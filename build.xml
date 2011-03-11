@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="freenet-autodep" default="all" basedir=".">
+	<description>
+Freenet is free software that lets you publish and retrieve information without
+fear of censorship. To achieve this, the network is entirely decentralized, and
+all actions are anonymous. Without anonymity, there can never be true freedom
+of speech, and without decentralization the network would be vulnerable to attack.
+
+This file is to build Freenet with minimal effort. It will check for Freenet's
+dependencies and requirements, and will try to satisfy these if they are not
+available (possibly using *pre-built blobs*). This requires the optional ANT
+tasks (ant-apache-bsf) and (if using Java &lt;6) bsf and rhino.
+	</description>
+
+	<import file="build-clean.xml"/>
+
+	<!-- =================================================================== -->
+	<!-- Dependencies (contrib, ie. freenet-ext.jar)                         -->
+	<!-- =================================================================== -->
+
+	<target name="dep-ext" description="try to ensure that Freenet-related dependencies are available">
+		<trydep property="contrib.present">
+			<condition><available classname="freenet.node.ExtVersion" classpathref="lib.path"/></condition>
+			<tasks>
+				<antcall target="build-ext"/>
+				<antcall target="get-ext"/>
+			</tasks>
+			<fail message="could neither build nor download freenet-ext.jar"/>
+		</trydep>
+	</target>
+
+	<target name="get-ext">
+		<get src="http://checksums.freenetproject.org/cc/freenet-ext.jar" dest="${lib}/freenet-ext.jar"
+			verbose="true" usetimestamp="true"/>
+	</target>
+
+	<target name="build-ext" depends="suppress-ext" unless="${suppress.ext}">
+		<ant inheritAll="false" antfile="${contrib.dir}/build.xml" />
+	</target>
+
+	<target name="clean-ext" depends="suppress-ext" unless="${suppress.ext}">
+		<ant inheritAll="false" antfile="${contrib.dir}/build.xml" target="clean"/>
+	</target>
+
+	<target name="suppress-ext" if="${suppress.ext}">
+		<echo message="suppress.ext is set to true, so clean-ext and build-ext will skip" />
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Generate GWT code                                                   -->
+	<!-- =================================================================== -->
+
+	<target name="dep-gjs" description="try to ensure that the GWT-generated javascript is available">
+		<trydep property="gjs.present">
+			<condition><available file="${gjs.dst}" type="dir"/></condition>
+			<tasks>
+				<antcall target="build-gjs"/>
+				<antcall target="checkout-gjs"/>
+			</tasks>
+			<fail message="could neither build nor checkout generated javascript"/>
+		</trydep>
+	</target>
+
+	<target name="checkout-gjs" depends="clean-gjs" description="checkout pre-generated javascript from VCS">
+		<exec executable="git">
+			<arg value="checkout" />
+			<arg value="${gjs.dst}" />
+		</exec>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Helper tasks                                                        -->
+	<!-- =================================================================== -->
+
+	<scriptdef name="trydep" language="javascript">
+		<!-- property to test for to see if the dependency has been satisfied -->
+		<attribute name="property"/>
+		<!-- "condition" task to maybe set the above property -->
+		<element name="condition" type="condition"/>
+		<!-- tasks to run, one by one, until the property is set -->
+		<element name="tasks" classname="org.apache.tools.ant.Target"/>
+		<!-- optional "fail" task to run, if none of the tasks succeeded -->
+		<element name="fail" type="fail"/>
+		<!-- optional name of dependency, used in the default fail message -->
+		<attribute name="name"/>
+		<![CDATA[
+			var prop = attributes.get("property")
+			var cond = elements.get("condition").get(0)
+			if (!prop) { self.fail("trydep: property attribute not given"); }
+			cond.getProxy().setProperty(prop)
+
+			function condition() {
+				cond.execute()
+				return project.getProperty(prop)
+			}
+
+			var taskel = elements.get("tasks")
+			var tasks = taskel? taskel.get(0).getTasks(): []
+
+			var name = attributes.get("name")
+			var desc = name? "dependency " + name: "property " + prop
+			var failel = elements.get("fail")
+			var failtask = failel? failel.get(0): null
+
+			function trydep() {
+				if (condition()) { return; }
+				for (var i=0; i<tasks.length; ++i) {
+					task = tasks[i]
+					task.maybeConfigure()
+					self.log("trying to satisfy " + desc + "...")
+					try {
+						task.execute()
+					} catch (e) {
+						if (!(e.javaException instanceof org.apache.tools.ant.BuildException)) { throw e; }
+						self.log("task failed: " + e.javaException)
+					}
+
+					if (condition()) { return; }
+				}
+
+				if (failtask) {
+					failtask.execute();
+				} else {
+					self.fail("could not satisfy " + desc);
+				}
+			}
+
+			trydep()
+		]]>
+	</scriptdef>
+
+</project>
