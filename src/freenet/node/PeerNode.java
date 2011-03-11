@@ -1071,7 +1071,7 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 			throw new NotConnectedException();
 		}
 		addToLocalNodeSentMessagesToStatistic(msg);
-		MessageItem item = new MessageItem(msg, cb == null ? null : new AsyncMessageCallback[]{cb}, ctr, this);
+		MessageItem item = new MessageItem(msg, cb == null ? null : new AsyncMessageCallback[]{cb}, ctr, this, node);
 		long now = System.currentTimeMillis();
 		reportBackoffStatus(now);
 		int x = messageQueue.queueAndEstimateSize(item);
@@ -4303,7 +4303,7 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 			// Force packet to have a sequence number.
 			Message m = DMT.createFNPVoid();
 			addToLocalNodeSentMessagesToStatistic(m);
-			messages.add(new MessageItem(m, null, null, this));
+			messages.add(new MessageItem(m, null, null, this, node));
 		}
 
 		if(!messages.isEmpty()) {
