@@ -230,16 +230,6 @@ public class PacketSender implements Runnable {
 
 			if(pn.shouldSendHandshake()) {
 				
-				// Major hack alert
-				// This runs too fast if you are on a local network
-				// causes session key to change in the middle of a bulk transfer
-				// setting up a node connection
-				// so.... lets slow it down by 4 seconds
-				try
-				{
-					Thread.sleep(4000);
-				}catch(InterruptedException e){}
-				
 				// Send handshake if necessary
 				long beforeHandshakeTime = System.currentTimeMillis();
 				pn.getOutgoingMangler().sendHandshake(pn, false);

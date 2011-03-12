@@ -1421,6 +1421,11 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 			// FIXME proper multi-homing support!
 			delay /= (handshakeIPs == null ? 1 : handshakeIPs.length);
 			if(delay < 3000) delay = 3000;
+			
+			// Hack, increase delay
+			delay = delay * 4;
+			System.out.println("Hand shake delay: "+ delay);
+			
 			sendHandshakeTime = now + delay;
 
 			if(successfulHandshakeSend)
