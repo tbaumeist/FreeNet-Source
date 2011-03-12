@@ -21,7 +21,8 @@ public class IPUtil {
 			return false;
 		} else if(i.isLinkLocalAddress() || i.isLoopbackAddress() ||
 				i.isSiteLocalAddress()) {
-			if(includeLocalAddressesInNoderefs) {
+			if(includeLocalAddressesInNoderefs && i.isSiteLocalAddress() &&
+					i.getAddress().length == 4) {
 				return true;
 			} else return false;
 		} else if(i.isMulticastAddress()) {
