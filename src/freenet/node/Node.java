@@ -2626,6 +2626,11 @@ public class Node implements TimeSkewDetectorCallback {
 		}
 		return dir;
 	}
+	
+	public boolean IsAcceptingSeedConnections()
+	{
+		return acceptSeedConnections;
+	}
 
 	public void lateSetupDatabase(byte[] databaseKey) throws MasterKeysWrongPasswordException, MasterKeysFileSizeException, IOException {
 		if(db != null) return;
