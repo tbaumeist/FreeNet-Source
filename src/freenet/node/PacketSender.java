@@ -228,7 +228,7 @@ public class PacketSender implements Runnable {
 				if(pn.noContactDetails())
 					pn.startARKFetcher();
 
-			if(pn.shouldSendHandshake()) {
+			if(pn.shouldSendHandshake() && !node.IsAcceptingSeedConnections()) {
 				
 				// Send handshake if necessary
 				long beforeHandshakeTime = System.currentTimeMillis();
