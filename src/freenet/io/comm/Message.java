@@ -135,7 +135,10 @@ public class Message {
 		}
 		if(logMINOR) Logger.minor(Message.class, "Returning message: "+m);
 		System.out.println("Decoded message: "+ m.toString());
-		Logger.receivedMessage(Message.class, "Message received: " + m.toString() + "\tArrived at: " + destloc + " From: " + srcloc);
+		if (!shouldFilter())
+		{
+			Logger.receivedMessage(Message.class, "Message received: " + m.toString() + "\tArrived at: " + destloc + " From: " + srcloc);
+		}
 		return m;
 	}
 
@@ -263,7 +266,10 @@ public class Message {
 			Logger.debug(this, "Length: "+buf.length+", hash: "+Fields.hashCode(buf));
 		System.out.println("Encoded message "+ toString());
 		System.out.println("From: " + srcloc + "To: " + destloc);
-		Logger.receivedMessage(Message.class, "Message sent: " + toString() + "\tFrom: " + srcloc + "\tTo: " + destloc + "\n");
+		if (!shouldFilter())
+		{
+			Logger.receivedMessage(Message.class, "Message sent: " + toString() + "\tFrom: " + srcloc + "\tTo: " + destloc + "\n");
+		}
 		return buf;
 	}
 
@@ -366,9 +372,10 @@ public class Message {
 		priority--;
 	}
 	
-	public boolean shouldFilter(MessageType t) {
-		//if (t.equals(FNPSSKDataRequest) || t.equals(FNPRejectedLoop) || t.equals(FNPRejectedOverload) || t.equals(FNPAccepted) || t.equals(FNPRouteNotFound) || t.equals(FNPRealTimeFlag) || t.equals(FNPCHKDataRequest) || t.equals(FNPRouteNotFound) || t.equals(FNPSSKInsertRequest)) {
-			return false;
+	public static boolean shouldFilter() {
+		//if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || getSpec() == DMT.FNPRealTimeFlag )
+			//return true;
+		return false;
 	}
 
 }
