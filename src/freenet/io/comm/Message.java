@@ -67,12 +67,12 @@ public class Message {
 	final int _receivedByteCount;
 	short priority;
 
-	public static Message decodeMessageFromPacket(byte[] buf, int offset, int length, PeerContext peer, int overhead, double destloc, double srcloc) {
+	public Message decodeMessageFromPacket(byte[] buf, int offset, int length, PeerContext peer, int overhead, double destloc, double srcloc) {
 		ByteBufferInputStream bb = new ByteBufferInputStream(buf, offset, length);
 		return decodeMessage(bb, peer, length + overhead, true, false, destloc, srcloc);
 	}
 
-	private static Message decodeMessage(ByteBufferInputStream bb, PeerContext peer, int recvByteCount,
+	private Message decodeMessage(ByteBufferInputStream bb, PeerContext peer, int recvByteCount,
 	        boolean mayHaveSubMessages, boolean inSubMessage, double destloc, double srcloc) {
 		MessageType mspec;
 		try {
@@ -372,9 +372,9 @@ public class Message {
 		priority--;
 	}
 	
-	public static boolean shouldFilter() {
-		//if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || getSpec() == DMT.FNPRealTimeFlag )
-			//return true;
+	public boolean shouldFilter() {
+		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || getSpec() == DMT.FNPRealTimeFlag )
+			return true;
 		return false;
 	}
 
