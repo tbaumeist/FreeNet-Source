@@ -10,12 +10,26 @@ dep:
 
 build:
      [copy] Copying 1 file to /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build/main/freenet/node
-     [echo] Updated build version to d19388 in build/main/freenet/node/Version.java
+     [echo] Updated build version to 73bb2 in build/main/freenet/node/Version.java
     [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build-clean.xml:191: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
-    [javac] Compiling 698 source files to /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build/main
-    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:138: non-static method shouldFilter() cannot be referenced from a static context
-    [javac] 		if (!shouldFilter())
-    [javac] 		     ^
+    [javac] Compiling 751 source files to /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build/main
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/keys/ClientCHKBlock.java:109: warning: [deprecation] create(freenet.crypt.BlockCipher) in freenet.crypt.PCFBMode has been deprecated
+    [javac]         PCFBMode pcfb = PCFBMode.create(cipher);
+    [javac]                                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/keys/ClientCHKBlock.java:252: warning: [deprecation] create(freenet.crypt.BlockCipher) in freenet.crypt.PCFBMode has been deprecated
+    [javac]         PCFBMode pcfb = PCFBMode.create(cipher);
+    [javac]                                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/MessageCore.java:82: non-static method decodeMessageFromPacket(byte[],int,int,freenet.io.comm.PeerContext,int,double,double) cannot be referenced from a static context
+    [javac]             return Message.decodeMessageFromPacket(data, offset, length, peer, overhead, destloc, srcloc);
+    [javac]                           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/node/NodeCrypto.java:581: warning: [deprecation] <T>get(java.lang.Object) in com.db4o.ObjectContainer has been deprecated
+    [javac] 				ObjectSet os = setupContainer.get(tuple);
+    [javac] 				                             ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/support/LRUQueue.java:177: warning: [unchecked] unchecked cast
+    [javac] found   : T
+    [javac] required: E
+    [javac] 			array[x++] = (E) e.nextElement().obj;
+    [javac] 			                                ^
     [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/node/fcp/FCPClient.java:647: warning: [unchecked] unchecked conversion
     [javac] found   : com.db4o.ObjectSet
     [javac] required: com.db4o.ObjectSet<freenet.node.fcp.FCPClientRequestClient>
@@ -314,18 +328,6 @@ build:
     [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:693: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
     [javac] 			_setDatastoreSize(request.getPartAsString("ds", 20)); // drop down options may be 6 chars or less, but formatted ones e.g. old value if re-running can be more
     [javac] 			                         ^
-    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:698: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
-    [javac] 				config.get("node.updater").set("autoupdate", Boolean.parseBoolean(request.getPartAsString("autodeploy", 10)));
-    [javac] 				                                                                         ^
-    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/N2NTMToadlet.java:116: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
-    [javac] 		String pass = request.getPartAsString("formPassword", 32);
-    [javac] 		                     ^
-    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/N2NTMToadlet.java:131: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
-    [javac] 			String message = request.getPartAsString("message", 5 * 1024);
-    [javac] 			                        ^
-    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/N2NTMToadlet.java:145: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
-    [javac] 			String fnam = request.getPartAsString("filename", 1024);
-    [javac] 			                     ^
     [javac] Note: Some input files additionally use or override a deprecated API.
     [javac] Note: Some input files additionally use unchecked or unsafe operations.
     [javac] 1 error

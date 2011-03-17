@@ -1,0 +1,353 @@
+Buildfile: /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build.xml
+
+init:
+
+dep-ext:
+
+dep-gjs:
+
+dep:
+
+build:
+     [copy] Copying 1 file to /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build/main/freenet/node
+     [echo] Updated build version to 73bb2 in build/main/freenet/node/Version.java
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build-clean.xml:191: warning: 'includeantruntime' was not set, defaulting to build.sysclasspath=last; set to false for repeatable builds
+    [javac] Compiling 671 source files to /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/build/main
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/client/async/BinaryBlobInserter.java:62: warning: [cast] redundant cast to freenet.keys.Key
+    [javac] 			Key key = (Key) i.next();
+    [javac] 			          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                         ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                                                               ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                                                                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                                                                                                                                           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                                                                                                                                                                           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: non-static method getSpec() cannot be referenced from a static context
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                                                                                                                                                                                                                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/io/comm/Message.java:376: operator + cannot be applied to freenet.io.comm.MessageType
+    [javac] 		if(getSpec() == DMT.FNPCHKDataRequest || getSpec() == DMT.FNPSSKDataRequest || getSpec() == DMT.FNPRejectedLoop || getSpec() == DMT.FNPRejectedOverload || getSpec() == DMT.FNPAccepted || getSpec() == DMT.FNPRouteNotFound || +getSpec() == DMT.FNPRealTimeFlag )
+    [javac] 		                                                                                                                                                                                                                                ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/node/fcp/FCPClient.java:647: warning: [unchecked] unchecked conversion
+    [javac] found   : com.db4o.ObjectSet
+    [javac] required: com.db4o.ObjectSet<freenet.node.fcp.FCPClientRequestClient>
+    [javac] 			ObjectSet<FCPClientRequestClient> results = q.execute();
+    [javac] 			                                                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/support/TimeSortedHashtable.java:129: warning: [unchecked] unchecked cast
+    [javac] found   : T
+    [javac] required: E
+    [javac]     		valuesArray[i] = (E) e.value;
+    [javac]     		                      ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/crypt/PCFBMode.java:49: warning: [dep-ann] deprecated item is not annotated with @Deprecated
+    [javac]     public static PCFBMode create(BlockCipher c) {
+    [javac]                            ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/client/async/Db4oBugs.java:20: warning: [unchecked] unchecked conversion
+    [javac] found   : com.db4o.ObjectSet
+    [javac] required: com.db4o.ObjectSet<T>
+    [javac] 			return query.execute();
+    [javac] 			                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/client/async/InsertCompressor.java:341: warning: [unchecked] unchecked conversion
+    [javac] found   : com.db4o.ObjectSet
+    [javac] required: com.db4o.ObjectSet<freenet.client.async.InsertCompressor>
+    [javac] 		ObjectSet<InsertCompressor> results = query.execute();
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/client/async/SimpleManifestPutter.java:664: warning: [unchecked] unchecked conversion
+    [javac] found   : java.util.HashMap
+    [javac] required: java.util.HashMap<java.lang.String,java.lang.Object>
+    [javac] 				checkDefaultName((HashMap)o, subname);
+    [javac] 				                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/support/RemoveRangeArrayList.java:5: warning: [serial] serializable class freenet.support.RemoveRangeArrayList has no definition of serialVersionUID
+    [javac] public class RemoveRangeArrayList<T> extends ArrayList<T> {
+    [javac]        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:158: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			if (request.getPartAsString("insert-local", 128).length() > 0) {
+    [javac] 			           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:163: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String keyType = request.getPartAsString("keytype", 10);
+    [javac] 				                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:174: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						String u = request.getPartAsString("key", MAX_KEY_LENGTH);
+    [javac] 						                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:184: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String overrideSplitfileKey = request.getPartAsString("overrideSplitfileKey", 65);
+    [javac] 				                                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:187: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				boolean compress = request.getPartAsString("compress", 128).length() > 0;
+    [javac] 				                          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:188: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String compatibilityMode = request.getPartAsString("compatibilityMode", 100);
+    [javac] 				                                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:194: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String pass = request.getPartAsString("formPassword", 32);
+    [javac] 			                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:203: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			if(request.isPartSet("delete_request") && (request.getPartAsString("delete_request", 128).length() > 0)) {
+    [javac] 			                                                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:218: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String identifier = request.getPartAsString("identifier-"+part, MAX_IDENTIFIER_LENGTH);
+    [javac] 					                           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:220: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String filename = request.getPartAsString("filename-"+part, MAX_FILENAME_LENGTH);
+    [javac] 					                         ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:221: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String keyString = request.getPartAsString("key-"+part, MAX_KEY_LENGTH);
+    [javac] 					                          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:222: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String type = request.getPartAsString("type-"+part, MAX_TYPE_LENGTH);
+    [javac] 					                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:223: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String size = request.getPartAsString("size-"+part, 50);
+    [javac] 					                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:255: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			} else if(request.isPartSet("remove_request") && (request.getPartAsString("remove_request", 128).length() > 0)) {
+    [javac] 			                                                         ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:265: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						identifier = request.getPartAsString(part, MAX_IDENTIFIER_LENGTH);
+    [javac] 						                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:283: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			} else if(request.isPartSet("restart_request") && (request.getPartAsString("restart_request", 128).length() > 0)) {
+    [javac] 			                                                          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:292: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					identifier = request.getPartAsString(part, MAX_IDENTIFIER_LENGTH);
+    [javac] 					                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:303: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			} else if(request.isPartSet("panic") && (request.getPartAsString("panic", 128).length() > 0)) {
+    [javac] 			                                                ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:314: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			} else if(request.isPartSet("confirmpanic") && (request.getPartAsString("confirmpanic", 128).length() > 0)) {
+    [javac] 			                                                       ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:328: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					expectedMIMEType = request.getPartAsString("type", MAX_TYPE_LENGTH);
+    [javac] 					                          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:332: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					fetchURI = new FreenetURI(request.getPartAsString("key", MAX_KEY_LENGTH));
+    [javac] 					                                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:337: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String persistence = request.getPartAsString("persistence", 32);
+    [javac] 				                            ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:338: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String returnType = request.getPartAsString("return-type", 32);
+    [javac] 				                           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:352: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String bulkDownloadsAsString = request.getPartAsString("bulkDownloads", 262144);
+    [javac] 				                                      ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:360: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String target = request.getPartAsString("target", 128);
+    [javac] 				                       ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:415: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				short newPriority = Short.parseShort(request.getPartAsString("priority", 32));
+    [javac] 				                                            ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:421: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					identifier = request.getPartAsString(part, MAX_IDENTIFIER_LENGTH);
+    [javac] 					                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:433: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			} else if (request.getPartAsString("insert", 128).length() > 0) {
+    [javac] 			                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:435: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String keyType = request.getPartAsString("keytype", 10);
+    [javac] 				                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:446: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						String u = request.getPartAsString("key", MAX_KEY_LENGTH);
+    [javac] 						                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:460: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final boolean compress = request.getPartAsString("compress", 128).length() > 0;
+    [javac] 				                                ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:462: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final String compatibilityMode = request.getPartAsString("compatibilityMode", 100);
+    [javac] 				                                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:468: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String s = request.getPartAsString("overrideSplitfileKey", 65);
+    [javac] 				                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:556: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final String filename = request.getPartAsString("filename", MAX_FILENAME_LENGTH);
+    [javac] 				                               ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:562: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final String key = request.getPartAsString("key", MAX_KEY_LENGTH);
+    [javac] 				                          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:564: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final String compatibilityMode = request.getPartAsString("compatibilityMode", 100);
+    [javac] 				                                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:570: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String s = request.getPartAsString("overrideSplitfileKey", 65);
+    [javac] 				                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:665: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final String filename = request.getPartAsString("filename", MAX_FILENAME_LENGTH);
+    [javac] 				                               ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:670: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				final String key = request.getPartAsString("key", MAX_KEY_LENGTH);
+    [javac] 				                          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:758: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String key = request.getPartAsString("key-"+part.substring("identifier-".length()), MAX_KEY_LENGTH);
+    [javac] 					                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:785: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String description = request.getPartAsString("description", 32768);
+    [javac] 				                            ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/QueueToadlet.java:789: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String key = request.getPartAsString(part, MAX_KEY_LENGTH);
+    [javac] 					                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:315: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		String passwd = req.getPartAsString("formPassword", 32);
+    [javac] 		                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:328: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		String bookmarkPath = req.getPartAsString("bookmark", MAX_BOOKMARK_PATH_LENGTH);
+    [javac] 		                         ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:344: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String action = req.getPartAsString("action", MAX_ACTION_LENGTH);
+    [javac] 			                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:358: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					name = req.getPartAsString("name", MAX_NAME_LENGTH);
+    [javac] 					          ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:365: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						item.update(new FreenetURI(req.getPartAsString("key", MAX_KEY_LENGTH)), hasAnActivelink, req.getPartAsString("descB", MAX_KEY_LENGTH));
+    [javac] 						                              ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:365: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						item.update(new FreenetURI(req.getPartAsString("key", MAX_KEY_LENGTH)), hasAnActivelink, req.getPartAsString("descB", MAX_KEY_LENGTH));
+    [javac] 						                                                                                            ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:366: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						sendBookmarkFeeds(req, item, req.getPartAsString("publicDescB", MAX_KEY_LENGTH));
+    [javac] 						                                ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:377: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						FreenetURI key = new FreenetURI(req.getPartAsString("key", MAX_KEY_LENGTH));
+    [javac] 						                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:389: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 							newBookmark = new BookmarkItem(key, name, req.getPartAsString("descB", MAX_KEY_LENGTH), hasAnActivelink, core.alerts);
+    [javac] 							                                             ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:402: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 							sendBookmarkFeeds(req, (BookmarkItem) newBookmark, req.getPartAsString("publicDescB", MAX_KEY_LENGTH));
+    [javac] 							                                                      ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/BookmarkEditorToadlet.java:410: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				sendBookmarkFeeds(req, (BookmarkItem) bookmark, req.getPartAsString("publicDescB", MAX_KEY_LENGTH));
+    [javac] 				                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConfigToadlet.java:119: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		String pass = request.getPartAsString("formPassword", 32);
+    [javac] 		                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConfigToadlet.java:143: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					String value = request.getPartAsString(prefix+ '.' +configName, MAX_PARAM_VALUE_SIZE);
+    [javac] 					                      ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConfigToadlet.java:163: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String value = request.getPartAsString(wrapperConfigName, MAX_PARAM_VALUE_SIZE);
+    [javac] 				                      ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConnectionsToadlet.java:483: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		String pass = request.getPartAsString("formPassword", 32);
+    [javac] 		                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConnectionsToadlet.java:494: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String urltext = request.getPartAsString("url", 200);
+    [javac] 			                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConnectionsToadlet.java:496: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String reftext = request.getPartAsString("ref", Integer.MAX_VALUE);
+    [javac] 			                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConnectionsToadlet.java:499: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				reftext = request.getPartAsString("reffile", Integer.MAX_VALUE);
+    [javac] 				                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/ConnectionsToadlet.java:504: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				privateComment = request.getPartAsString("peerPrivateNote", 250).trim();
+    [javac] 				                        ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:161: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("send_n2ntm")) {
+    [javac] 		                                            ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:179: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("update_notes")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:185: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					if(!request.getPartAsString("peerPrivateNote_"+peerNodes[i].hashCode(),250).equals(peerNodes[i].getPrivateDarknetCommentNote())) {
+    [javac] 					           ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:186: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 						peerNodes[i].setPrivateDarknetCommentNote(request.getPartAsString("peerPrivateNote_"+peerNodes[i].hashCode(),250));
+    [javac] 						                                                 ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:192: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("enable")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:203: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("disable")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:214: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("set_burst_only")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:225: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("clear_burst_only")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:236: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("set_ignore_source_port")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:247: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("clear_ignore_source_port")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:258: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("clear_dont_route")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:267: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("set_dont_route")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:276: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("set_listen_only")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:287: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("clear_listen_only")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:298: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("set_allow_local")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:309: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("clear_allow_local")) {
+    [javac] 		                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:320: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		} else if (request.isPartSet("remove") || (request.isPartSet("doAction") && request.getPartAsString("action",25).equals("remove"))) {			
+    [javac] 		                                                                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:357: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					long id = Long.parseLong(request.getPartAsString("id", 32)); // FIXME handle NumberFormatException
+    [javac] 					                                ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/DarknetConnectionsToadlet.java:369: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 					long id = Long.parseLong(request.getPartAsString("id", 32)); // FIXME handle NumberFormatException
+    [javac] 					                                ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:426: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		String passwd = request.getPartAsString("formPassword", 32);
+    [javac] 		                       ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:438: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String networkThreatLevel = request.getPartAsString("security-levels.networkThreatLevel", 128);
+    [javac] 			                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:486: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String friendsThreatLevel = request.getPartAsString("security-levels.friendsThreatLevel", 128);
+    [javac] 			                                   ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:526: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String physicalThreatLevel = request.getPartAsString("security-levels.physicalThreatLevel", 128);
+    [javac] 			                                    ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:536: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String pass = request.getPartAsString("masterPassword", SecurityLevelsToadlet.MAX_PASSWORD_LENGTH);
+    [javac] 				                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:590: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				String pass = request.getPartAsString("masterPassword", SecurityLevelsToadlet.MAX_PASSWORD_LENGTH);
+    [javac] 				                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:679: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String selectedNName = request.getPartAsString("nname", 128);
+    [javac] 			                              ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:689: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			_setUpstreamBandwidthLimit(request.getPartAsString("bw", 20)); // drop down options may be 6 chars or less, but formatted ones e.g. old value if re-running can be more
+    [javac] 			                                  ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:693: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			_setDatastoreSize(request.getPartAsString("ds", 20)); // drop down options may be 6 chars or less, but formatted ones e.g. old value if re-running can be more
+    [javac] 			                         ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/FirstTimeWizardToadlet.java:698: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 				config.get("node.updater").set("autoupdate", Boolean.parseBoolean(request.getPartAsString("autodeploy", 10)));
+    [javac] 				                                                                         ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/N2NTMToadlet.java:116: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 		String pass = request.getPartAsString("formPassword", 32);
+    [javac] 		                     ^
+    [javac] /home/dhiyuen/workspace/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/src/freenet/clients/http/N2NTMToadlet.java:131: warning: [deprecation] getPartAsString(java.lang.String,int) in freenet.support.api.HTTPRequest has been deprecated
+    [javac] 			String message = request.getPartAsString("message", 5 * 1024);
+    [javac] 			                        ^
+    [javac] Note: Some input files additionally use or override a deprecated API.
+    [javac] Note: Some input files additionally use unchecked or unsafe operations.
+    [javac] 8 errors
+    [javac] 100 warnings
