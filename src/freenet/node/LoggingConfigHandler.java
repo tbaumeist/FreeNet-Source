@@ -53,8 +53,8 @@ public class LoggingConfigHandler {
 	}
 
 	protected static final String LOG_PREFIX = "freenet";
-	protected static final String SENT_MESSAGE_LOG_PREFIX = "sent_messages";
-	protected static final String RECEIVED_MESSAGE_LOG_PREFIX = "received_messages";
+	protected static final String GENERAL_MESSAGE_LOG_PREFIX = "general_messages";
+	protected static final String SPECIAL_MESSAGE_LOG_PREFIX = "special_messages";
 	private final SubConfig config;
 	private FileLoggerHook fileLoggerHook;
 	private File logDir;
@@ -322,11 +322,11 @@ public class LoggingConfigHandler {
 			
 			
 			// sent messages logger
-			FileLoggerHook sentHook = null;
+			FileLoggerHook genHook = null;
 			try {
-				sentHook = 
-					new FileLoggerHook(true, new File(logDir, SENT_MESSAGE_LOG_PREFIX).getAbsolutePath(), 
-				    		"d (c, t, p): m", "MMM dd, yyyy HH:mm:ss:SSS", logRotateInterval, LogLevel.DEBUG /* filtered by chain */, false, true, 
+				genHook = 
+					new FileLoggerHook(true, new File(logDir, GENERAL_MESSAGE_LOG_PREFIX).getAbsolutePath(), 
+				    		"d m", "MMM dd, yyyy HH:mm:ss:SSS", logRotateInterval, LogLevel.DEBUG /* filtered by chain */, false, true, 
 				    		maxZippedLogsSize /* 1GB of old compressed logfiles */, maxCachedLogLines);
 			} catch (IOException e) {
 				System.err.println("CANNOT START LOGGER: "+e.getMessage());
@@ -336,17 +336,17 @@ public class LoggingConfigHandler {
 				return;
 			}
 			
-			sentHook.setMaxListBytes(maxCachedLogBytes);
-			sentHook.setMaxBacklogNotBusy(maxBacklogNotBusy);
-			Logger.setSentMessageLogger(sentHook);
-			sentHook.start();
+			genHook.setMaxListBytes(maxCachedLogBytes);
+			genHook.setMaxBacklogNotBusy(maxBacklogNotBusy);
+			Logger.setGeneralMessageLogger(genHook);
+			genHook.start();
 			
 			// received messages logger
-			FileLoggerHook recHook = null;
+			FileLoggerHook specHook = null;
 			try {
-				recHook = 
-					new FileLoggerHook(true, new File(logDir, RECEIVED_MESSAGE_LOG_PREFIX).getAbsolutePath(), 
-				    		"d (c, t, p): m", "MMM dd, yyyy HH:mm:ss:SSS", logRotateInterval, LogLevel.DEBUG /* filtered by chain */, false, true, 
+				specHook = 
+					new FileLoggerHook(true, new File(logDir, SPECIAL_MESSAGE_LOG_PREFIX).getAbsolutePath(), 
+				    		"d m", "MMM dd, yyyy HH:mm:ss:SSS", logRotateInterval, LogLevel.DEBUG /* filtered by chain */, false, true, 
 				    		maxZippedLogsSize /* 1GB of old compressed logfiles */, maxCachedLogLines);
 			} catch (IOException e) {
 				System.err.println("CANNOT START LOGGER: "+e.getMessage());
@@ -356,10 +356,10 @@ public class LoggingConfigHandler {
 				return;
 			}
 			
-			recHook.setMaxListBytes(maxCachedLogBytes);
-			recHook.setMaxBacklogNotBusy(maxBacklogNotBusy);
-			Logger.setReceivedMessageLogger(recHook);
-			recHook.start();
+			specHook.setMaxListBytes(maxCachedLogBytes);
+			specHook.setMaxBacklogNotBusy(maxBacklogNotBusy);
+			Logger.setSpecialMessageLogger(specHook);
+			specHook.start();
 		}
 	}
 

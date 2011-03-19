@@ -886,6 +886,7 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 			return;
 		
 		StringBuilder sb = new StringBuilder( e == null ? 512 : 1024 );
+		sb.append("<LogMessage>");
 		int sctr = 0;
 
 		for (int i = 0; i < fmt.length; ++i) {
@@ -897,35 +898,36 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 					long now = System.currentTimeMillis();
 					synchronized (this) {
 						myDate.setTime(now);
-						sb.append(df.format(myDate));
+						sb.append("<Date>").append(df.format(myDate)).append("</Date>");
 					}
 					break;
 				case CLASS :
-					sb.append(c == null ? "<none>" : c.getName());
+					sb.append("<Class>").append(c == null ? "<none>" : c.getName()).append("</Class>");
 					break;
 				case HASHCODE :
-					sb.append(
+					sb.append("<Hash>").append(
 						o == null
 							? "<none>"
-							: Integer.toHexString(o.hashCode()));
+							: Integer.toHexString(o.hashCode())).append("</Hash>");
 					break;
 				case THREAD :
-					sb.append(Thread.currentThread().getName());
+					sb.append("<Thread>").append(Thread.currentThread().getName()).append("</Thread>");
 					break;
 				case PRIORITY :
-					sb.append(priority.name());
+					sb.append("<Priority>").append(priority.name()).append("</Priority>");
 					break;
 				case MESSAGE :
-					sb.append(msg);
+					sb.append("<MessageItem>").append(msg).append("</MessageItem>");
 					break;
 				case UNAME :
-					sb.append(uname);
+					sb.append("<Uname>").append(uname).append("</Uname>");
 					break;
 			}
 		}
 		sb.append('\n');
 
 		// Write stacktrace if available
+		sb.append("<TraceStack>");
 		for(int j=0;j<20 && e != null;j++) {
 			sb.append(e.toString());
 			
@@ -948,6 +950,8 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 			if(cause != e) e = cause;
 			else break;
 		}
+		sb.append("</TraceStack>");
+		sb.append("</LogMessage>");
 
 		logString(sb.toString().getBytes());
 	}
