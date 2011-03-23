@@ -137,7 +137,7 @@ public class Message {
 		System.out.println("Decoded message: "+ m.toString());
 		if (!shouldFilter())
 		{
-			Logger.receivedMessage(Message.class, "Message received: " + m.toString() + "\tArrived at: " + destloc + " From: " + srcloc);
+			Logger.generalLogMessage(Message.class, m.toXML(false) + "<From>" + srcloc + "</From><To>" + destloc + "</To>");
 		}
 		return m;
 	}
@@ -268,7 +268,7 @@ public class Message {
 		System.out.println("From: " + srcloc + "To: " + destloc);
 		if (!shouldFilter())
 		{
-			Logger.receivedMessage(Message.class, "Message sent: " + toString() + "\tFrom: " + srcloc + "\tTo: " + destloc + "\n");
+			Logger.generalLogMessage(Message.class, toXML(true) + "<From>" + srcloc + "</From><To>" + destloc + "</To>");
 		}
 		return buf;
 	}
@@ -284,6 +284,19 @@ public class Message {
 			comma = ", ";
 		}
 		ret.append('}');
+		return ret.toString();
+	}
+	
+	public String toXML(boolean sentMessage)
+	{
+		StringBuilder ret = new StringBuilder(1000);
+		ret.append("<Message type=\"").append(_spec.getName()).append("\"");
+		ret.append(" direction=\"").append(sentMessage == true?"sent":"recieved").append("\"");
+		for (String name : _spec.getFields().keySet()) {
+			ret.append(" ").append(name).append("=\"");
+			ret.append(_payload.get(name)).append("\"");
+		}
+		ret.append(" />");
 		return ret.toString();
 	}
 

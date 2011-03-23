@@ -246,18 +246,18 @@ public abstract class Logger {
 	 * Single global LoggerHook.
 	 */
 	static Logger logger = new VoidLogger();
-	static Logger sentMessLogger = null;
-	static Logger recMessLogger = null;
+	static Logger generalMessLogger = null;
+	static Logger specialMessLogger = null;
 	
 	// set static sent messages logger
-	public synchronized static void setSentMessageLogger(Logger logger)
+	public synchronized static void setGeneralMessageLogger(Logger logger)
 	{
-		sentMessLogger = logger;
+		generalMessLogger = logger;
 	}
 	
-	public synchronized static void setReceivedMessageLogger(Logger logger)
+	public synchronized static void setSpecialMessageLogger(Logger logger)
 	{
-		recMessLogger = logger;
+		specialMessLogger = logger;
 	}
 
 	/** Log to standard output. */
@@ -289,37 +289,37 @@ public abstract class Logger {
 	}
 
 	// Log out going messages from the system
-	public synchronized static void sentMessage(Class<?> c, String s) {
-		sentMessLogger.log(c, s, LogLevel.NORMAL);
+	public synchronized static void generalLogMessage(Class<?> c, String s) {
+		generalMessLogger.log(c, s, LogLevel.NORMAL);
 	}
 
-	public synchronized static void sentMessage(Class<?> c, String s, Throwable t) {
-		sentMessLogger.log(c, s, t, LogLevel.NORMAL);
+	public synchronized static void generalLogMessage(Class<?> c, String s, Throwable t) {
+		generalMessLogger.log(c, s, t, LogLevel.NORMAL);
 	}
 	
-	public synchronized static void sentMessage(Object o, String s) {
-		sentMessLogger.log(o, s, LogLevel.NORMAL);
+	public synchronized static void generalLogMessage(Object o, String s) {
+		generalMessLogger.log(o, s, LogLevel.NORMAL);
 	}
 
-	public synchronized static void sentMessage(Object o, String s, Throwable t) {
-		sentMessLogger.log(o, s, t, LogLevel.NORMAL);
+	public synchronized static void generalLogMessage(Object o, String s, Throwable t) {
+		generalMessLogger.log(o, s, t, LogLevel.NORMAL);
 	}
 	
 	// Log in coming messages from the system
-	public synchronized static void receivedMessage(Class<?> c, String s) {
-		recMessLogger.log(c, s, LogLevel.NORMAL);
+	public synchronized static void specialLogMessage(Class<?> c, String s) {
+		specialMessLogger.log(c, s, LogLevel.NORMAL);
 	}
 
-	public synchronized static void receivedMessage(Class<?> c, String s, Throwable t) {
-		recMessLogger.log(c, s, t, LogLevel.NORMAL);
+	public synchronized static void specialLogMessage(Class<?> c, String s, Throwable t) {
+		specialMessLogger.log(c, s, t, LogLevel.NORMAL);
 	}
 	
-	public synchronized static void receivedMessage(Object o, String s) {
-		recMessLogger.log(o, s, LogLevel.NORMAL);
+	public synchronized static void specialLogMessage(Object o, String s) {
+		specialMessLogger.log(o, s, LogLevel.NORMAL);
 	}
 
-	public synchronized static void receivedMessage(Object o, String s, Throwable t) {
-		recMessLogger.log(o, s, t, LogLevel.NORMAL);
+	public synchronized static void specialLogMessage(Object o, String s, Throwable t) {
+		specialMessLogger.log(o, s, t, LogLevel.NORMAL);
 	}
 	
 	// These methods log messages at various priorities using the global logger.
