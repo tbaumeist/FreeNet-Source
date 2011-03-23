@@ -2155,7 +2155,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 				return;
 			}
 			if(logMINOR) Logger.minor(this, "Message "+i+" length "+length+", hash code: "+Fields.hashCode(decrypted, ptr, length));
-			Message m = usm.decodeSingleMessage(decrypted, ptr, length, tracker.pn, 1 + (overhead / messages), tracker.pn.getLocation(), node.getLocation());
+			Message m = usm.decodeSingleMessage(decrypted, ptr, length, tracker.pn, 1 + (overhead / messages), node.getLocation(), tracker.pn.getLocation());
 			ptr+=length;
 			if(m != null) {
 				//Logger.minor(this, "Dispatching packet: "+m);

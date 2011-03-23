@@ -131,7 +131,7 @@ public class Version {
 	public static final int lastGoodStableBuild = 1;
 
 	/** Revision number of Version.java as read from CVS */
-	public static final String cvsRevision = "73bb2";
+	public static final String cvsRevision = "b3f24a";
 
 	/**
 	 * Analogous to {@link #buildNumber()} but for {@link #cvsRevision}.
