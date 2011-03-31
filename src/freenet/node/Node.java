@@ -745,7 +745,7 @@ public class Node implements TimeSkewDetectorCallback {
 	private volatile boolean routeAccordingToOurPeersLocation;
 	boolean enableSwapQueueing;
 	boolean enablePacketCoalescing;
-	public static final short DEFAULT_MAX_HTL = (short)18;
+	public static final short DEFAULT_MAX_HTL = (short)5;
 	private short maxHTL;
 	private boolean skipWrapperWarning;
 	/** Should inserts ignore low backoff times by default? */
@@ -4404,8 +4404,9 @@ public class Node implements TimeSkewDetectorCallback {
 					nodeStats.avgStoreCHKLocation.report(loc);
 
 				}
-				chkDatacache.put(block, !canWriteDatastore);
-				nodeStats.avgCacheCHKLocation.report(loc);
+				// custom removal of caching
+				//chkDatacache.put(block, !canWriteDatastore);
+				//nodeStats.avgCacheCHKLocation.report(loc);
 			}
 			if (canWriteDatastore || forULPR || useSlashdotCache)
 				failureTable.onFound(block);
