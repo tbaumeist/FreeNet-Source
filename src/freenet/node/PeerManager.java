@@ -1129,12 +1129,39 @@ public class PeerManager {
 		}
 		Arrays.sort(peerList);
 		for(int i = 0; i < peerList.length; i++) {
-			sb.append(peerList[i]);
-			sb.append('\n');
+			if (!peerList[i].equals(""))
+				sb.append(peerList[i]);
+				sb.append('\n');
 		}
 		return sb.toString();
 	}
 
+	/* custom
+	 * write formatted to file, return as string as well
+	 */
+	public String writeTMCIPeerList() {
+		StringBuilder sb = new StringBuilder();
+		PeerNode[] peers;
+		synchronized(this) {
+			peers = myPeers;
+		}
+		String[] peerList = new String[peers.length];
+		for(int i = 0; i < peers.length; i++) {
+			PeerNode pn = peers[i];
+			//if (pn.getPeerNodeStatusString().equals("CONNECTED"))
+				peerList[i] = pn.getFileTMCIPeerInfo();
+			//else
+				//peerList[i] = "";
+		}
+		//Arrays.sort(peerList);
+		for(int i = 0; i < peerList.length; i++) {
+			if (!peerList[i].equals("")) {
+				sb.append(peerList[i]);
+				sb.append('\n');
+			}
+		}
+		return sb.toString();
+	}
 	public String getFreevizOutput() {
 		StringBuilder sb = new StringBuilder();
 		PeerNode[] peers;

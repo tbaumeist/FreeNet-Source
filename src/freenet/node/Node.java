@@ -13,12 +13,14 @@ import static freenet.node.stats.DataStoreType.SLASHDOT;
 import static freenet.node.stats.DataStoreType.STORE;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
@@ -173,8 +175,8 @@ import freenet.support.io.Closer;
 import freenet.support.io.FileUtil;
 import freenet.support.io.NativeThread;
 import freenet.support.transport.ip.HostnameSyntaxException;
-
-/**
+import java.io.Writer
+;/**
  * @author amphibian
  */
 public class Node implements TimeSkewDetectorCallback {
@@ -4846,6 +4848,29 @@ public class Node implements TimeSkewDetectorCallback {
 			sb.append(peers.getTMCIPeerList());
 		else
 			sb.append("No peers yet");
+		return sb.toString();
+	}
+	
+	/* custom
+	 * @write TMCI peer list to file formatted
+	 */
+	public String writeTMCIPeerFile() {
+		StringBuilder sb = new StringBuilder();
+		try {
+			FileWriter fstream = new FileWriter("peers.txt");
+			BufferedWriter out = new BufferedWriter(fstream);
+			if (peers != null)
+			{
+				sb.append(peers.writeTMCIPeerList());
+
+			}
+			else
+				sb.append("No peers yet");
+			out.write(sb.toString());
+			out.write('\n');
+			out.close();
+		} catch (IOException e) {
+		}
 		return sb.toString();
 	}
 

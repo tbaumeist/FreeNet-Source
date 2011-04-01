@@ -2647,6 +2647,13 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 			idle = (int) ((now - getPeerAddedTime()) / 1000);
 		return String.valueOf(getPeer()) + '\t' + getIdentityString() + '\t' + getLocation() + '\t' + getPeerNodeStatusString() + '\t' + idle;
 	}
+	
+	/* custom
+	 * get tmci peer info formatted for file
+	 */
+	public String getFileTMCIPeerInfo() {
+		return "\"" + node.getLocation() + '\t' + node.ipDetector.lastIPAddress[0].getAddress() + "\"" + '\t' + "->" + '\t' + "\"" + getLocation() + '\t' + String.valueOf(getPeer()) + "\"";
+	}
 
 	public String getFreevizOutput() {
 		return getStatus(true).toString() + '|' + identityAsBase64String;

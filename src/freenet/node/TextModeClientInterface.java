@@ -200,6 +200,8 @@ public class TextModeClientInterface implements Runnable {
         sb.append("MEMSTAT - display some memory usage related informations.\r\n");
         sb.append("SHUTDOWN - exit the program\r\n");
         sb.append("ANNOUNCE[:<location>] - announce to the specified location\r\n");
+        // custom TMCI command
+        sb.append("PEERFILE - dump list of peers to file\r\n");
         if(n.isUsingWrapper())
         	sb.append("RESTART - restart the program\r\n");
         if(core != null && core.directTMCI != this) {
@@ -920,6 +922,11 @@ public class TextModeClientInterface implements Runnable {
         } else if(uline.startsWith("PEERS")) {
         	outsb.append(n.getTMCIPeerList());
         	outsb.append("PEERS done.\r\n");
+        }
+        // custom TMCI command
+        else if (uline.startsWith("PEERFILE")) {
+        	outsb.append(n.writeTMCIPeerFile());
+        	outsb.append("PEERFILE done.\r\n");
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();
         	double d = Double.parseDouble(s);
@@ -1199,7 +1206,6 @@ public class TextModeClientInterface implements Runnable {
             Logger.error(this, "Did not parse: "+e1, e1);
             return;
 		}
-        if(n.peers.addPeer(pn))
             System.out.println("Added peer: "+pn);
         n.peers.writePeers();
     }
