@@ -201,7 +201,7 @@ public class TextModeClientInterface implements Runnable {
         sb.append("SHUTDOWN - exit the program\r\n");
         sb.append("ANNOUNCE[:<location>] - announce to the specified location\r\n");
         // custom TMCI command
-        sb.append("PEERFILE - dump list of peers to file\r\n");
+        sb.append("PEERFILE:<[peer type]> - dump list of peers to file. peer type=ALL, dumps all peers. peer type=CONNECTED, dumps only connected peers\r\n");
         if(n.isUsingWrapper())
         	sb.append("RESTART - restart the program\r\n");
         if(core != null && core.directTMCI != this) {
@@ -924,9 +924,11 @@ public class TextModeClientInterface implements Runnable {
         	outsb.append("PEERS done.\r\n");
         }
         // custom TMCI command
-        else if (uline.startsWith("PEERFILE")) {
-        	outsb.append(n.writeTMCIPeerFile());
-        	outsb.append("PEERFILE done.\r\n");
+        else if (uline.startsWith("PEERFILE:")) {
+        	String peerFileCmd = (line.substring("PEERFILE:".length())).trim();
+        	boolean all = (peerFileCmd == "CONNECTED"?false:true);
+        	outsb.append(n.writeTMCIPeerFile(all));
+        	outsb.append("\r\nPEERFILE done.\r\n");
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();
         	double d = Double.parseDouble(s);

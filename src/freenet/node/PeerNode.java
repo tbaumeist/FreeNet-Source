@@ -2652,7 +2652,7 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 	 * get tmci peer info formatted for file
 	 */
 	public String getFileTMCIPeerInfo() {
-		return "\"" + node.getLocation() + '\t' + node.ipDetector.lastIPAddress[0].getAddress() + "\"" + '\t' + "->" + '\t' + "\"" + getLocation() + '\t' + String.valueOf(getPeer()) + "\"";
+		return "\"" + node.getLocation() + '\t' + node.ipDetector.lastIPAddress[0].getAddress().toString().replace("/","")+":" + node.getOpennetFNPPort() + "\"\t->\t\"" + getLocation() + '\t' + String.valueOf(getPeer()) + "\"";
 	}
 
 	public String getFreevizOutput() {

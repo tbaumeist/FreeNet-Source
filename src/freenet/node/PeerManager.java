@@ -1139,7 +1139,7 @@ public class PeerManager {
 	/* custom
 	 * write formatted to file, return as string as well
 	 */
-	public String writeTMCIPeerList() {
+	public String writeTMCIPeerList(boolean allPeers) {
 		StringBuilder sb = new StringBuilder();
 		PeerNode[] peers;
 		synchronized(this) {
@@ -1148,10 +1148,10 @@ public class PeerManager {
 		String[] peerList = new String[peers.length];
 		for(int i = 0; i < peers.length; i++) {
 			PeerNode pn = peers[i];
-			//if (pn.getPeerNodeStatusString().equals("CONNECTED"))
+			if (allPeers || pn.getPeerNodeStatusString().equals("CONNECTED"))
 				peerList[i] = pn.getFileTMCIPeerInfo();
-			//else
-				//peerList[i] = "";
+			else
+				peerList[i] = "";
 		}
 		//Arrays.sort(peerList);
 		for(int i = 0; i < peerList.length; i++) {

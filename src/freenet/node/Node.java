@@ -4854,20 +4854,20 @@ public class Node implements TimeSkewDetectorCallback {
 	/* custom
 	 * @write TMCI peer list to file formatted
 	 */
-	public String writeTMCIPeerFile() {
+	public String writeTMCIPeerFile(boolean allPeers) {
 		StringBuilder sb = new StringBuilder();
 		try {
 			FileWriter fstream = new FileWriter("peers.txt");
 			BufferedWriter out = new BufferedWriter(fstream);
 			if (peers != null)
 			{
-				sb.append(peers.writeTMCIPeerList());
+				sb.append(peers.writeTMCIPeerList(allPeers));
 
 			}
-			else
-				sb.append("No peers yet");
+			//else
+				//sb.append("No peers yet");
 			out.write(sb.toString());
-			out.write('\n');
+			//out.write('\n');
 			out.close();
 		} catch (IOException e) {
 		}
