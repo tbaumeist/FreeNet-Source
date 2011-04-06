@@ -4403,8 +4403,9 @@ public class Node implements TimeSkewDetectorCallback {
 
 				if (deep) {
 					chkDatastore.put(block, !canWriteDatastore);
+					// custom logging - log when node stores a block
+					//Logger.specialLogMessage(this, "Node at: " + loc + " Stored: " + block.toString());
 					nodeStats.avgStoreCHKLocation.report(loc);
-
 				}
 				// custom removal of caching
 				//chkDatacache.put(block, !canWriteDatastore);
