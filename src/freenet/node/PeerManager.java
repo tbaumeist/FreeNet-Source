@@ -1141,10 +1141,7 @@ public class PeerManager {
 	 */
 	public String writeTMCIPeerList(boolean allPeers) {
 		StringBuilder sb = new StringBuilder();
-		PeerNode[] peers;
-		synchronized(this) {
-			peers = myPeers;
-		}
+		OpennetPeerNode[] peers = getOpennetPeers();
 		String[] peerList = new String[peers.length];
 		for(int i = 0; i < peers.length; i++) {
 			PeerNode pn = peers[i];
