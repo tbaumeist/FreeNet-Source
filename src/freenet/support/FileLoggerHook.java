@@ -218,8 +218,13 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 			buf.append(digit);
 		}
 		buf.append(".log");
-		if(compressed) buf.append(".gz");
+		if(compressed) buf.append(".gz.part");
 		return buf.toString();
+	}
+	
+	private String removePartialExt(String fileName)
+	{
+		return fileName.replace(".part", "");
 	}
 
 	private StringBuilder pad2digits(StringBuilder buf, int x) {
@@ -403,6 +408,11 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 	        			"Closing on change caught " + e);
 	        }
 	        long length = currentFilename.length();
+	        
+	        // rename old log files to drop the .part
+	        File renamed = new File(removePartialExt(currentFilename.getPath()));
+	        currentFilename.renameTo(renamed);
+	        
 	        OldLogFile olf = new OldLogFile(currentFilename, lastTime, nextHour, length);
 	        synchronized(logFiles) {
 	        	logFiles.addLast(olf);
@@ -924,7 +934,7 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 					break;
 			}
 		}
-		sb.append('\n');
+		//sb.append('\n');
 
 		// Write stacktrace if available
 		sb.append("<TraceStack>");
@@ -951,7 +961,7 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 			else break;
 		}
 		sb.append("</TraceStack>");
-		sb.append("</LogMessage>");
+		sb.append("</LogMessage>\n");
 
 		logString(sb.toString().getBytes());
 	}
