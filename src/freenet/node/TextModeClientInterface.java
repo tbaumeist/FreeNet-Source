@@ -54,6 +54,7 @@ import freenet.support.io.ArrayBucket;
 import freenet.support.io.BucketTools;
 import freenet.support.io.Closer;
 import freenet.support.io.FileBucket;
+import freenet.keys.ClientCHK;
 
 /**
  * @author amphibian
@@ -561,6 +562,10 @@ public class TextModeClientInterface implements Runnable {
             }
 
             outsb.append("URI: ").append(uri);
+            //custom
+            ClientCHK chk = new ClientCHK(uri);
+            double targetLoc = chk.getNodeCHK().toNormalizedDouble();
+            outsb.append("\r\nDouble: ").append(targetLoc).append("\r\n");
             ////////////////////////////////////////////////////////////////////////////////
         } else if(uline.startsWith("PUTDIR:") || (uline.startsWith("PUTSSKDIR")) || (getCHKOnly = uline.startsWith("GETCHKDIR:"))) {
         	// TODO: Check for errors?
