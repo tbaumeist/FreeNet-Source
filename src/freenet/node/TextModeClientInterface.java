@@ -20,8 +20,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import freenet.client.ClientMetadata;
 import freenet.client.DefaultMIMETypes;
@@ -963,6 +965,72 @@ public class TextModeClientInterface implements Runnable {
 						out.flush();
 					} catch (IOException e) {
 						// Ignore
+					}
+				}
+
+				public void onRejectOverload() {
+					String msg = "Probe trace received RejectOverload\n";
+					try {
+						out.write(msg.getBytes());
+						out.flush();
+					} catch (IOException e) {
+						// Ignore
+					}
+				}
+        	};
+        	outsb.append("Probing keyspace around "+d+" ...");
+        	n.dispatcher.startProbe(d, cb);
+        	synchronized(this) {
+        		while(!doneSomething) {
+        			try {
+        				wait(5000);
+        			} catch (InterruptedException e) {
+        				// Ignore
+        			}
+        		}
+        		doneSomething = false;
+        	}
+        } else if(uline.startsWith("PROBETOPOLOGY:")) {
+        	String s = uline.substring("PROBETOPOLOGY:".length()).trim();
+        	double d = Double.parseDouble(s);
+        	if(d > 1.0 || d < 0.0) {
+        		System.err.println("Unacceptable target location: "+d);
+        		return false;
+        	}
+        	ProbeCallback cb = new ProbeCallback() {
+        		// Outer hashtable is source, inner is peers for that source
+        		private Hashtable<Double, Hashtable<Double, Object>> topology = new Hashtable<Double, Hashtable<Double, Object>>();
+				public void onCompleted(String reason, double target, double best, double nearest, long id, short counter, short uniqueCounter, short linearCounter) {
+					String msg = "digraph G {\noverlap=\"scale\"\n";
+					for(double sourceLoc : topology.keySet())
+					{
+						for(double peerLoc : topology.get(sourceLoc).keySet())
+						{
+							msg += "\""+ sourceLoc+ "\" -> \""+peerLoc+"\"\n";
+						}
+					}
+					msg += "}";
+					try {
+						out.write(msg.getBytes());
+						out.flush();
+					} catch (IOException e) {
+						// Already closed. :(
+					}
+					synchronized(TextModeClientInterface.this) {
+						doneSomething = true;
+						TextModeClientInterface.this.notifyAll();
+					}
+				}
+
+				public void onTrace(long uid, double target, double nearest, double best, short htl, short counter, double location, long nodeUID, double[] peerLocs, long[] peerUIDs, double[] locsNotVisited, short forkCount, short linearCounter, String reason, long prevUID) {
+					if(!topology.containsKey(location))
+						topology.put(location, new Hashtable<Double, Object>());
+					
+					Hashtable<Double, Object> peers = topology.get(location);
+					for(double peerLoc : peerLocs)
+					{
+						if(!peers.containsKey(peerLoc))
+							peers.put(peerLoc, null);
 					}
 				}
 
