@@ -19,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1002,14 +1003,19 @@ public class TextModeClientInterface implements Runnable {
         		private Hashtable<Double, Hashtable<Double, Object>> topology = new Hashtable<Double, Hashtable<Double, Object>>();
 				public void onCompleted(String reason, double target, double best, double nearest, long id, short counter, short uniqueCounter, short linearCounter) {
 					String msg = "digraph G {\noverlap=\"scale\"\n";
-					for(double sourceLoc : topology.keySet())
+					for(Double sourceLoc : topology.keySet())
 					{
-						for(double peerLoc : topology.get(sourceLoc).keySet())
+						for(Double peerLoc : topology.get(sourceLoc).keySet())
 						{
-							msg += "\""+ sourceLoc+ "\" -> \""+peerLoc+"\"\n";
+							// Round it to 3 decimal places for our purposes
+							DecimalFormat threeDForm = new DecimalFormat("#.###");
+							// +1 becuz they are all -1.######
+							double peerRounded = Double.valueOf(threeDForm.format(peerLoc.doubleValue()+1));
+
+							msg += "\""+ sourceLoc+ "\" -> \""+Math.abs(peerRounded)+"\"\n";
 						}
 					}
-					msg += "}";
+					msg += "}\n";
 					try {
 						out.write(msg.getBytes());
 						out.flush();
@@ -1023,14 +1029,16 @@ public class TextModeClientInterface implements Runnable {
 				}
 
 				public void onTrace(long uid, double target, double nearest, double best, short htl, short counter, double location, long nodeUID, double[] peerLocs, long[] peerUIDs, double[] locsNotVisited, short forkCount, short linearCounter, String reason, long prevUID) {
-					if(!topology.containsKey(location))
-						topology.put(location, new Hashtable<Double, Object>());
+					Double dLocation = new Double(location);
+					if(!topology.containsKey(dLocation))
+						topology.put(dLocation, new Hashtable<Double, Object>());
 					
-					Hashtable<Double, Object> peers = topology.get(location);
+					Hashtable<Double, Object> peers = topology.get(dLocation);
 					for(double peerLoc : peerLocs)
 					{
-						if(!peers.containsKey(peerLoc))
-							peers.put(peerLoc, null);
+						Double dPeerLoc = new Double(peerLoc);
+						if(!peers.containsKey(dPeerLoc))
+							peers.put(dPeerLoc, new Object());// should use a list here but w/e
 					}
 				}
 
