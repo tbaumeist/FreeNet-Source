@@ -17,12 +17,15 @@ import freenet.crypt.DiffieHellman;
 import freenet.crypt.RandomSource;
 import freenet.crypt.SSL;
 import freenet.crypt.Yarrow;
+import freenet.io.comm.Message;
+import freenet.node.LoggingConfigHandler.Deleter;
 import freenet.support.Executor;
 import freenet.support.Logger;
 import freenet.support.PooledExecutor;
 import freenet.support.SimpleFieldSet;
 import freenet.support.Logger.LogLevel;
 import freenet.support.LoggerHook.InvalidThresholdException;
+import freenet.support.api.StringCallback;
 import freenet.support.io.NativeThread;
 
 /**
@@ -91,20 +94,37 @@ public class NodeStarter implements WrapperListener {
 		System.out.println(builtWithMessage);
 
 		File configFilename;
+		File configDebugFilename;
 		if(args.length == 0) {
 			System.out.println("Using default config filename freenet.ini");
 			configFilename = new File("freenet.ini");
 		} else
 			configFilename = new File(args[0]);
+		
+		configDebugFilename = new File("debug.conf");
 
 		// set Java's DNS cache not to cache forever, since many people
 		// use dyndns hostnames
 		java.security.Security.setProperty("networkaddress.cache.ttl", "0");
 		java.security.Security.setProperty("networkaddress.cache.negative.ttl", "0");
 
+		FreenetFilePersistentConfig debugCfg = null;
 		try {
 			System.out.println("Creating config from "+configFilename);
 			cfg = FreenetFilePersistentConfig.constructFreenetFilePersistentConfig(configFilename);
+			if(configDebugFilename.isFile()) //custom debug init code
+			{
+				debugCfg = FreenetFilePersistentConfig.constructFreenetFilePersistentConfig(configDebugFilename);
+				SimpleFieldSet s = debugCfg.getSimpleFieldSet();
+				
+				try
+				{
+					Message.SetRemoteDebugServer( s.getString("debug.IP") );
+					Message.SetRemoteDebugServerPort( s.getInt("debug.port") );
+				}catch(FSParseException p)
+				{
+				}
+			}
 		} catch(IOException e) {
 			System.out.println("Error : " + e);
 			e.printStackTrace();
