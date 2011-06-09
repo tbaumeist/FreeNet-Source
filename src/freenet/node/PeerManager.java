@@ -1125,7 +1125,8 @@ public class PeerManager {
 		String[] peerList = new String[peers.length];
 		for(int i = 0; i < peers.length; i++) {
 			PeerNode pn = peers[i];
-			peerList[i] = pn.getTMCIPeerInfo();
+			//peerList[i] = pn.getTMCIPeerInfo();
+			peerList[i] = pn.toString();
 		}
 		Arrays.sort(peerList);
 		for(int i = 0; i < peerList.length; i++) {
