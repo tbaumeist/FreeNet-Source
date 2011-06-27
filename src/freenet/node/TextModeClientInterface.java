@@ -790,7 +790,12 @@ public class TextModeClientInterface implements Runnable {
             }
             if(content == null) return false;
             if(content.equals("")) return false;
-            addPeer(content);
+            try {
+            	addPeer(content);
+            } catch (OpennetDisabledException e) {
+            	System.err.println("Did not parse: "+e);
+            	Logger.error(this, "Did not parse: "+e, e);
+            }
         
         } else if(uline.startsWith("NAME:")) {
             outsb.append("Node name currently: ").append(n.getMyName());
@@ -1262,8 +1267,9 @@ public class TextModeClientInterface implements Runnable {
 
     /**
      * Add a peer to the node, given its reference.
+     * @throws OpennetDisabledException 
      */
-    private void addPeer(String content) {
+    private void addPeer(String content) throws OpennetDisabledException {
         SimpleFieldSet fs;
         System.out.println("Connecting to:\r\n"+content);
         try {
@@ -1275,7 +1281,8 @@ public class TextModeClientInterface implements Runnable {
         }
         PeerNode pn;
         try {
-            pn = n.createNewDarknetNode(fs);
+            //pn = n.createNewDarknetNode(fs);
+			pn = n.createNewOpennetNode(fs);
         } catch (FSParseException e1) {
             System.err.println("Did not parse: "+e1);
             Logger.error(this, "Did not parse: "+e1, e1);
@@ -1368,7 +1375,8 @@ public class TextModeClientInterface implements Runnable {
      */
     private boolean removePeer(String nodeIdentifier) {
     	System.out.println("Removing peer from node for: "+nodeIdentifier);
-    	DarknetPeerNode[] pn = n.peers.getDarknetPeers();
+    	//DarknetPeerNode[] pn = n.peers.getDarknetPeers();
+    	OpennetPeerNode[] pn = n.peers.getOpennetPeers();
     	for(int i=0;i<pn.length;i++)
     	{
     		Peer peer = pn[i].getPeer();
@@ -1376,9 +1384,10 @@ public class TextModeClientInterface implements Runnable {
     		if(peer != null) {
         		nodeIpAndPort = peer.toString();
     		}
-    		String name = pn[i].myName;
+    		//String name = pn[i].myName;
     		String identity = pn[i].getIdentityString();
-    		if(identity.equals(nodeIdentifier) || nodeIpAndPort.equals(nodeIdentifier) || name.equals(nodeIdentifier))
+    		//if(identity.equals(nodeIdentifier) || nodeIpAndPort.equals(nodeIdentifier) || name.equals(nodeIdentifier))
+    		if(identity.equals(nodeIdentifier) || nodeIpAndPort.equals(nodeIdentifier))
     		{
     			n.removePeerConnection(pn[i]);
     			return true;

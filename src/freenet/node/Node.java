@@ -5657,7 +5657,7 @@ public class Node implements TimeSkewDetectorCallback {
 	}
 
 	public OpennetPeerNode createNewOpennetNode(SimpleFieldSet fs) throws FSParseException, OpennetDisabledException, PeerParseException, ReferenceSignatureVerificationException {
-		if(opennet == null) throw new OpennetDisabledException("Opennet is not currently enabled");
+	if(opennet == null) throw new OpennetDisabledException("Opennet is not currently enabled");
 		return new OpennetPeerNode(fs, this, opennet.crypto, opennet, peers, false, opennet.crypto.packetMangler);
 	}
 
