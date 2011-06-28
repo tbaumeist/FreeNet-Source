@@ -1386,6 +1386,7 @@ public class TextModeClientInterface implements Runnable {
     		}
     		//String name = pn[i].myName;
     		String identity = pn[i].getIdentityString();
+        	System.out.println("Comparing "+nodeIdentifier+" to "+identity+", "+nodeIpAndPort);
     		//if(identity.equals(nodeIdentifier) || nodeIpAndPort.equals(nodeIdentifier) || name.equals(nodeIdentifier))
     		if(identity.equals(nodeIdentifier) || nodeIpAndPort.equals(nodeIdentifier))
     		{
