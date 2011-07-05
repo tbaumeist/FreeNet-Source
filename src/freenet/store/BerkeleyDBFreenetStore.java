@@ -2375,4 +2375,35 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 		return null;
 	}
 
+	public String getDbContents() {
+		StringBuilder sb = new StringBuilder();
+		Cursor c = null;
+		try {
+			c = keysDB.openCursor(null,null);
+			StoreBlock oldStoreBlock;
+			DatabaseEntry keyDBE = new DatabaseEntry();
+			DatabaseEntry dataDBE = new DatabaseEntry();
+			
+			while (c.getNext(keyDBE, dataDBE, LockMode.READ_UNCOMMITTED) == OperationStatus.SUCCESS)
+			{
+				sb.append(keyDBE.toString() + "\t" + dataDBE.toString() + "\r\n");
+				System.out.println(keyDBE.toString() + "\t" + dataDBE.toString() + "\r\n");
+			}
+			c.close();
+			c = null;
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error accessing database: ");
+			e.printStackTrace();
+		} finally {
+			if(c != null) {
+				try {
+					c.close();
+				} catch (DatabaseException e) {
+					Logger.error(this, "Caught "+e, e);
+				}
+			}
+		}
+		return sb.toString();
+	}
 }

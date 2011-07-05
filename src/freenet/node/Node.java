@@ -585,7 +585,7 @@ public class Node implements TimeSkewDetectorCallback {
 	 * insert (because inserts will always reach the most specialized node; if we
 	 * allow requests to store here, then we get pollution by inserts for keys not
 	 * close to our specialization). These conclusions derived from Oskar's simulations. */
-	private CHKStore chkDatastore;
+	CHKStore chkDatastore;
 	/** The SSK datastore. See description for chkDatastore. */
 	private SSKStore sskDatastore;
 	/** The store of DSAPublicKeys (by hash). See description for chkDatastore. */

@@ -78,4 +78,6 @@ public interface FreenetStore<T extends StorableBlock> {
 	public abstract StoreAccessStats getSessionAccessStats();
 
 	public abstract StoreAccessStats getTotalAccessStats();
+	
+	public String getDbContents();
 }
