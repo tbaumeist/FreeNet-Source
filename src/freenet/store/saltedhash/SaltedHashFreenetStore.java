@@ -2082,7 +2082,11 @@ public class SaltedHashFreenetStore<T extends StorableBlock> implements FreenetS
 		};
 	}
 	public String getDbContents() {
-		return null;
+		StringBuilder sb = new StringBuilder();
+		sb.append("Hits: hits.get()\r\n");
+		sb.append("Misses: misses.get()\r\n");
+		sb.append("Writes: writes.get()\r\n");
+		return sb.toString();
 	}
 
 }

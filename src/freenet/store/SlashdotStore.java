@@ -280,6 +280,6 @@ public class SlashdotStore<T extends StorableBlock> implements FreenetStore<T> {
 	}
 	
 	public String getDbContents() {
-		return null;
+		return "SlashDotFreenetStore accessed";
 	}
 }

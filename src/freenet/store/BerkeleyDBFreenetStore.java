@@ -2376,6 +2376,7 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 	}
 
 	public String getDbContents() {
+		System.out.println("Entering getDbContents\r\n");
 		StringBuilder sb = new StringBuilder();
 		Cursor c = null;
 		try {

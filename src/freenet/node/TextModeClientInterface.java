@@ -206,6 +206,7 @@ public class TextModeClientInterface implements Runnable {
         sb.append("ANNOUNCE[:<location>] - announce to the specified location\r\n");
         // custom TMCI command
         sb.append("PEERFILE:<[peer type]> - dump list of peers to file. peer type=ALL, dumps all peers. peer type=CONNECTED, dumps only connected peers\r\n");
+        sb.append("STOREDUMP - dump contents of CHK store to file.\r\n");
         if(n.isUsingWrapper())
         	sb.append("RESTART - restart the program\r\n");
         if(core != null && core.directTMCI != this) {
@@ -942,6 +943,9 @@ public class TextModeClientInterface implements Runnable {
         	boolean all = (peerFileCmd == "CONNECTED"?false:true);
         	outsb.append(n.writeTMCIPeerFile(all));
         	outsb.append("\r\nPEERFILE done.\r\n");
+        } else if(uline.startsWith("STOREDUMP:")) {
+        	outsb.append(n.chkDatastore.getDbContents());
+        	outsb.append("\r\nSTOREDUMP done.\r\n");
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();
         	double d = Double.parseDouble(s);

@@ -89,6 +89,6 @@ public class NullFreenetStore<T extends StorableBlock> implements FreenetStore<T
 	}
 
 	public String getDbContents() {
-		return null;
+		return "NullFreenetStore accessed";
 	}
 }
