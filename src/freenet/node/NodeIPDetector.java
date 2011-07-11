@@ -62,7 +62,7 @@ public class NodeIPDetector {
 	/** Detected IP's and their NAT status from plugins */
 	DetectedIP[] pluginDetectedIPs;
 	/** Last detected IP address */
-	FreenetInetAddress[] lastIPAddress;
+	public FreenetInetAddress[] lastIPAddress;
 	/** The minimum reported MTU on all detected interfaces */
 	private int minimumMTU = Integer.MAX_VALUE;
 	/** IP address detector */

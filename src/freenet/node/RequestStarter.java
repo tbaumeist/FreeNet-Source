@@ -3,6 +3,8 @@
  * http://www.gnu.org/ for further details of the GPL. */
 package freenet.node;
 
+import DebugMessenger.DebugMessage;
+
 import com.db4o.ObjectContainer;
 
 import freenet.client.async.ChosenBlock;
@@ -19,6 +21,7 @@ import freenet.support.RandomGrabArrayItemExclusionList;
 import freenet.support.TokenBucket;
 import freenet.support.Logger.LogLevel;
 import freenet.support.math.RunningAverage;
+import freenet.tools.DebugTool;
 
 /**
  * Starts requests.
@@ -238,6 +241,13 @@ public class RequestStarter implements Runnable, RandomGrabArrayItemExclusionLis
 		public SenderThread(ChosenBlock req, Key key) {
 			this.req = req;
 			this.key = key;
+			
+			DebugMessage mess = new DebugMessage();
+			mess.setMessageType("New_Request");
+			try {
+				mess.setMessage("Document name: " + req.ckey.getURI().getDocName());
+			} catch (Exception e) {	}
+			DebugTool.getInstance().sendMessage(mess);
 		}
 
 		public void run() {

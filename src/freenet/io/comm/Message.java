@@ -39,6 +39,7 @@ import freenet.support.Logger;
 import freenet.support.Serializer;
 import freenet.support.ShortBuffer;
 import freenet.support.Logger.LogLevel;
+import freenet.tools.DebugTool;
 
 /**
  * A Message which can be read from and written to a DatagramPacket
@@ -50,18 +51,6 @@ public class Message {
 	public static final String VERSION = "$Id: Message.java,v 1.11 2005/09/15 18:16:04 amphibian Exp $";
 	private static volatile boolean logMINOR;
 	private static volatile boolean logDEBUG;
-
-	private static String remoteDebugServer = "";
-	private static int remoteDebugServerPort = 0;
-	
-	public static void SetRemoteDebugServer(String ip)
-	{
-		remoteDebugServer = ip;
-	}
-	public static void SetRemoteDebugServerPort(int port)
-	{
-		remoteDebugServerPort = port;
-	}
 	
 	static {
 		Logger.registerLogThresholdCallback(new LogThresholdCallback(){
@@ -157,39 +146,16 @@ public class Message {
 		if(m.shouldRemoteDebug(mspec))
 		{
 			DebugMessage mess = new DebugMessage();
-			mess.setUniqueId(destloc+"");
-			mess.setMessageType(mspec.getName());
-			mess.setMessage("Recieved");
-			new DebugMessengerClientSender(remoteDebugServer, remoteDebugServerPort).SendMessage(mess);
+			mess.setMessageType("Messages");
+			mess.setMessage("Recieved " + mspec.getName() + " from "+peer.getPeer().toString());
+			DebugTool.getInstance().sendMessage(mess);
 		}
 		return m;
 	}
 	
 	private boolean shouldRemoteDebug(MessageType type)
 	{
-		if(remoteDebugServer.equals("") || remoteDebugServerPort == 0)
-			return false;
-		return type == DMT.FNPInsertReply ||
-				type == DMT.FNPInsertRequest ||
-				type == DMT.FNPInsertTransfersCompleted ||
-				type == DMT.FNPCHKDataFound ||
-				type == DMT.FNPCHKDataRequest ||
-				type == DMT.FNPDataInsert ||
-				type == DMT.FNPDataInsertRejected ||
-				type == DMT.FNPDataNotFound ||
-				type == DMT.FNPOpennetAnnounceCompleted ||
-				type == DMT.FNPOpennetAnnounceNodeNotWanted ||
-				type == DMT.FNPOpennetAnnounceReply ||
-				type == DMT.FNPOpennetAnnounceRequest ||
-				type == DMT.FNPOpennetCompletedAck ||
-				type == DMT.FNPOpennetConnectDestinationNew ||
-				type == DMT.FNPOpennetConnectReplyNew ||
-				type == DMT.FNPOpennetNoderefRejected ||
-				type == DMT.FNPSSKAccepted ||
-				type == DMT.FNPSSKDataFoundData ||
-				type == DMT.FNPSSKDataRequest ||
-				type == DMT.FNPSSKInsertRequest ||
-				type == DMT.FNPSSKInsertRequestData;
+		return type != DMT.FNPVoid;
 	}
 
 	public Message(MessageType spec) {
@@ -323,10 +289,9 @@ public class Message {
 		if(shouldRemoteDebug(_spec))
 		{
 			DebugMessage mess = new DebugMessage();
-			mess.setUniqueId(srcloc+"");
-			mess.setMessageType(_spec.getName());
-			mess.setMessage("Sent");
-			new DebugMessengerClientSender(remoteDebugServer, remoteDebugServerPort).SendMessage(mess);
+			mess.setMessageType("Messages");
+			mess.setMessage("Sent " + _spec.getName() + " to "+destination.getPeer().toString());
+			DebugTool.getInstance().sendMessage(mess);
 		}
 		return buf;
 	}
