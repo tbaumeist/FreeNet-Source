@@ -3,7 +3,6 @@
 	<name>FreeNet-Source</name>
 	<comment></comment>
 	<projects>
-		<project>ExDebugTools</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
