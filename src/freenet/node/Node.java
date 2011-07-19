@@ -4417,32 +4417,12 @@ public class Node implements TimeSkewDetectorCallback {
 					newChkDatastoreContents[chkDatastoreContents.length] = block.toString();
 					chkDatastoreContents = newChkDatastoreContents;
 
-					StringBuilder sb = new StringBuilder();
-					try {
-						FileWriter fstream = new FileWriter("storedebug.txt");
-						BufferedWriter out = new BufferedWriter(fstream);
-						sb.append("If this is written, then this function was called.\n");
-/*
-						if (chkDatastoreContents != null) {
-							for (int i = 0; i < chkDatastoreContents.length; i++) {
-								sb.append("\n" + chkDatastoreContents[i]);
-							}
-						}
-						else {
-							sb.append("CHK Datastore appears to be empty.\n");
-						}
-						*/
-						out.write(sb.toString());
-						out.close();
-					} catch (IOException e) {
-					}	
-					
 					//System.out.println("Added " + block.toString() + "to chkDatastore.");
 
 				}
 				// custom removal of caching
 				// chkDatacache.put(block, !canWriteDatastore);
-				// nodeStats.avgCacheCHKLocation.report(loc);
+				nodeStats.avgCacheCHKLocation.report(loc);
 			}
 			if (canWriteDatastore || forULPR || useSlashdotCache)
 				failureTable.onFound(block);
@@ -6337,5 +6317,15 @@ public class Node implements TimeSkewDetectorCallback {
 	
 	public boolean getUseSlashdotCache() {
 		return useSlashdotCache;
+	}
+	
+	public String storeStats() {
+		// Do the node stats match the chkDatastore's stats?
+		StringBuilder sb = new StringBuilder();
+		sb.append("Stored inserts: " + completeInsertsStored + " of " + completeInsertsTotal + "\n");
+		sb.append("Hits: " + chkDatastore.hits() + "\n");
+		sb.append("Hits: " + chkDatastore.misses() + "\n");
+		sb.append("Hits: " + chkDatastore.writes() + "\n");
+		return sb.toString();
 	}
 }

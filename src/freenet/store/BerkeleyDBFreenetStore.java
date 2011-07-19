@@ -2375,13 +2375,12 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 		return null;
 	}
 
-	public String getDbContents() {
-		System.out.println("Entering getDbContents\r\n");
+	/*
+	public String iterateDatabase() {
 		StringBuilder sb = new StringBuilder();
 		Cursor c = null;
 		try {
 			c = keysDB.openCursor(null,null);
-			StoreBlock oldStoreBlock;
 			DatabaseEntry keyDBE = new DatabaseEntry();
 			DatabaseEntry dataDBE = new DatabaseEntry();
 			
@@ -2407,4 +2406,5 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 		}
 		return sb.toString();
 	}
+	*/
 }

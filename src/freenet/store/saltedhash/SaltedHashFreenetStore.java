@@ -70,7 +70,7 @@ import freenet.support.io.NativeThread;
  */
 public class SaltedHashFreenetStore<T extends StorableBlock> implements FreenetStore<T> {
 	/** Option for saving plainkey */
-	private static final boolean OPTION_SAVE_PLAINKEY = false;
+	private static final boolean OPTION_SAVE_PLAINKEY = true;
 	private static final int OPTION_MAX_PROBE = 5;
 
 	private static final byte FLAG_DIRTY = 0x1;
@@ -2081,12 +2081,4 @@ public class SaltedHashFreenetStore<T extends StorableBlock> implements FreenetS
 			
 		};
 	}
-	public String getDbContents() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Hits: hits.get()\r\n");
-		sb.append("Misses: misses.get()\r\n");
-		sb.append("Writes: writes.get()\r\n");
-		return sb.toString();
-	}
-
 }

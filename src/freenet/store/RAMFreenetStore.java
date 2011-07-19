@@ -211,7 +211,4 @@ public class RAMFreenetStore<T extends StorableBlock> implements FreenetStore<T>
 		return null;
 	}
 
-	public String getDbContents() {
-		return "RAMFreenetStore accessed";
-	}
 }
