@@ -590,7 +590,7 @@ public class Node implements TimeSkewDetectorCallback {
 	/** String version of our chkDatastore
 	 * Automatically updated whenever something is placed into it.
 	 */
-	String[] chkDatastoreContents;
+	ArrayList chkDatastoreContents = new ArrayList();
 	
 	/** The SSK datastore. See description for chkDatastore. */
 	private SSKStore sskDatastore;
@@ -4412,11 +4412,7 @@ public class Node implements TimeSkewDetectorCallback {
 					nodeStats.avgStoreCHKLocation.report(loc);
 					
 					// Add block to chkDatastoreContents for network storage topology
-					String[] newChkDatastoreContents = new String[chkDatastoreContents.length + 1];
-					System.arraycopy(chkDatastoreContents, 0, newChkDatastoreContents, 0, chkDatastoreContents.length);
-					newChkDatastoreContents[chkDatastoreContents.length] = block.toString();
-					chkDatastoreContents = newChkDatastoreContents;
-
+					chkDatastoreContents.add(block.toString());
 					//System.out.println("Added " + block.toString() + "to chkDatastore.");
 
 				}
@@ -4891,21 +4887,38 @@ public class Node implements TimeSkewDetectorCallback {
 	/**
 	 * Write CHK Datastore array to file 
 	 */
-	public String writeChkDatastoreFile() {
+	public String writeChkDatastoreFileA() {
 		StringBuilder sb = new StringBuilder();
 		try {
-			FileWriter fstream = new FileWriter("datastore.txt");
+			FileWriter fstream = new FileWriter("datastorea.txt");
 			BufferedWriter out = new BufferedWriter(fstream);
 			sb.append(getLocation());
 
-			if (chkDatastoreContents != null) {
-				for (int i = 0; i < chkDatastoreContents.length; i++) {
-					sb.append("\n" + chkDatastoreContents[i]);
+			if (chkDatastoreContents.size() == 0) {
+				sb.append("CHK Datastore appears to be empty.\n");
+			} else {	
+				for (int i = 0; i < chkDatastoreContents.size(); i++) {
+					sb.append("\n" + chkDatastoreContents.get(i));
 				}
 			}
-			else {
-				sb.append("CHK Datastore appears to be empty.\n");
-			}
+			out.write(sb.toString());
+			out.close();
+		} catch (IOException e) {
+		}
+		return sb.toString();
+	}
+	
+	/**
+	 * Write CHK Datastore contents (via cursor through berkeley DB)
+	 */
+	public String writeChkDatastoreFileB() {
+		StringBuilder sb = new StringBuilder();
+		try {
+			FileWriter fstream = new FileWriter("datastoreb.txt");
+			BufferedWriter out = new BufferedWriter(fstream);
+			sb.append(getLocation());
+
+			sb.append((chkDatastore).getDatabaseContents());
 			out.write(sb.toString());
 			out.close();
 		} catch (IOException e) {

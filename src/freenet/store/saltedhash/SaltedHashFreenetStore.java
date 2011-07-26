@@ -2081,4 +2081,7 @@ public class SaltedHashFreenetStore<T extends StorableBlock> implements FreenetS
 			
 		};
 	}
+	public String getDatabaseContents() {
+		return "This method not implemented for SaltedHashFreenetStore.\n";
+	}
 }

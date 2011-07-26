@@ -87,4 +87,8 @@ public class NullFreenetStore<T extends StorableBlock> implements FreenetStore<T
 	public StoreAccessStats getTotalAccessStats() {
 		return null;
 	}
+	
+	public String getDatabaseContents() {
+		return "This method not implemented for NullFreenetStore.\n";
+	}
 }

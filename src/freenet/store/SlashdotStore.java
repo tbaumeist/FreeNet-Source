@@ -278,5 +278,8 @@ public class SlashdotStore<T extends StorableBlock> implements FreenetStore<T> {
 	public StoreAccessStats getTotalAccessStats() {
 		return null;
 	}
-	
+
+	public String getDatabaseContents() {
+		return "This method not implemented for SlashdotStore.\n";
+	}
 }

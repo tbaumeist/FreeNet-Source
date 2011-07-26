@@ -943,9 +943,12 @@ public class TextModeClientInterface implements Runnable {
         	boolean all = (peerFileCmd == "CONNECTED"?false:true);
         	outsb.append(n.writeTMCIPeerFile(all));
         	outsb.append("\r\nPEERFILE done.\r\n");
-        } else if(uline.startsWith("STOREFILE:")) {
-        	outsb.append(n.writeChkDatastoreFile());
-        	outsb.append("\r\nSTOREFILE done.\r\n");
+        } else if(uline.startsWith("STOREFILEA")) { 
+        	outsb.append(n.writeChkDatastoreFileA()); // writes store file using array list
+        	outsb.append("\r\nSTOREFILEA done.\r\n");
+        } else if(uline.startsWith("STOREFILEB")) {
+        	outsb.append(n.writeChkDatastoreFileB()); // writes store file iterating over db with cursor
+        	outsb.append("\r\nSTOREFILEB done.\r\n");
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();
         	double d = Double.parseDouble(s);

@@ -72,4 +72,8 @@ public class CHKStore extends StoreCallback<CHKBlock> {
 		return NodeCHK.routingKeyFromFullKey(keyBuf);
 	}
 
+	public String getDatabaseContents() {
+		return store.getDatabaseContents();
+	}
+
 }

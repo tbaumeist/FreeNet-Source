@@ -2375,8 +2375,7 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 		return null;
 	}
 
-	/*
-	public String iterateDatabase() {
+	public String getDatabaseContents() {
 		StringBuilder sb = new StringBuilder();
 		Cursor c = null;
 		try {
@@ -2392,7 +2391,6 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 			c.close();
 			c = null;
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error accessing database: ");
 			e.printStackTrace();
 		} finally {
@@ -2406,5 +2404,4 @@ public class BerkeleyDBFreenetStore<T extends StorableBlock> implements FreenetS
 		}
 		return sb.toString();
 	}
-	*/
 }
