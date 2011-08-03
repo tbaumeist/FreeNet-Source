@@ -206,7 +206,9 @@ public class TextModeClientInterface implements Runnable {
         sb.append("ANNOUNCE[:<location>] - announce to the specified location\r\n");
         // custom TMCI command
         sb.append("PEERFILE:<[peer type]> - dump list of peers to file. peer type=ALL, dumps all peers. peer type=CONNECTED, dumps only connected peers\r\n");
-        sb.append("STOREFILE: - dump contents of CHK store to file.\r\n");
+        sb.append("STOREFILE - dump contents of CHK store to file.\r\n");
+        sb.append("ENABLEANNOUNCE - enable node announcements\r\n");
+        sb.append("DISABLEANNOUNCE - enable node announcements\r\n");
         if(n.isUsingWrapper())
         	sb.append("RESTART - restart the program\r\n");
         if(core != null && core.directTMCI != this) {
@@ -1151,6 +1153,12 @@ public class TextModeClientInterface implements Runnable {
 				}
         		
         	});
+        } else if(uline.startsWith("ENABLEANNOUNCE")) {
+        	enableAnnouncements();
+        	outsb.append("\r\nENABLEANNOUNCE done.\r\n");
+        } else if(uline.startsWith("DISABLEANNOUNCE")) {
+        	disableAnnouncements();
+        	outsb.append("\r\nDISABLENNOUNCE done.\r\n");
         } else {
         	if(uline.length() > 0)
         		printHeader(out);
@@ -1403,6 +1411,16 @@ public class TextModeClientInterface implements Runnable {
     	}
     	System.out.println("No node in peers list for: "+nodeIdentifier);
     	return false;
+    }
+    
+    /** Enables node announcements */
+    private void enableAnnouncements() {
+    	n.opennet.announcer.enableAnnouncements();
+    }
+    
+    /** Disables node announcements */
+    private void disableAnnouncements() {
+    	n.opennet.announcer.disableAnnouncements();
     }
 
     private String sanitize(String fnam) {

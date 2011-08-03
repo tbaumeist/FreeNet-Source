@@ -68,6 +68,8 @@ public class Announcer {
 	private int announcementAddedNodes;
 	/** Total nodes that didn't want us so far */
 	private int announcementNotWantedNodes;
+	/** Controls whether or not our node does re-announcements */
+	private boolean announcementsEnabled = true;
 
 	Announcer(OpennetManager om) {
 		this.om = om;
@@ -406,6 +408,12 @@ public class Announcer {
 		synchronized(this) {
 			if(!started) return;
 		}
+		
+		/** If announcements are disabled, quit now */
+		if(!announcementsEnabled) {
+			return;
+		}
+		
 		logMINOR = Logger.shouldLog(LogLevel.MINOR, this);
 		if(logMINOR)
 			Logger.minor(this, "maybeSendAnnouncement()");
@@ -727,5 +735,13 @@ public class Announcer {
 		synchronized(this) {
 			return killedAnnouncementTooOld;
 		}
+	}
+	
+	public void enableAnnouncements() {
+		announcementsEnabled = true;
+	}
+	
+	public void disableAnnouncements() {
+		announcementsEnabled = false;
 	}
 }
