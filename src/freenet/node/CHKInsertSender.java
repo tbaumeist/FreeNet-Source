@@ -6,6 +6,8 @@ package freenet.node;
 import java.util.HashSet;
 import java.util.Vector;
 
+import DebugMessenger.DebugMessage;
+
 import freenet.io.comm.AsyncMessageFilterCallback;
 import freenet.io.comm.ByteCounter;
 import freenet.io.comm.DMT;
@@ -20,11 +22,13 @@ import freenet.io.xfer.BlockTransmitter.BlockTransmitterCompletion;
 import freenet.io.xfer.PartiallyReceivedBlock;
 import freenet.keys.CHKBlock;
 import freenet.keys.CHKVerifyException;
+import freenet.keys.Key;
 import freenet.keys.NodeCHK;
 import freenet.support.Logger;
 import freenet.support.OOMHandler;
 import freenet.support.Logger.LogLevel;
 import freenet.support.io.NativeThread;
+import freenet.tools.DebugTool;
 
 public final class CHKInsertSender implements PrioRunnable, AnyInsertSender, ByteCounter {
 	
@@ -371,6 +375,7 @@ public final class CHKInsertSender implements PrioRunnable, AnyInsertSender, Byt
             	Logger.normal(this, "FORKING CHK INSERT "+origUID+" to "+uid);
             	nodesRoutedTo.clear();
             	node.lockUID(uid, false, true, false, false, realTimeFlag, forkedRequestTag);
+            	
             }
             
             // Route it

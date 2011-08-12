@@ -32,6 +32,7 @@ import java.util.List;
 import DebugMessenger.DebugMessage;
 import DebugMessenger.DebugMessengerClientSender;
 
+import freenet.keys.Key;
 import freenet.support.ByteBufferInputStream;
 import freenet.support.Fields;
 import freenet.support.LogThresholdCallback;
@@ -145,10 +146,37 @@ public class Message {
 		}
 		if(m.shouldRemoteDebug(mspec))
 		{
-			DebugMessage mess = new DebugMessage();
-			mess.setMessageType("Messages");
-			mess.setMessage("Recieved " + mspec.getName() + " from "+peer.getPeer().toString());
-			DebugTool.getInstance().sendMessage(mess);
+			
+			if(m._payload.containsKey(DMT.UID))
+			{
+				DebugMessage mess = new DebugMessage();
+				long id = m.getLong(DMT.UID);
+				mess.setCustomProperty("MESSAGE_UID", id+"");
+				
+				if(m._payload.containsKey(DMT.FREENET_ROUTING_KEY))
+				{
+					Key key = (Key) m.getObject(DMT.FREENET_ROUTING_KEY);
+					mess.setCustomProperty("MESSAGE_CHK", key.toString());
+				}
+				
+
+				if(m._payload.containsKey(DMT.HTL))
+				{
+					short htl = m.getShort(DMT.HTL);
+					mess.setCustomProperty("MESSAGE_HTL", htl+"");
+				}
+				
+//				Message forkControl = m.getSubMessage(DMT.FNPSubInsertForkControl);
+//				if(forkControl != null)
+//					mess.setCustomProperty("MESSAGE_FORKED", "TRUE");
+//				else
+//					mess.setCustomProperty("MESSAGE_FORKED", "FALSE");
+				
+				
+				mess.setMessageType("MESSAGE_TRACE");
+				mess.setMessage("Recieved " + mspec.getName() + " from "+peer.getPeer().toString());
+				DebugTool.getInstance().sendMessage(mess);
+			}
 		}
 		return m;
 	}
@@ -288,10 +316,34 @@ public class Message {
 		}
 		if(shouldRemoteDebug(_spec))
 		{
-			DebugMessage mess = new DebugMessage();
-			mess.setMessageType("Messages");
-			mess.setMessage("Sent " + _spec.getName() + " to "+destination.getPeer().toString());
-			DebugTool.getInstance().sendMessage(mess);
+			if(_payload.containsKey(DMT.UID))
+			{
+				DebugMessage mess = new DebugMessage();
+				long id = getLong(DMT.UID);
+				mess.setCustomProperty("MESSAGE_UID", id+"");
+				
+				if(_payload.containsKey(DMT.FREENET_ROUTING_KEY))
+				{
+					Key key = (Key) getObject(DMT.FREENET_ROUTING_KEY);
+					mess.setCustomProperty("MESSAGE_CHK", key.toString());
+				}
+				
+				if(_payload.containsKey(DMT.HTL))
+				{
+					short htl = getShort(DMT.HTL);
+					mess.setCustomProperty("MESSAGE_HTL", htl+"");
+				}
+				
+//				Message forkControl = getSubMessage(DMT.FNPSubInsertForkControl);
+//				if(forkControl != null)
+//					mess.setCustomProperty("MESSAGE_FORKED", "TRUE");
+//				else
+//					mess.setCustomProperty("MESSAGE_FORKED", "FALSE");
+				
+				mess.setMessageType("MESSAGE_TRACE");
+				mess.setMessage("Sent " + _spec.getName() + " to "+destination.getPeer().toString());
+				DebugTool.getInstance().sendMessage(mess);
+			}
 		}
 		return buf;
 	}

@@ -57,6 +57,7 @@ import freenet.support.io.ArrayBucket;
 import freenet.support.io.BucketTools;
 import freenet.support.io.Closer;
 import freenet.support.io.FileBucket;
+import freenet.tools.TracebackAttacklet;
 import freenet.keys.ClientCHK;
 
 /**
@@ -209,6 +210,12 @@ public class TextModeClientInterface implements Runnable {
         sb.append("STOREFILE - dump contents of CHK store to file.\r\n");
         sb.append("ENABLEANNOUNCE - enable node announcements\r\n");
         sb.append("DISABLEANNOUNCE - enable node announcements\r\n");
+		sb.append("TRACEBACKATTACK: Message UID - Finds all nodes that routed the message with the given UID.\r\n");
+        sb.append("PRINTMESSAGEUIDS Prints all of the compted message UIDS stored.\r\n");
+        sb.append("ATTACKAGENT: Attack Cload IP - Turns this node into an attack agent that uses the attack cload at given ip to perform the attack.\r\n");
+        sb.append("ATTACKAGENTINSERTFILTER: TRUE | FALSE - Turns the insert attack agent on/off.\r\n");
+        sb.append("ATTACKAGENTREQUESTFILTER: TRUE | FALSE - Turns the update attack agent on/off.\r\n");
+        
         if(n.isUsingWrapper())
         	sb.append("RESTART - restart the program\r\n");
         if(core != null && core.directTMCI != this) {
@@ -951,6 +958,21 @@ public class TextModeClientInterface implements Runnable {
         } else if(uline.startsWith("STOREFILEB")) {
         	outsb.append(n.writeChkDatastoreFileB()); // writes store file iterating over db with cursor
         	outsb.append("\r\nSTOREFILEB done.\r\n");
+        } else if(uline.startsWith("TRACEBACKATTACK:")) {
+        	String messUID = (line.substring("TRACEBACKATTACK:".length())).trim();
+        	TracebackAttacklet attacklet = new TracebackAttacklet(n);
+        	attacklet.attack(Long.parseLong(messUID), outsb);
+        } else if(uline.startsWith("PRINTMESSAGEUIDS")) {
+        	outsb.append(n.recentlyCompletedUIDsToString());
+        } else if(uline.startsWith("ATTACKAGENT:")) {
+        	String attackCloadIp = (line.substring("ATTACKAGENT:".length())).trim();
+        	n.getAttackAgent().setAttackCloadIP(attackCloadIp);
+        } else if(uline.startsWith("ATTACKAGENTINSERTFILTER:")) {
+        	String type = (line.substring("ATTACKAGENTINSERTFILTER:".length())).trim();
+        	n.getAttackAgent().setInsertFilter(type.equals("TRUE"));
+        } else if(uline.startsWith("ATTACKAGENTREQUESTFILTER:")) {
+        	String type = (line.substring("ATTACKAGENTREQUESTFILTER:".length())).trim();
+        	n.getAttackAgent().setRequestFilter(type.equals("TRUE"));
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();
         	double d = Double.parseDouble(s);

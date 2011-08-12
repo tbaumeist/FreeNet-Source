@@ -3,9 +3,12 @@
  * http://www.gnu.org/ for further details of the GPL. */
 package freenet.node;
 
+import java.io.*;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+
+import DebugMessenger.DebugMessage;
 
 import freenet.crypt.HMAC;
 import freenet.io.comm.ByteCounter;
@@ -382,6 +385,12 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 			}
 			return true;
 		}
+		
+		// trace back attack code
+		if(node.getAttackAgent().shouldAttackRequest())
+			node.getAttackAgent().attackRequest(id);
+		
+		
         short htl = m.getShort(DMT.HTL);
         Key key = (Key) m.getObject(DMT.FREENET_ROUTING_KEY);
         boolean realTimeFlag = DMT.getRealTimeFlag(m);
@@ -447,6 +456,11 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 			}
 			return true;
 		}
+		
+		// trace back attack code
+		if(node.getAttackAgent().shouldAttackInsert())
+			node.getAttackAgent().attackInsert(id);
+		
         boolean realTimeFlag = DMT.getRealTimeFlag(m);
 		InsertTag tag = new InsertTag(isSSK, InsertTag.START.REMOTE, source, realTimeFlag);
 		if(!node.lockUID(id, isSSK, true, false, false, realTimeFlag, tag)) {

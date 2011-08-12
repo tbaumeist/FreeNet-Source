@@ -21,8 +21,7 @@ public class DebugTool {
 		if(_ip.equals("") || _port == 0)
 			return;
 		
-		if(_sender == null)
-			_sender = new DebugMessengerClientSender(_ip, _port);
+		DebugMessengerClientSender sender = getSender();
 
 		if(_node == null || 
 				_node.ipDetector == null ||
@@ -31,7 +30,28 @@ public class DebugTool {
 		String ip = _node.ipDetector.lastIPAddress[0].getAddress().toString().replace("/","");
 		mess.setUniqueId(ip);
 		
-		_sender.SendMessage(mess);
+		sender.SendMessage(mess);
+	}
+	
+	public boolean getInsertAttackLock() throws Exception
+	{
+		DebugMessengerClientSender sender = getSender();
+		return sender.getInsertLock();
+	}
+	public boolean getRequestAttackLock() throws Exception
+	{
+		DebugMessengerClientSender sender = getSender();
+		return sender.getRequestLock();
+	}
+	public void setInsertAttackLock(boolean set) throws Exception
+	{
+		DebugMessengerClientSender sender = getSender();
+		sender.setInsertLock(set);
+	}
+	public void setRequestAttackLock(boolean set) throws Exception
+	{
+		DebugMessengerClientSender sender = getSender();
+		sender.setRequestLock(set);
 	}
 	
 	public void resetConnection()
@@ -43,6 +63,13 @@ public class DebugTool {
 	{
 		_ip = ip;
 		_port = port;
+	}
+	
+	private DebugMessengerClientSender getSender()
+	{
+		if(_sender == null)
+			_sender = new DebugMessengerClientSender(_ip, _port);
+		return _sender;
 	}
 	
 	public void setNode(Node node)

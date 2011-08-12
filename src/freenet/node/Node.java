@@ -175,6 +175,8 @@ import freenet.support.io.Closer;
 import freenet.support.io.FileUtil;
 import freenet.support.io.NativeThread;
 import freenet.support.transport.ip.HostnameSyntaxException;
+import freenet.tools.TracebackMonitor;
+
 import java.io.Writer
 ;/**
  * @author amphibian
@@ -253,6 +255,10 @@ public class Node implements TimeSkewDetectorCallback {
 	volatile CHKStore oldCHKClientCache;
 	volatile PubkeyStore oldPKClientCache;
 	volatile SSKStore oldSSKClientCache;
+	
+	private TracebackMonitor _attackAgent = new TracebackMonitor();
+	
+	public TracebackMonitor getAttackAgent(){ return _attackAgent;}
 
 	private <T extends StorableBlock> void migrateOldStore(StoreCallback<T> old, StoreCallback<T> newStore, boolean canReadClientCache) {
 		FreenetStore<T> store = old.getStore();
@@ -590,7 +596,7 @@ public class Node implements TimeSkewDetectorCallback {
 	/** String version of our chkDatastore
 	 * Automatically updated whenever something is placed into it.
 	 */
-	ArrayList chkDatastoreContents = new ArrayList();
+	ArrayList<String> chkDatastoreContents = new ArrayList<String>();
 	
 	/** The SSK datastore. See description for chkDatastore. */
 	private SSKStore sskDatastore;
@@ -715,7 +721,7 @@ public class Node implements TimeSkewDetectorCallback {
 	/** Weak but fast RNG */
 	public final Random fastWeakRandom;
 	/** The object which handles incoming messages and allows us to wait for them */
-	final MessageCore usm;
+	public final MessageCore usm;
 
 	// Darknet stuff
 
@@ -4412,7 +4418,8 @@ public class Node implements TimeSkewDetectorCallback {
 					nodeStats.avgStoreCHKLocation.report(loc);
 					
 					// Add block to chkDatastoreContents for network storage topology
-					chkDatastoreContents.add(block.toString());
+					if(!chkDatastoreContents.contains(block.toString()))
+						chkDatastoreContents.add(block.toString());
 					//System.out.println("Added " + block.toString() + "to chkDatastore.");
 
 				}
@@ -5194,6 +5201,18 @@ public class Node implements TimeSkewDetectorCallback {
 		synchronized (recentlyCompletedIDs) {
 			return recentlyCompletedIDs.contains(id);
 		}
+	}
+	
+	public String recentlyCompletedUIDsToString()
+	{
+		String s = "";
+		Object[] uids = recentlyCompletedIDs.toArray();
+		for(int i = 0 ; i < uids.length; i++)
+		{
+			Long l = (Long)uids[i];
+			s += l.toString() + "\n";
+		}
+		return s;
 	}
 	
 	private ArrayList<Long> completedBuffer = new ArrayList<Long>();
