@@ -2,6 +2,8 @@ package freenet.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,15 +18,18 @@ public class TracebackMonitor extends Thread {
 	private boolean _filterRequest = false;
 	
 	private String _attackCloadIP = "";
-	private String _saveDirectory = "~/Desktop/Freenet_Data/Monitor/";
+	private String _saveDirectory = "/Desktop/Freenet_Data/Monitor/";
 	private File _outputFile = null;
+	
+	private ArrayList<Long> _seenUids = new ArrayList<Long>();
 	
 	public void setAttackCloadIP(String ip) throws IOException
 	{
 		_attackCloadIP = ip;
 		Date time = new Date();
 		String fileName = time.toString().replace(" ", "_").replace(":", "-");
-		_outputFile = new File(_saveDirectory+"attack_results_"+fileName+".dat");
+		_outputFile = new File(System.getProperty("user.home")+_saveDirectory+"attack_results_"+fileName+".dat");
+		_outputFile.getParentFile().mkdirs();
 		_outputFile.createNewFile();
 	}
 	
@@ -50,12 +55,18 @@ public class TracebackMonitor extends Thread {
 	
 	public void attackInsert(long uid)
 	{
+		if(_seenUids.contains(uid))
+			return;
+		_seenUids.add(uid);
 		AttackThread attack = new AttackThread(true, uid, _attackCloadIP);
 		attack.start();
 	}
 	
 	public void attackRequest(long uid)
 	{
+		if(_seenUids.contains(uid))
+			return;
+		_seenUids.add(uid);
 		AttackThread attack = new AttackThread(false, uid, _attackCloadIP);
 		attack.start();
 	}
@@ -93,17 +104,10 @@ public class TracebackMonitor extends Thread {
 				reader.join(); // wait for results
 				socket.close();
 				
-				if(_outputFile != null)
-				{
-					PrintWriter fileOut = new PrintWriter(_outputFile);
-					if(reader.hadError())
-						fileOut.print("~ERROR ");
-					fileOut.print(_uid+":");
-					for(ResultData d : reader.getResults())
-						fileOut.print(d.ip+","+(d.present?"true":"false")+",");
-					fileOut.println();
-				}
+				write(_outputFile, reader);
 				
+				// 10 seconds of buffer time
+				Thread.sleep(10000); 
 				// tell them that we are done
 				if(_isInsert)
 					tool.setInsertAttackLock(true);
@@ -113,6 +117,22 @@ public class TracebackMonitor extends Thread {
 			{
 				
 			}
+		}
+		private synchronized void write(File f, AttackResponseReader reader) throws Exception
+		{
+			if(f == null)
+				return;
+			
+			FileWriter writer = new FileWriter(f, true);
+			if(reader.hadError())
+				writer.write("~ERROR ");
+			writer.write(_uid+":");
+			for(ResultData d : reader.getResults())
+				writer.write(d.ip+","+(d.present?"true":"false")+",");
+			writer.write("\n");
+			writer.flush();
+			writer.close();
+			
 		}
 		private boolean isLocked(boolean isInsert, DebugTool tool) throws Exception
 		{
@@ -145,7 +165,7 @@ public class TracebackMonitor extends Thread {
                 String line;
                 while ((line = br.readLine()) != null) {
                 	line = line.toLowerCase();
-                    if(line.startsWith("result:"))
+                    if(line.contains("result:"))
 					{
                     	String[] parsed = line.split(":");
                     	boolean present = parsed[2].equals("true");

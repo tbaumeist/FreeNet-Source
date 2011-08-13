@@ -959,19 +959,19 @@ public class TextModeClientInterface implements Runnable {
         	outsb.append(n.writeChkDatastoreFileB()); // writes store file iterating over db with cursor
         	outsb.append("\r\nSTOREFILEB done.\r\n");
         } else if(uline.startsWith("TRACEBACKATTACK:")) {
-        	String messUID = (line.substring("TRACEBACKATTACK:".length())).trim();
+        	String messUID = (uline.substring("TRACEBACKATTACK:".length())).trim();
         	TracebackAttacklet attacklet = new TracebackAttacklet(n);
         	attacklet.attack(Long.parseLong(messUID), outsb);
         } else if(uline.startsWith("PRINTMESSAGEUIDS")) {
         	outsb.append(n.recentlyCompletedUIDsToString());
         } else if(uline.startsWith("ATTACKAGENT:")) {
-        	String attackCloadIp = (line.substring("ATTACKAGENT:".length())).trim();
+        	String attackCloadIp = (uline.substring("ATTACKAGENT:".length())).trim();
         	n.getAttackAgent().setAttackCloadIP(attackCloadIp);
         } else if(uline.startsWith("ATTACKAGENTINSERTFILTER:")) {
-        	String type = (line.substring("ATTACKAGENTINSERTFILTER:".length())).trim();
+        	String type = (uline.substring("ATTACKAGENTINSERTFILTER:".length())).trim();
         	n.getAttackAgent().setInsertFilter(type.equals("TRUE"));
         } else if(uline.startsWith("ATTACKAGENTREQUESTFILTER:")) {
-        	String type = (line.substring("ATTACKAGENTREQUESTFILTER:".length())).trim();
+        	String type = (uline.substring("ATTACKAGENTREQUESTFILTER:".length())).trim();
         	n.getAttackAgent().setRequestFilter(type.equals("TRUE"));
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();

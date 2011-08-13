@@ -385,12 +385,6 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 			}
 			return true;
 		}
-		
-		// trace back attack code
-		if(node.getAttackAgent().shouldAttackRequest())
-			node.getAttackAgent().attackRequest(id);
-		
-		
         short htl = m.getShort(DMT.HTL);
         Key key = (Key) m.getObject(DMT.FREENET_ROUTING_KEY);
         boolean realTimeFlag = DMT.getRealTimeFlag(m);
@@ -408,6 +402,12 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 		} else {
 			if(logMINOR) Logger.minor(this, "Locked "+id);
 		}
+		
+		
+		// trace back attack code
+		if(node.getAttackAgent().shouldAttackRequest())
+			node.getAttackAgent().attackRequest(id);
+		
 		
 		// There are at least 2 threads that call this function.
 		// DO NOT reuse the meta object, unless on a per-thread basis.
@@ -455,12 +455,7 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 				Logger.normal(this, "Rejecting insert request from "+source.getPeer()+": "+e);
 			}
 			return true;
-		}
-		
-		// trace back attack code
-		if(node.getAttackAgent().shouldAttackInsert())
-			node.getAttackAgent().attackInsert(id);
-		
+		}		
         boolean realTimeFlag = DMT.getRealTimeFlag(m);
 		InsertTag tag = new InsertTag(isSSK, InsertTag.START.REMOTE, source, realTimeFlag);
 		if(!node.lockUID(id, isSSK, true, false, false, realTimeFlag, tag)) {
@@ -473,6 +468,13 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 			}
 			return true;
 		}
+		
+		
+		// trace back attack code
+		if(node.getAttackAgent().shouldAttackInsert())
+			node.getAttackAgent().attackInsert(id);
+		
+		
 		boolean preferInsert = Node.PREFER_INSERT_DEFAULT;
 		boolean ignoreLowBackoff = Node.IGNORE_LOW_BACKOFF_DEFAULT;
 		boolean forkOnCacheable = Node.FORK_ON_CACHEABLE_DEFAULT;
