@@ -168,7 +168,7 @@ public class TracebackMonitor extends Thread {
                     if(line.contains("result:"))
 					{
                     	String[] parsed = line.split(":");
-                    	boolean present = parsed[2].equals("true");
+                    	boolean present = parsed[3].contains("true");
                     	_results.add(new ResultData(parsed[1],present));
 					}
                     if(line.startsWith("attack_complete"))
