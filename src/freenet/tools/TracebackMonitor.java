@@ -90,23 +90,25 @@ public class TracebackMonitor extends Thread {
 			{
 				// wait for the control flow signal to begin
 				DebugTool tool = DebugTool.getInstance();
-				while(isLocked(_isInsert, tool) != false )
+				System.out.println("Checking if it is locked");
+				while(isLocked(_isInsert, tool) )
 				{
 					// sleep 20 seconds and try again
+					System.out.println("Its locked [sleep]");
 					Thread.sleep(20*1000);
 				}
-				
+				System.out.println("Its unlocked");
 				// ok we got the all clear
 				Socket socket = new Socket(_attackCloadIP, _attackCloadPort);
 				PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 				
 				AttackResponseReader reader = new AttackResponseReader(socket.getInputStream());
 				reader.start();
-				out.println("TRACEBACKATTACK:"+_uid+":"+_htl);
+				out.println("TRACEBACKATTACK:"+_uid);
 				reader.join(); // wait for results
 				socket.close();
 				
-				write(_outputFile, reader);
+				write(_outputFile, reader, _htl);
 				
 				// 10 seconds of buffer time
 				Thread.sleep(10000); 
@@ -120,7 +122,7 @@ public class TracebackMonitor extends Thread {
 				
 			}
 		}
-		private synchronized void write(File f, AttackResponseReader reader) throws Exception
+		private synchronized void write(File f, AttackResponseReader reader, int htl) throws Exception
 		{
 			if(f == null)
 				return;
@@ -128,9 +130,9 @@ public class TracebackMonitor extends Thread {
 			FileWriter writer = new FileWriter(f, true);
 			if(reader.hadError())
 				writer.write("~ERROR ");
-			writer.write(_uid+":");
+			writer.write(_uid+":"+ htl+":");
 			for(ResultData d : reader.getResults())
-				writer.write(d.ip+","+d.htl+","+(d.present?"true":"false")+",");
+				writer.write(d.ip+","+(d.present?"true":"false")+",");
 			writer.write("\n");
 			writer.flush();
 			writer.close();
@@ -170,9 +172,8 @@ public class TracebackMonitor extends Thread {
                     if(line.contains("result:"))
 					{
                     	String[] parsed = line.split(":");
-                    	boolean present = parsed[4].contains("true");
-                    	int htl = Integer.parseInt(parsed[1]);
-                    	_results.add(new ResultData(parsed[2],htl,present));
+                    	boolean present = parsed[3].contains("true");
+                    	_results.add(new ResultData(parsed[1],present));
 					}
                     if(line.startsWith("attack_complete"))
                     	break;
@@ -186,12 +187,10 @@ public class TracebackMonitor extends Thread {
 	{
 		public String ip="";
 		public boolean present;
-		public int htl = 0;
-		public ResultData(String s, int h, boolean b)
+		public ResultData(String s, boolean b)
 		{
 			ip = s;
 			present = b;
-			htl = h;
 		}
 	}
 	

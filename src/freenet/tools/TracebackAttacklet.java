@@ -18,7 +18,7 @@ public class TracebackAttacklet {
 		node = n;
 	}
 	
-	public void attack(long uid, int htl, StringBuilder status)
+	public void attack(long uid, StringBuilder status)
 	{
 		boolean isSSK = false;
 		ByteCounter ctr = isSSK ? node.nodeStats.sskRequestCtr : node.nodeStats.chkRequestCtr;
@@ -36,7 +36,7 @@ public class TracebackAttacklet {
 				
 				n.sendSync(m, ctr);
 				
-				status.append("Result:"+htl+":"+ n.getPeer()+":");
+				status.append("Result:"+ n.getPeer()+":");
 				MessageFilter mfAccepted = MessageFilter.create().setSource(n).setField(DMT.UID, uid).setTimeout(5000).setType(DMT.FNPRejectedLoop);
 				Message msg = node.usm.waitFor(mfAccepted, null);
 				if (msg==null || (msg.getSpec() != DMT.FNPRejectedLoop)) {
