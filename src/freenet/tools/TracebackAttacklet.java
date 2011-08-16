@@ -33,9 +33,10 @@ public class TracebackAttacklet {
 		for( OpennetPeerNode n : neighbors)
 		{
 			try {
-				status.append("Result:"+ n.getPeer()+":"+htl+":");
+				
 				n.sendSync(m, ctr);
-			
+				
+				status.append("Result:"+htl+":"+ n.getPeer()+":");
 				MessageFilter mfAccepted = MessageFilter.create().setSource(n).setField(DMT.UID, uid).setTimeout(5000).setType(DMT.FNPRejectedLoop);
 				Message msg = node.usm.waitFor(mfAccepted, null);
 				if (msg==null || (msg.getSpec() != DMT.FNPRejectedLoop)) {

@@ -171,8 +171,8 @@ public class TracebackMonitor extends Thread {
 					{
                     	String[] parsed = line.split(":");
                     	boolean present = parsed[4].contains("true");
-                    	int htl = Integer.parseInt(parsed[3]);
-                    	_results.add(new ResultData(parsed[1],htl,present));
+                    	int htl = Integer.parseInt(parsed[1]);
+                    	_results.add(new ResultData(parsed[2],htl,present));
 					}
                     if(line.startsWith("attack_complete"))
                     	break;
