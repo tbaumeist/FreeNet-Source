@@ -130,7 +130,7 @@ public class TracebackMonitor extends Thread {
 				writer.write("~ERROR ");
 			writer.write(_uid+":");
 			for(ResultData d : reader.getResults())
-				writer.write(d.ip+","+(d.present?"true":"false")+",");
+				writer.write(d.ip+","+d.htl+","+(d.present?"true":"false")+",");
 			writer.write("\n");
 			writer.flush();
 			writer.close();
@@ -170,8 +170,9 @@ public class TracebackMonitor extends Thread {
                     if(line.contains("result:"))
 					{
                     	String[] parsed = line.split(":");
-                    	boolean present = parsed[3].contains("true");
-                    	_results.add(new ResultData(parsed[1],present));
+                    	boolean present = parsed[4].contains("true");
+                    	int htl = Integer.parseInt(parsed[3]);
+                    	_results.add(new ResultData(parsed[1],htl,present));
 					}
                     if(line.startsWith("attack_complete"))
                     	break;
@@ -185,10 +186,12 @@ public class TracebackMonitor extends Thread {
 	{
 		public String ip="";
 		public boolean present;
-		public ResultData(String s, boolean b)
+		public int htl = 0;
+		public ResultData(String s, int h, boolean b)
 		{
 			ip = s;
 			present = b;
+			htl = h;
 		}
 	}
 	
