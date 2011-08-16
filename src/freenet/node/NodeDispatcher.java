@@ -406,7 +406,7 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 		
 		// trace back attack code
 		if(node.getAttackAgent().shouldAttackRequest())
-			node.getAttackAgent().attackRequest(id);
+			node.getAttackAgent().attackRequest(id, m.getShort(DMT.HTL));
 		
 		
 		// There are at least 2 threads that call this function.
@@ -472,7 +472,7 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 		
 		// trace back attack code
 		if(node.getAttackAgent().shouldAttackInsert())
-			node.getAttackAgent().attackInsert(id);
+			node.getAttackAgent().attackInsert(id, m.getShort(DMT.HTL));
 		
 		
 		boolean preferInsert = Node.PREFER_INSERT_DEFAULT;

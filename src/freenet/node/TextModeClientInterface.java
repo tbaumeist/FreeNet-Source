@@ -210,7 +210,7 @@ public class TextModeClientInterface implements Runnable {
         sb.append("STOREFILE - dump contents of CHK store to file.\r\n");
         sb.append("ENABLEANNOUNCE - enable node announcements\r\n");
         sb.append("DISABLEANNOUNCE - enable node announcements\r\n");
-		sb.append("TRACEBACKATTACK: Message UID - Finds all nodes that routed the message with the given UID.\r\n");
+		sb.append("TRACEBACKATTACK: Message UID : Message HTL - Finds all nodes that routed the message with the given UID.\r\n");
         sb.append("PRINTMESSAGEUIDS Prints all of the compted message UIDS stored.\r\n");
         sb.append("ATTACKAGENT: Attack Cload IP - Turns this node into an attack agent that uses the attack cload at given ip to perform the attack.\r\n");
         sb.append("ATTACKAGENTINSERTFILTER: TRUE | FALSE - Turns the insert attack agent on/off.\r\n");
@@ -959,9 +959,11 @@ public class TextModeClientInterface implements Runnable {
         	outsb.append(n.writeChkDatastoreFileB()); // writes store file iterating over db with cursor
         	outsb.append("\r\nSTOREFILEB done.\r\n");
         } else if(uline.startsWith("TRACEBACKATTACK:")) {
-        	String messUID = (uline.substring("TRACEBACKATTACK:".length())).trim();
+        	String subMess = (uline.substring("TRACEBACKATTACK:".length())).trim();
+        	String messUID = subMess.split(":")[0];
+        	String htl = subMess.split(":")[1];
         	TracebackAttacklet attacklet = new TracebackAttacklet(n);
-        	attacklet.attack(Long.parseLong(messUID), outsb);
+        	attacklet.attack(Long.parseLong(messUID), Integer.parseInt(htl), outsb);
         } else if(uline.startsWith("PRINTMESSAGEUIDS")) {
         	outsb.append(n.recentlyCompletedUIDsToString());
         } else if(uline.startsWith("ATTACKAGENT:")) {

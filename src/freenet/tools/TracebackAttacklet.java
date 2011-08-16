@@ -18,7 +18,7 @@ public class TracebackAttacklet {
 		node = n;
 	}
 	
-	public void attack(long uid, StringBuilder status)
+	public void attack(long uid, int htl, StringBuilder status)
 	{
 		boolean isSSK = false;
 		ByteCounter ctr = isSSK ? node.nodeStats.sskRequestCtr : node.nodeStats.chkRequestCtr;
@@ -33,7 +33,7 @@ public class TracebackAttacklet {
 		for( OpennetPeerNode n : neighbors)
 		{
 			try {
-				status.append("Result:"+ n.getPeer()+":");
+				status.append("Result:"+ n.getPeer()+":"+htl+":");
 				n.sendSync(m, ctr);
 			
 				MessageFilter mfAccepted = MessageFilter.create().setSource(n).setField(DMT.UID, uid).setTimeout(5000).setType(DMT.FNPRejectedLoop);

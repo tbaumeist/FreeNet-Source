@@ -53,21 +53,21 @@ public class TracebackMonitor extends Thread {
 		return _filterRequest;
 	}
 	
-	public void attackInsert(long uid)
+	public void attackInsert(long uid, int htl)
 	{
 		if(_seenUids.contains(uid))
 			return;
 		_seenUids.add(uid);
-		AttackThread attack = new AttackThread(true, uid, _attackCloadIP);
+		AttackThread attack = new AttackThread(true, uid, htl, _attackCloadIP);
 		attack.start();
 	}
 	
-	public void attackRequest(long uid)
+	public void attackRequest(long uid, int htl)
 	{
 		if(_seenUids.contains(uid))
 			return;
 		_seenUids.add(uid);
-		AttackThread attack = new AttackThread(false, uid, _attackCloadIP);
+		AttackThread attack = new AttackThread(false, uid, htl, _attackCloadIP);
 		attack.start();
 	}
 
@@ -76,10 +76,12 @@ public class TracebackMonitor extends Thread {
 		private boolean _isInsert = true;
 		private String _attackCloadIP = "";
 		private int _attackCloadPort = 2323;
+		private int _htl = 0;
 
-		public AttackThread(boolean isInsert, long uid, String ip) {
+		public AttackThread(boolean isInsert, long uid, int htl, String ip) {
 			_uid = uid;
 			_isInsert = isInsert;
+			_htl = htl;
 			_attackCloadIP = ip;
 		}
 		public void run()
@@ -100,7 +102,7 @@ public class TracebackMonitor extends Thread {
 				
 				AttackResponseReader reader = new AttackResponseReader(socket.getInputStream());
 				reader.start();
-				out.println("TRACEBACKATTACK:"+_uid);
+				out.println("TRACEBACKATTACK:"+_uid+":"+_htl);
 				reader.join(); // wait for results
 				socket.close();
 				
