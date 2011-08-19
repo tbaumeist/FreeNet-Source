@@ -3,7 +3,9 @@
  * http://www.gnu.org/ for further details of the GPL. */
 package freenet.node;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import freenet.io.comm.Peer;
@@ -130,6 +132,8 @@ public class PacketSender implements Runnable {
 		}
 	}
 
+	//private ArrayList<PeerNode> seenNodes = new ArrayList<PeerNode>();
+	private Hashtable<PeerNode, Long> seenNodes = new Hashtable<PeerNode, Long>();
 	private int realRun(int brokeAt) {
 		long now = System.currentTimeMillis();
                 PeerManager pm;
@@ -228,15 +232,26 @@ public class PacketSender implements Runnable {
 				if(pn.noContactDetails())
 					pn.startARKFetcher();
 
-			if(pn.shouldSendHandshake() && !node.IsAcceptingSeedConnections()) {
-				
-				// Send handshake if necessary
-				long beforeHandshakeTime = System.currentTimeMillis();
-				pn.getOutgoingMangler().sendHandshake(pn, false);
-				long afterHandshakeTime = System.currentTimeMillis();
-				if((afterHandshakeTime - beforeHandshakeTime) > (2 * 1000))
-					Logger.error(this, "afterHandshakeTime is more than 2 seconds past beforeHandshakeTime (" + (afterHandshakeTime - beforeHandshakeTime) + ") in PacketSender working with " + pn.userToString());
+			if(pn.shouldSendHandshake()) {
+				if(!seenNodes.containsKey(pn) && node.IsAcceptingSeedConnections())
+				{
+					System.out.println("**Just added a new node, wait 30 seconds before sending handshakes");
+					seenNodes.put(pn, System.currentTimeMillis());
+				}
+				else if(!node.IsAcceptingSeedConnections() || System.currentTimeMillis() > (seenNodes.get(pn) + 30000))
+				{				
+					// hack, wait 30 seconds after adding new node ref
+					
+					System.out.println("**Sending a handshakers");
+					// Send handshake if necessary
+					long beforeHandshakeTime = System.currentTimeMillis();
+					pn.getOutgoingMangler().sendHandshake(pn, false);
+					long afterHandshakeTime = System.currentTimeMillis();
+					if((afterHandshakeTime - beforeHandshakeTime) > (2 * 1000))
+						Logger.error(this, "afterHandshakeTime is more than 2 seconds past beforeHandshakeTime (" + (afterHandshakeTime - beforeHandshakeTime) + ") in PacketSender working with " + pn.userToString());
+				}
 			}
+
 			long tempNow = System.currentTimeMillis();
 			if((tempNow - oldTempNow) > (5 * 1000))
 				Logger.error(this, "tempNow is more than 5 seconds past oldTempNow (" + (tempNow - oldTempNow) + ") in PacketSender working with " + pn.userToString());

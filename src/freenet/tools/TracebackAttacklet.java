@@ -28,6 +28,19 @@ public class TracebackAttacklet {
 		byte cryptoAlgorithm = 0;
 		NodeCHK nodeChk = new NodeCHK(routingKey, cryptoAlgorithm);
 		
+		// us first
+		String ip = "127.0.0.1";
+		if(	node.ipDetector != null && node.ipDetector.lastIPAddress.length != 0)
+			ip = node.ipDetector.lastIPAddress[0].getAddress().toString().replace("/","");
+		ip += ":"+node.getOpennetFNPPort();
+		
+		status.append("Result:"+ ip +":");
+		if(node.recentlyCompleted(uid))
+			status.append("true\n");
+		else
+			status.append("false\n");
+		
+		// try peers
 		Message m = DMT.createFNPCHKDataRequest(uid, (short)0, nodeChk);
 		OpennetPeerNode[] neighbors = node.peers.getOpennetPeers();
 		for( OpennetPeerNode n : neighbors)

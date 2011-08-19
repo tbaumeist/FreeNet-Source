@@ -139,7 +139,7 @@ public class Message {
 		    return null;
 		}
 		if(logMINOR) Logger.minor(Message.class, "Returning message: "+m);
-		System.out.println("Decoded message: "+ m.toString());
+		//System.out.println("Decoded message: "+ m.toString());
 		if (!shouldFilter())
 		{
 			Logger.generalLogMessage(Message.class, m.toXML(false) + "<From>" + srcloc + "</From><To>" + destloc + "</To>");
@@ -308,8 +308,8 @@ public class Message {
 		byte[] buf = baos.toByteArray();
 		if(logDEBUG)
 			Logger.debug(this, "Length: "+buf.length+", hash: "+Fields.hashCode(buf));
-		System.out.println("Encoded message "+ toString());
-		System.out.println("From: " + srcloc + "To: " + destloc);
+		//System.out.println("Encoded message "+ toString());
+		//System.out.println("From: " + srcloc + "To: " + destloc);
 		if (!shouldFilter())
 		{
 			Logger.generalLogMessage(Message.class, toXML(true) + "<From>" + srcloc + "</From><To>" + destloc + "</To>");

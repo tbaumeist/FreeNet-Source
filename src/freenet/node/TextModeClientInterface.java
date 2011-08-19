@@ -212,7 +212,7 @@ public class TextModeClientInterface implements Runnable {
         sb.append("DISABLEANNOUNCE - enable node announcements\r\n");
 		sb.append("TRACEBACKATTACK: Message UID - Finds all nodes that routed the message with the given UID.\r\n");
         sb.append("PRINTMESSAGEUIDS Prints all of the compted message UIDS stored.\r\n");
-        sb.append("ATTACKAGENT: Attack Cload IP - Turns this node into an attack agent that uses the attack cload at given ip to perform the attack.\r\n");
+        sb.append("ATTACKAGENT: Attack Cload IPs , seperated - Turns this node into an attack agent that uses the attack cload at given ip to perform the attack.\r\n");
         sb.append("ATTACKAGENTINSERTFILTER: TRUE | FALSE - Turns the insert attack agent on/off.\r\n");
         sb.append("ATTACKAGENTREQUESTFILTER: TRUE | FALSE - Turns the update attack agent on/off.\r\n");
         
@@ -966,13 +966,19 @@ public class TextModeClientInterface implements Runnable {
         	outsb.append(n.recentlyCompletedUIDsToString());
         } else if(uline.startsWith("ATTACKAGENT:")) {
         	String attackCloadIp = (uline.substring("ATTACKAGENT:".length())).trim();
-        	n.getAttackAgent().setAttackCloadIP(attackCloadIp);
+        	n.getAttackAgent().setAttackCloadIP(attackCloadIp.split(","));
         } else if(uline.startsWith("ATTACKAGENTINSERTFILTER:")) {
         	String type = (uline.substring("ATTACKAGENTINSERTFILTER:".length())).trim();
-        	n.getAttackAgent().setInsertFilter(type.equals("TRUE"));
+        	if(type.equals("FORCE"))
+        		n.getAttackAgent().attackInsert(11133324, 4);
+        	else
+        		n.getAttackAgent().setInsertFilter(type.equals("TRUE"));
         } else if(uline.startsWith("ATTACKAGENTREQUESTFILTER:")) {
         	String type = (uline.substring("ATTACKAGENTREQUESTFILTER:".length())).trim();
-        	n.getAttackAgent().setRequestFilter(type.equals("TRUE"));
+        	if(type.equals("FORCE"))
+        		n.getAttackAgent().attackRequest(11133324, 4);
+        	else
+        		n.getAttackAgent().setRequestFilter(type.equals("TRUE"));
         } else if(uline.startsWith("PROBE:")) {
         	String s = uline.substring("PROBE:".length()).trim();
         	double d = Double.parseDouble(s);
