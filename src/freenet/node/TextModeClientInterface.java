@@ -949,7 +949,7 @@ public class TextModeClientInterface implements Runnable {
         // custom TMCI command
         else if (uline.startsWith("PEERFILE:")) {
         	String peerFileCmd = (line.substring("PEERFILE:".length())).trim();
-        	boolean all = (peerFileCmd == "CONNECTED"?false:true);
+        	boolean all = (peerFileCmd.equals("CONNECTED")?false:true);
         	outsb.append(n.writeTMCIPeerFile(all));
         	outsb.append("\r\nPEERFILE done.\r\n");
         } else if(uline.startsWith("STOREFILEA")) { 
