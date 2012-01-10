@@ -38,6 +38,8 @@ import freenet.support.io.PersistentFileTracker;
 
 public class HighLevelSimpleClientImpl implements HighLevelSimpleClient, RequestClient {
 
+	private int htl = -1;
+	
 	private final short priorityClass;
 	private final BucketFactory bucketFactory;
 	private final BucketFactory persistentBucketFactory;
@@ -185,6 +187,11 @@ public class HighLevelSimpleClientImpl implements HighLevelSimpleClient, Request
 		return insert(insert, getCHKOnly, filenameHint, priorityClass);
 	}
 	
+	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint, int htl) throws InsertException {
+		this.htl = htl;
+		return insert(insert, getCHKOnly, filenameHint, priorityClass);
+	}
+	
 	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint, short priority) throws InsertException {
 		return insert(insert, getCHKOnly, filenameHint, false, priority);
 	}
@@ -204,6 +211,7 @@ public class HighLevelSimpleClientImpl implements HighLevelSimpleClient, Request
 		ClientPutter put = new ClientPutter(pw, insert.getData(), insert.desiredURI, insert.clientMetadata,
 				context, priority,
 				getCHKOnly, isMetadata, this, filenameHint, false, core.clientContext, null);
+		put.setHTL(this.htl);
 		try {
 			core.clientContext.start(put, false);
 		} catch (DatabaseDisabledException e) {

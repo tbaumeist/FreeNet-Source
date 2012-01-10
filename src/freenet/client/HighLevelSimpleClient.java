@@ -84,13 +84,15 @@ public interface HighLevelSimpleClient {
 	 * @throws InsertException If there is an error inserting the data
 	 */
 	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint) throws InsertException;
-
+	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint, int htl) throws InsertException;
+	
 	/**
 	 * Blocking insert.
 	 * @param filenameHint If set, insert a single-file manifest containing only this file, under the given filename.
 	 * @throws InsertException If there is an error inserting the data
 	 */
 	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint, short priority) throws InsertException;
+	
 
 	/**
 	 * Blocking insert.

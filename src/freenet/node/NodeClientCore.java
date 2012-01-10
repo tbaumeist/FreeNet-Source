@@ -1260,8 +1260,11 @@ public class NodeClientCore implements Persistable, DBJobRunner, OOMHook, Execut
 		}
 		try {
 			long startTime = System.currentTimeMillis();
+			short htl = (short)this.clientContext.getHTL();
+			if(htl <= 0)
+				htl = node.maxHTL();
 			is = node.makeInsertSender(block.getKey(),
-				node.maxHTL(), uid, tag, null, headers, prb, false, canWriteClientCache, forkOnCacheable, preferInsert, ignoreLowBackoff, realTimeFlag);
+				htl, uid, tag, null, headers, prb, false, canWriteClientCache, forkOnCacheable, preferInsert, ignoreLowBackoff, realTimeFlag);
 			boolean hasReceivedRejectedOverload = false;
 			// Wait for status
 			while(true) {

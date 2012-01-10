@@ -53,6 +53,7 @@ public class ClientPutter extends BaseClientPutter implements PutCompletionCallb
 	private final boolean binaryBlob;
 	/** The final URI for the data. */
 	private FreenetURI uri;
+	private int htl = -1;
 	private final byte[] overrideSplitfileCrypto;
 
         private static volatile boolean logMINOR;
@@ -96,6 +97,10 @@ public class ClientPutter extends BaseClientPutter implements PutCompletionCallb
 		this.binaryBlob = binaryBlob;
 		this.overrideSplitfileCrypto = overrideSplitfileCrypto;
 	}
+	
+	public void setHTL(int htl){
+		this.htl = htl;
+	}
 
 	/** Start the insert.
 	 * @param earlyEncode If true, try to find the final URI as quickly as possible, and insert the upper
@@ -128,6 +133,7 @@ public class ClientPutter extends BaseClientPutter implements PutCompletionCallb
 		if(logMINOR)
 			Logger.minor(this, "Starting "+this+" for "+targetURI);
 		try {
+			context.setHTL(this.htl);
 			this.targetURI.checkInsertURI();
 			// If the top level key is an SSK, all CHK blocks and particularly splitfiles below it should have
 			// randomised keys. This substantially improves security by making it impossible to identify blocks
