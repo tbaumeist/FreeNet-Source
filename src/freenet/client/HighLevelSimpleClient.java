@@ -15,7 +15,7 @@ import freenet.keys.FreenetURI;
 import freenet.node.RequestClient;
 
 public interface HighLevelSimpleClient {
-
+	public void setHTL(int htl);
 	/**
 	 * Set the maximum length of the fetched data.
 	 */
@@ -84,7 +84,7 @@ public interface HighLevelSimpleClient {
 	 * @throws InsertException If there is an error inserting the data
 	 */
 	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint) throws InsertException;
-	public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint, int htl) throws InsertException;
+	//public FreenetURI insert(InsertBlock insert, boolean getCHKOnly, String filenameHint, int htl) throws InsertException;
 	
 	/**
 	 * Blocking insert.

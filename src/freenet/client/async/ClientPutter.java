@@ -53,8 +53,11 @@ public class ClientPutter extends BaseClientPutter implements PutCompletionCallb
 	private final boolean binaryBlob;
 	/** The final URI for the data. */
 	private FreenetURI uri;
-	private int htl = -1;
+	
 	private final byte[] overrideSplitfileCrypto;
+	
+	private int htl = -1;
+	public void setHTL(int htl){this.htl = htl;}
 
         private static volatile boolean logMINOR;
 	static {
@@ -98,9 +101,6 @@ public class ClientPutter extends BaseClientPutter implements PutCompletionCallb
 		this.overrideSplitfileCrypto = overrideSplitfileCrypto;
 	}
 	
-	public void setHTL(int htl){
-		this.htl = htl;
-	}
 
 	/** Start the insert.
 	 * @param earlyEncode If true, try to find the final URI as quickly as possible, and insert the upper

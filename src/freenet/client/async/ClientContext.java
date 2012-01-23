@@ -61,14 +61,10 @@ public class ClientContext {
 	public transient final CooldownTracker cooldownTracker;
 	public transient KeysFetchingLocally fetching;
 	public transient DownloadCache downloadCache;
-	private int htl = -1;
 	
-	public void setHTL(int htl){
-		this.htl = htl;
-	}
-	public int getHTL(){
-		return this.htl;
-	}
+	private int htl = -1;
+	public void setHTL(int htl){this.htl = htl;}
+	public int getHTL(){return this.htl;}
 
 	public ClientContext(long bootID, long nodeDBHandle, DBJobRunner jobRunner, FECQueue fecQueue, Executor mainExecutor,
 			BackgroundBlockEncoder blockEncoder, ArchiveManager archiveManager,

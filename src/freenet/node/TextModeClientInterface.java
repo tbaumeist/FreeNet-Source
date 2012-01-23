@@ -705,8 +705,9 @@ public class TextModeClientInterface implements Runnable {
 
 			FreenetURI uri;
 			try {
-				
-				uri = client.insert(block, getCHKOnly, null, htl);
+				client.setHTL(htl);
+				uri = client.insert(block, getCHKOnly, null);
+				client.setHTL(-1);
 			} catch (InsertException e) {
 				outsb.append("Error: ").append(e.getMessage());
 				if (e.uri != null)
