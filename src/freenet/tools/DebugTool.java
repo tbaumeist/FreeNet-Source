@@ -1,5 +1,8 @@
 package freenet.tools;
 
+import java.io.File;
+import java.io.PrintStream;
+
 import freenet.node.Node;
 import DebugMessenger.*;
 
@@ -11,9 +14,19 @@ public class DebugTool {
 	private Node _node = null;
 	private int _port = 0;
 	private DebugMessengerClientSender _sender = null;
+	private PrintStream _outputStream = null;
 	
-	private DebugTool()
+	private DebugTool() 
 	{
+		try
+		{
+			File file = new File("Debug.SentMessages.dat");
+			_outputStream = new PrintStream(file);
+		}
+		catch(Exception ex)
+		{
+			_outputStream = null;
+		}
 	}
 	
 	public void sendMessage(DebugMessage mess)
@@ -30,6 +43,8 @@ public class DebugTool {
 		String ip = _node.ipDetector.lastIPAddress[0].getAddress().toString().replace("/","");
 		mess.setUniqueId(ip);
 		
+		if(_outputStream != null)
+			_outputStream.println(mess);
 		sender.SendMessage(mess);
 	}
 	
