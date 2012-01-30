@@ -31,20 +31,23 @@ public class DebugTool {
 	
 	public void sendMessage(DebugMessage mess)
 	{
+		if(	_node == null || 
+			_node.ipDetector == null ||
+			_node.ipDetector.lastIPAddress.length == 0)
+			return;
+		
+		String ip = _node.ipDetector.lastIPAddress[0].getAddress().toString().replace("/","");
+		mess.setUniqueId(ip);
+		
+		// write to the local file
+		if(_outputStream != null)
+			_outputStream.println(mess);
+		
 		if(_ip.equals("") || _port == 0)
 			return;
 		
 		DebugMessengerClientSender sender = getSender();
-
-		if(_node == null || 
-				_node.ipDetector == null ||
-				_node.ipDetector.lastIPAddress.length == 0)
-			return;
-		String ip = _node.ipDetector.lastIPAddress[0].getAddress().toString().replace("/","");
-		mess.setUniqueId(ip);
 		
-		if(_outputStream != null)
-			_outputStream.println(mess);
 		sender.SendMessage(mess);
 	}
 	

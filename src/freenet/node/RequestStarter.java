@@ -242,12 +242,12 @@ public class RequestStarter implements Runnable, RandomGrabArrayItemExclusionLis
 			this.req = req;
 			this.key = key;
 			
-			DebugMessage mess = new DebugMessage();
-			mess.setMessageType("New_Request");
-			try {
-				mess.setMessage("Document name: " + req.ckey.getURI().getDocName());
-			} catch (Exception e) {	}
-			DebugTool.getInstance().sendMessage(mess);
+			//DebugMessage mess = new DebugMessage();
+			//mess.setMessageType("New_Request");
+			//try {
+			//	mess.setMessage("Document name: " + req.ckey.getURI().getDocName());
+			//} catch (Exception e) {	}
+			//DebugTool.getInstance().sendMessage(mess);
 		}
 
 		public void run() {

@@ -165,14 +165,7 @@ public class Message {
 					short htl = m.getShort(DMT.HTL);
 					mess.setCustomProperty("MESSAGE_HTL", htl+"");
 				}
-				
-//				Message forkControl = m.getSubMessage(DMT.FNPSubInsertForkControl);
-//				if(forkControl != null)
-//					mess.setCustomProperty("MESSAGE_FORKED", "TRUE");
-//				else
-//					mess.setCustomProperty("MESSAGE_FORKED", "FALSE");
-				
-				
+			
 				mess.setMessageType("MESSAGE_TRACE");
 				mess.setMessage("Recieved " + mspec.getName() + " from "+peer.getPeer().toString());
 				DebugTool.getInstance().sendMessage(mess);
@@ -183,7 +176,16 @@ public class Message {
 	
 	private boolean shouldRemoteDebug(MessageType type)
 	{
-		return type != DMT.FNPVoid;
+		return type == DMT.FNPAccepted ||
+				type == DMT.FNPInsertRequest ||
+				type == DMT.FNPRejectedLoop ||
+				type == DMT.FNPInsertReply ||
+				type == DMT.FNPDataInsert ||
+				type == DMT.FNPInsertTransfersCompleted ||
+				type == DMT.FNPRejectedOverload ||
+				type == DMT.FNPRouteNotFound ||
+				type == DMT.FNPRejectedTimeout;
+		//return type != DMT.FNPVoid;
 	}
 
 	public Message(MessageType spec) {
@@ -333,12 +335,6 @@ public class Message {
 					short htl = getShort(DMT.HTL);
 					mess.setCustomProperty("MESSAGE_HTL", htl+"");
 				}
-				
-//				Message forkControl = getSubMessage(DMT.FNPSubInsertForkControl);
-//				if(forkControl != null)
-//					mess.setCustomProperty("MESSAGE_FORKED", "TRUE");
-//				else
-//					mess.setCustomProperty("MESSAGE_FORKED", "FALSE");
 				
 				mess.setMessageType("MESSAGE_TRACE");
 				mess.setMessage("Sent " + _spec.getName() + " to "+destination.getPeer().toString());
