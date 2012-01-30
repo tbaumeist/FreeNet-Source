@@ -180,7 +180,8 @@ public class NodeStarter implements WrapperListener {
 			System.exit(e.exitCode);
 		}
 		
-		
+		// Debug Tool setup
+		DebugTool.getInstance().setNode(node);
 		File configDebugFilename = new File("debug.conf");
 		if(configDebugFilename.isFile()) //custom debug init code
 		{
@@ -189,10 +190,10 @@ public class NodeStarter implements WrapperListener {
 				SimpleFieldSet s = debugCfg.getSimpleFieldSet();
 
 				DebugTool.getInstance().setServerInformation(s.getString("debug.IP"), s.getInt("debug.port"));
-				DebugTool.getInstance().setNode(node);
 			} catch (Exception p) {
 			}
 		}
+		// End: Debug Tool setup
 
 		return null;
 	}
