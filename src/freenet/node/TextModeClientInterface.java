@@ -1585,8 +1585,8 @@ public class TextModeClientInterface implements Runnable {
 		}
 		PeerNode pn;
 		try {
-			// pn = n.createNewDarknetNode(fs);
-			pn = n.createNewOpennetNode(fs);
+			pn = n.createNewDarknetNode(fs);
+			//pn = n.createNewOpennetNode(fs);
 		} catch (FSParseException e1) {
 			System.err.println("Did not parse: " + e1);
 			Logger.error(this, "Did not parse: " + e1, e1);
@@ -1681,8 +1681,8 @@ public class TextModeClientInterface implements Runnable {
 	 */
 	private boolean removePeer(String nodeIdentifier) {
 		System.out.println("Removing peer from node for: " + nodeIdentifier);
-		// DarknetPeerNode[] pn = n.peers.getDarknetPeers();
-		OpennetPeerNode[] pn = n.peers.getOpennetPeers();
+		DarknetPeerNode[] pn = n.peers.getDarknetPeers();
+		//OpennetPeerNode[] pn = n.peers.getOpennetPeers();
 		for (int i = 0; i < pn.length; i++) {
 			Peer peer = pn[i].getPeer();
 			String nodeIpAndPort = "";

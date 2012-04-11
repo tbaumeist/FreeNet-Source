@@ -565,6 +565,8 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 	}
 
 	private boolean handleAnnounceRequest(Message m, PeerNode source) {
+		System.out.println("!! Received announcement from " + source.userToString());
+		
 		long uid = m.getLong(DMT.UID);
 		OpennetManager om = node.getOpennet();
 		if(om == null || !source.canAcceptAnnouncements()) {

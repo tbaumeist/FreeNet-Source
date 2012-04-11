@@ -665,6 +665,13 @@ public class OpennetManager {
 			if(peersLRU.contains(pn)) {
 				peersLRU.push(pn);
 				if(logMINOR) Logger.minor(this, "Opennet peer "+pn+" promoted to top of LRU because of successful request");
+				
+				// debug successCount values
+				System.out.println("Opennet peer "+pn+" promoted to top of LRU because of successful request");
+				System.out.print("\tSuccess Count:");
+				for(ConnectionType type : ConnectionType.values())
+					System.out.print(type.toString()+"="+successCount.get(type)+" ");
+				
 				return;
 			} else {
 				if(logMINOR) Logger.minor(this, "Success on opennet peer which isn't in the LRU!: "+pn, new Exception("debug"));
@@ -672,7 +679,10 @@ public class OpennetManager {
 			}
 		}
 		if(!wantPeer(pn, false, false, false, ConnectionType.RECONNECT)) // Start at top as it just succeeded
+		{
+			System.out.println("Dropping peer");
 			node.peers.disconnect(pn, true, false, true);
+		}
 	}
 
 	public void onRemove(OpennetPeerNode pn) {

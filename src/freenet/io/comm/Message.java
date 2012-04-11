@@ -184,7 +184,9 @@ public class Message {
 				type == DMT.FNPInsertTransfersCompleted ||
 				type == DMT.FNPRejectedOverload ||
 				type == DMT.FNPRouteNotFound ||
-				type == DMT.FNPRejectedTimeout;
+				type == DMT.FNPRejectedTimeout ||
+				type == DMT.FNPCHKDataRequest ||
+				type == DMT.FNPCHKDataFound;
 		//return type != DMT.FNPVoid;
 	}
 

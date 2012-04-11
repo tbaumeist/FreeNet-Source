@@ -571,7 +571,7 @@ public class Announcer {
 				// be more than that period in the future.
 				node.peers.disconnect(seed, true, false, false);
 				int shallow=node.maxHTL()-(totalAdded+totalNotWanted);
-				System.out.println("Announcement to "+seed.userToString()+" completed ("+totalAdded+" added, "+totalNotWanted+" not wanted, "+shallow+" shallow)");
+				System.out.println("Announcement to "+seed.userToString()+" completed ("+totalAdded+" added, "+totalNotWanted+" not wanted, "+shallow+" shallow = "+node.maxHTL()+"-("+totalAdded+"+"+totalNotWanted+"))");
 				if(announceNow)
 					maybeSendAnnouncement();
 			}
