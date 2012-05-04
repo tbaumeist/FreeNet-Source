@@ -179,8 +179,6 @@ public class TextModeClientInterface implements Runnable {
 		sb
 				.append("GETCHK:<text> - Get the key that would be returned if the line was inserted.\r\n");
 		sb
-				.append("GETCHKHTL:htl:<text> - Get the key that would be returned if the line was inserted. Specifying the htl to use.\r\n");
-		sb
 				.append("PUTFILE:<filename>[#<mimetype>] - Put a file from disk.\r\n");
 		sb
 				.append("GETFILE:<filename> - Fetch a key and put it in a file. If the key includes a filename we will use it but we will not overwrite local files.\r\n");
@@ -674,13 +672,9 @@ public class TextModeClientInterface implements Runnable {
 			double targetLoc = chk.getNodeCHK().toNormalizedDouble();
 			outsb.append("\r\nDouble: ").append(targetLoc).append("\r\n");
 			// //////////////////////////////////////////////////////////////////////////////
-		} else if (uline.startsWith("PUTHTL:")
-				|| (getCHKOnly = uline.startsWith("GETCHKHTL:"))) {
+		} else if (uline.startsWith("PUTHTL:")) {
 
-			if (getCHKOnly)
-				line = line.substring(("GETCHKHTL:").length()).trim();
-			else
-				line = line.substring("PUTHTL:".length()).trim();
+			line = line.substring("PUTHTL:".length()).trim();
 		
 			String[] parsed = line.split(":");
 			int htl = Integer.parseInt(parsed[0]);
@@ -1158,7 +1152,7 @@ public class TextModeClientInterface implements Runnable {
 		else if (uline.startsWith("PEERFILE:")) {
 			String peerFileCmd = (line.substring("PEERFILE:".length())).trim();
 			boolean all = (peerFileCmd.equals("CONNECTED") ? false : true);
-			outsb.append(n.writeTMCIPeerFile(all));
+			outsb.append(n.writeTMCIPeerFile(all, false));
 			outsb.append("\r\nPEERFILE done.\r\n");
 		} else if (uline.startsWith("STOREFILEA")) {
 			outsb.append(n.writeChkDatastoreFileA()); // writes store file using

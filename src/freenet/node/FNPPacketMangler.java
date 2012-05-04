@@ -372,7 +372,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
                 	}
                 } else
                 {
-                	System.out.println("Unmatchable packet from "+peer);
+                	System.out.println(node.getOpennetFNPPort() + " Unmatchable packet from "+peer);
                     Logger.normal(this,"Unmatchable packet from "+peer);
                 }
                 
@@ -852,7 +852,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 
 		long t2=System.currentTimeMillis();
 		if((t2-t1)>500) {
-			Logger.error(this,"Message1 timeout error:Processing packet for"+pn);
+			Logger.normal(this,"Message1 timeout error:Processing packet for"+pn);
 		}
 	}
 
@@ -867,7 +867,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 	private void sendJFKMessage1(PeerNode pn, Peer replyTo, boolean unknownInitiator, int setupType, int negType) {
 		if(logMINOR) Logger.minor(this, "Sending a JFK(1) message to "+replyTo+" for "+pn.getPeer());
 		
-		System.out.println("!! Sending a JFK(1) message to "+replyTo+" for "+pn.getPeer());
+		//System.out.println("!! Sending a JFK(1) message to "+replyTo+" for "+pn.getPeer());
 		
 		final long now = System.currentTimeMillis();
 		DiffieHellmanLightContext ctx = (DiffieHellmanLightContext) pn.getKeyAgreementSchemeContext();
@@ -900,7 +900,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		}
 		long t2=System.currentTimeMillis();
 		if((t2-now)>500) {
-			Logger.error(this,"Message1 timeout error:Sending packet for"+pn.getPeer());
+			Logger.normal(this,"Message1 timeout error:Sending packet for"+pn.getPeer());
 		}
 	}
 
@@ -918,7 +918,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 	private void sendJFKMessage2(byte[] nonceInitator, byte[] hisExponential, PeerNode pn, Peer replyTo, boolean unknownInitiator, int setupType, int negType) {
 		if(logMINOR) Logger.minor(this, "Sending a JFK(2) message to "+pn);
 		
-		System.out.println("!! Sending a JFK(2) message to "+pn);
+		//System.out.println("!! Sending a JFK(2) message to "+pn);
 		DiffieHellmanLightContext ctx = getLightDiffieHellmanContext();
 		// g^r
 		byte[] myExponential = stripBigIntegerToNetworkFormat(ctx.myExponential);
@@ -995,7 +995,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		long t1=System.currentTimeMillis();
 		if(logMINOR) Logger.minor(this, "Got a JFK(2) message, processing it - "+pn.getPeer());
 		
-		System.out.println("!! Got a JFK(2) message, processing it - "+pn.getPeer());
+		//System.out.println("!! Got a JFK(2) message, processing it - "+pn.getPeer());
 		
 		
 		// FIXME: follow the spec and send IDr' ?
@@ -1081,7 +1081,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 
 		long t2=System.currentTimeMillis();
 		if((t2-t1)>500) {
-			Logger.error(this,"Message2 timeout error:Processing packet for"+pn.getPeer());
+			Logger.normal(this,"Message2 timeout error:Processing packet for"+pn.getPeer());
 		}
 	}
 
@@ -1114,7 +1114,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		final long t1 = System.currentTimeMillis();
 		if(logMINOR) Logger.minor(this, "Got a JFK(3) message, processing it - "+pn);
 		
-		System.out.println("!! Got a JFK(3) message, processing it - "+pn);
+		//System.out.println("!! Got a JFK(3) message, processing it - "+pn);
 
 		BlockCipher c = null;
 		try { c = new Rijndael(256, 256); } catch (UnsupportedCipherException e) { throw new RuntimeException(e); }
@@ -1314,7 +1314,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 
 		final long t2=System.currentTimeMillis();
 		if((t2-t1)>500) {
-			Logger.error(this,"Message3 Processing packet for"+pn.getPeer()+" took "+TimeUtil.formatTime(t2-t1, 3, true));
+			Logger.normal(this,"Message3 Processing packet for"+pn.getPeer()+" took "+TimeUtil.formatTime(t2-t1, 3, true));
 		}
 	}
 
@@ -1373,7 +1373,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 	{
 		final long t1 = System.currentTimeMillis();
 		if(logMINOR) Logger.minor(this, "Got a JFK(4) message, processing it - "+pn.getPeer());
-		System.out.println("!! Got a JFK(4) message, processing it - "+pn.getPeer());
+		//System.out.println("!! Got a JFK(4) message, processing it - "+pn.getPeer());
 		
 		
 		if(pn.jfkMyRef == null) {
@@ -1544,7 +1544,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 
 		final long t2=System.currentTimeMillis();
 		if((t2-t1)>500)
-			Logger.error(this,"Message4 timeout error:Processing packet from "+pn.getPeer());
+			Logger.normal(this,"Message4 timeout error:Processing packet from "+pn.getPeer());
 		return true;
 	}
 
@@ -1563,7 +1563,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 	{
 		if(logMINOR) Logger.minor(this, "Sending a JFK(3) message to "+pn.getPeer());
 		
-		System.out.println("!! Sending a JFK(3) message to "+pn.getPeer());
+		//System.out.println("!! Sending a JFK(3) message to "+pn.getPeer());
 		
 		
 		long t1=System.currentTimeMillis();
@@ -1684,7 +1684,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		}, 5*1000);
 		long t2=System.currentTimeMillis();
 		if((t2-t1)>500)
-			Logger.error(this,"Message3 timeout error:Sending packet for"+pn.getPeer());
+			Logger.normal(this,"Message3 timeout error:Sending packet for"+pn.getPeer());
 	}
 
 
@@ -1702,7 +1702,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		if(logMINOR)
 			Logger.minor(this, "Sending a JFK(4) message to "+pn.getPeer());
 		
-		System.out.println("!! Sending a JFK(4) message to "+pn.getPeer());
+		//System.out.println("!! Sending a JFK(4) message to "+pn.getPeer());
 		
 		
 		long t1=System.currentTimeMillis();
@@ -1781,7 +1781,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		}
 		long t2=System.currentTimeMillis();
 		if((t2-t1)>500)
-			Logger.error(this,"Message4 timeout error:Sending packet for"+pn.getPeer());
+			Logger.normal(this,"Message4 timeout error:Sending packet for"+pn.getPeer());
 	}
 
 	/**
@@ -2955,7 +2955,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 		if(logMINOR) Logger.minor(this, "Possibly sending handshake to "+pn+" negotiation type "+negType);
 		
 		
-		System.out.println("!! Possibly sending handshake to "+pn+" negotiation type "+negType);
+		//System.out.println("!! Possibly sending handshake to "+pn+" negotiation type "+negType);
 
 		
 		Peer peer = pn.getHandshakeIP();
@@ -2975,7 +2975,7 @@ public class FNPPacketMangler implements OutgoingPacketMangler, IncomingPacketFi
 			Logger.minor(this, "Sending handshake to "+peer+" for "+pn);
 		
 		
-		System.out.println("!! Sending handshake to "+peer+" for "+pn);
+		//System.out.println("!! Sending handshake to "+peer+" for "+pn);
 		
 		
 		pn.sentHandshake(notRegistered);

@@ -14,6 +14,7 @@ import freenet.config.InvalidConfigValueException;
 import freenet.config.PersistentConfig;
 import freenet.config.SubConfig;
 import freenet.crypt.DiffieHellman;
+import freenet.crypt.DummyRandomSource;
 import freenet.crypt.RandomSource;
 import freenet.crypt.SSL;
 import freenet.crypt.Yarrow;
@@ -282,7 +283,9 @@ public class NodeStarter implements WrapperListener {
 		java.security.Security.setProperty("networkaddress.cache.negative.ttl", "0");
 
 		// Setup RNG
-		RandomSource random = new Yarrow();
+		// this is TOO slow in gather entrophy
+		//RandomSource random = new Yarrow();
+		RandomSource random = new DummyRandomSource();
 
 		DiffieHellman.init(random);
 
@@ -334,12 +337,30 @@ public class NodeStarter implements WrapperListener {
 	 * likely a config problem.
 	 */
 	public static Node createTestNode(int port, int opennetPort, String testName, boolean disableProbabilisticHTLs,
-		short maxHTL, int dropProb, RandomSource random,
+			short maxHTL, int maxPeers, int dropProb, RandomSource random,
+			Executor executor, int threadLimit, long storeSize, boolean ramStore,
+			boolean enableSwapping, boolean enableARKs, boolean enableULPRs, boolean enablePerNodeFailureTables,
+			boolean enableSwapQueueing, boolean enablePacketCoalescing,
+			int outputBandwidthLimit, boolean enableFOAF,
+			boolean connectToSeednodes, boolean longPingTimes, boolean useSlashdotCache, String ipAddressOverride) throws NodeInitException {
+		
+		return createTestNode(port, opennetPort, testName, disableProbabilisticHTLs,
+				maxHTL, maxPeers, dropProb, random,
+				executor, threadLimit, storeSize, ramStore,
+				enableSwapping, enableARKs, enableULPRs, enablePerNodeFailureTables,
+				enableSwapQueueing, enablePacketCoalescing,
+				outputBandwidthLimit, enableFOAF,
+				connectToSeednodes, longPingTimes, useSlashdotCache, ipAddressOverride, 0);
+
+	}
+	public static Node createTestNode(int port, int opennetPort, String testName, boolean disableProbabilisticHTLs,
+		short maxHTL, int maxPeers, int dropProb, RandomSource random,
 		Executor executor, int threadLimit, long storeSize, boolean ramStore,
 		boolean enableSwapping, boolean enableARKs, boolean enableULPRs, boolean enablePerNodeFailureTables,
 		boolean enableSwapQueueing, boolean enablePacketCoalescing,
 		int outputBandwidthLimit, boolean enableFOAF,
-		boolean connectToSeednodes, boolean longPingTimes, boolean useSlashdotCache, String ipAddressOverride) throws NodeInitException {
+		boolean connectToSeednodes, boolean longPingTimes, boolean useSlashdotCache, String ipAddressOverride,
+		int TMCIPort) throws NodeInitException {
 
 		File baseDir = new File(testName);
 		File portDir = new File(baseDir, Integer.toString(port));
@@ -364,7 +385,12 @@ public class NodeStarter implements WrapperListener {
 		configFS.put("node.disableProbabilisticHTLs", disableProbabilisticHTLs);
 		configFS.put("fproxy.enabled", false);
 		configFS.put("fcp.enabled", false);
-		configFS.put("console.enabled", false);
+		if(TMCIPort > 0){
+			configFS.put("console.enabled", true);
+			configFS.put("console.port", TMCIPort);
+		}else{
+			configFS.put("console.enabled", false);
+		}
 		configFS.putSingle("pluginmanager.loadplugin", "");
 		configFS.put("node.updater.enabled", false);
 		configFS.putSingle("node.tempDir", new File(portDir, "temp").toString());
@@ -375,6 +401,7 @@ public class NodeStarter implements WrapperListener {
 		configFS.putSingle("node.userDir", portDir.toString());
 		configFS.putSingle("node.runDir", portDir.toString());
 		configFS.putSingle("node.cfgDir", portDir.toString());
+		configFS.putSingle("nnode.downloadsDir", portDir.toString() + File.separator + "downloads");
 		configFS.put("node.maxHTL", maxHTL);
 		configFS.put("node.testingDropPacketsEvery", dropProb);
 		configFS.put("node.alwaysAllowLocalAddresses", true);
@@ -399,6 +426,9 @@ public class NodeStarter implements WrapperListener {
 		configFS.put("node.opennet.oneConnectionPerIP", false);
 		configFS.put("node.opennet.assumeNATed", true);
 		configFS.put("node.opennet.connectToSeednodes", connectToSeednodes);
+		configFS.put("node.opennet.includeLocalAddressesInNoderefs", true);
+		if(maxPeers > 0)
+			configFS.put("node.opennet.maxOpennetPeers", maxPeers);
 		configFS.put("node.encryptTempBuckets", false);
 		configFS.put("node.encryptPersistentTempBuckets", false);
 		if(ipAddressOverride != null)

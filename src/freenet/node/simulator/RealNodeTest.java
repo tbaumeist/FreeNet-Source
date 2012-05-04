@@ -3,6 +3,10 @@
  * http://www.gnu.org/ for further details of the GPL. */
 package freenet.node.simulator;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import freenet.crypt.RandomSource;
 import freenet.io.comm.PeerParseException;
 import freenet.node.FSParseException;
@@ -10,6 +14,9 @@ import freenet.node.Location;
 import freenet.node.Node;
 import freenet.node.NodeInitException;
 import freenet.node.NodeStats;
+import freenet.node.OpennetDisabledException;
+import freenet.node.OpennetManager.ConnectionType;
+import freenet.node.OpennetPeerNode;
 import freenet.node.PeerNode;
 import freenet.support.LogThresholdCallback;
 import freenet.support.Logger;
@@ -24,7 +31,7 @@ import freenet.support.Logger.LogLevel;
 public class RealNodeTest {
 
 	static final int EXIT_BASE = NodeInitException.EXIT_NODE_UPPER_LIMIT;
-	static final int EXIT_CANNOT_DELETE_OLD_DATA = EXIT_BASE + 3;
+	protected static final int EXIT_CANNOT_DELETE_OLD_DATA = EXIT_BASE + 3;
 	static final int EXIT_PING_TARGET_NOT_REACHED = EXIT_BASE + 4;
 	static final int EXIT_INSERT_FAILED = EXIT_BASE + 5;
 	static final int EXIT_REQUEST_FAILED = EXIT_BASE + 6;
@@ -51,25 +58,28 @@ public class RealNodeTest {
 	        [0..n], some nodes tend to have *much* higher connections than the degree (the first few),
 	        starving the latter ones.
 	 */
-	static void makeKleinbergNetwork (Node[] nodes, boolean idealLocations, int degree, boolean forceNeighbourConnections, RandomSource random)
+	protected static void makeKleinbergNetwork (Node[] nodes, boolean idealLocations, int degree, boolean forceNeighbourConnections, RandomSource random)
 	{
 		if(idealLocations) {
 			// First set the locations up so we don't spend a long time swapping just to stabilise each network.
 			double div = 1.0 / nodes.length;
 			double loc = 0.0;
+			
+			DecimalFormat twoDForm = new DecimalFormat("0.00000");
 			for (int i=0; i<nodes.length; i++) {
-				nodes[i].setLocation(loc);
+				nodes[i].setLocation(Double.valueOf(twoDForm.format(loc)));
 				loc += div;
 			}
 		}
 		if(forceNeighbourConnections) {
 			for(int i=0;i<nodes.length;i++) {
 				int next = (i+1) % nodes.length;
-				connect(nodes[i], nodes[next]);
+				connectOpen(nodes[i], nodes[next]);
 			}
 		}
 		for (int i=0; i<nodes.length; i++) {
 			Node a = nodes[i];
+			
 			// Normalise the probabilities
 			double norm = 0.0;
 			for (int j=0; j<nodes.length; j++) {
@@ -83,12 +93,27 @@ public class RealNodeTest {
 				if (a.getLocation() == b.getLocation()) continue;
 				double p = 1.0 / distance (a, b) / norm;
 				for (int n = 0; n < degree / 2; n++) {
-					if (random.nextFloat() < p) {
-						connect(a, b);
+					if (random.nextFloat() < p && 
+							a.peers.countValidPeers() < degree &&
+							b.peers.countValidPeers() < degree){
+						connectOpen(a, b);
 						break;
 					}
 				}
 			}
+		}
+	}
+	
+	protected static void connectOpen(Node a, Node b) {
+		try {
+			a.addNewOpennetNode(b.exportOpennetPublicFieldSet(), ConnectionType.ANNOUNCE);
+			b.addNewOpennetNode(a.exportOpennetPublicFieldSet(), ConnectionType.ANNOUNCE);
+		} catch (FSParseException e) {
+			Logger.error(RealNodeSecretPingTest.class, "cannot connect!!!!", e);
+		} catch (PeerParseException e) {
+			Logger.error(RealNodeSecretPingTest.class, "cannot connect #2!!!!", e);
+		} catch (freenet.io.comm.ReferenceSignatureVerificationException e) {
+			Logger.error(RealNodeSecretPingTest.class, "cannot connect #3!!!!", e);
 		}
 	}
 	
@@ -123,7 +148,66 @@ public class RealNodeTest {
 		return Integer.toString(n.getDarknetPortNumber());
 	}
 	
-	static void waitForAllConnected(Node[] nodes) throws InterruptedException {
+	protected static boolean waitForAllConnectedOpen(Node[] nodes) throws InterruptedException, NodeInitException {
+		long tStart = System.currentTimeMillis();
+		
+		int disconnectTime = 1 * nodes.length;
+		
+		while(true) {
+			int countFullyConnected = 0;
+			int countReallyConnected = 0;
+			int totalPeers = 0;
+			int totalConnections = 0;
+			int totalBackedOff = 0;
+			double totalPingTime = 0.0;
+			double maxPingTime = 0.0;
+			double minPingTime = Double.MAX_VALUE;
+			
+			for(int i=0;i<nodes.length;i++) {
+				int countConnected = nodes[i].peers.countConnectedOpennetPeers();
+				int countTotal = nodes[i].peers.countValidPeers();
+				int countBackedOff = nodes[i].peers.countBackedOffPeers();
+				totalPeers += countTotal;
+				totalConnections += countConnected;
+				totalBackedOff += countBackedOff;
+				double pingTime = nodes[i].nodeStats.getNodeAveragePingTime();
+				totalPingTime += pingTime;
+				if(pingTime > maxPingTime) maxPingTime = pingTime;
+				if(pingTime < minPingTime) minPingTime = pingTime;
+				if(countConnected == countTotal) {
+					countFullyConnected++;
+					if(countBackedOff == 0) countReallyConnected++;
+				} else {
+					if(logMINOR)
+						Logger.minor(RealNodeTest.class, "Connection count for "+nodes[i]+" : "+countConnected);
+				}
+				if(countBackedOff > 0) {
+					if(logMINOR)
+						Logger.minor(RealNodeTest.class, "Backed off: "+nodes[i]+" : "+countBackedOff);
+				}
+			}
+			double avgPingTime = totalPingTime / nodes.length;
+			if(countFullyConnected == nodes.length && countReallyConnected == nodes.length && totalBackedOff == 0 &&
+					minPingTime < NodeStats.DEFAULT_SUB_MAX_PING_TIME && maxPingTime < NodeStats.DEFAULT_SUB_MAX_PING_TIME && avgPingTime < NodeStats.DEFAULT_SUB_MAX_PING_TIME) {
+				System.err.println("All nodes fully connected");
+				Logger.normal(RealNodeTest.class, "All nodes fully connected");
+				System.err.println();
+				return true;
+			} else {
+				long tDelta = (System.currentTimeMillis() - tStart)/1000;	
+				
+				if(tDelta > disconnectTime && countFullyConnected != nodes.length){
+					return false;
+				}
+				
+				System.err.println("Waiting for nodes to be fully connected: "+countFullyConnected+" / "+nodes.length+" ("+totalConnections+" / "+totalPeers+" connections total) - backed off "+totalBackedOff+" ping min/avg/max "+(int)minPingTime+"/"+(int)avgPingTime+"/"+(int)maxPingTime+" at "+tDelta+'s');
+				Logger.normal(RealNodeTest.class, "Waiting for nodes to be fully connected: "+countFullyConnected+" / "+nodes.length+" ("+totalConnections+" / "+totalPeers+" connections total) - backed off "+totalBackedOff+" ping min/avg/max "+(int)minPingTime+"/"+(int)avgPingTime+"/"+(int)maxPingTime+" at "+tDelta+'s');
+				Thread.sleep(1000);
+			}
+		}
+	}
+	
+	protected static void waitForAllConnected(Node[] nodes) throws InterruptedException {
 		long tStart = System.currentTimeMillis();
 		while(true) {
 			int countFullyConnected = 0;
@@ -142,6 +226,7 @@ public class RealNodeTest {
 				int countTotal = nodes[i].peers.countValidPeers();
 				int countBackedOff = nodes[i].peers.countBackedOffPeers();
 				int countCompatible = nodes[i].peers.countCompatibleDarknetPeers();
+
 				totalPeers += countTotal;
 				totalConnections += countConnected;
 				totalPartialConnections += countAlmostConnected;
@@ -156,7 +241,7 @@ public class RealNodeTest {
 					if(countBackedOff == 0) countReallyConnected++;
 				} else {
 					if(logMINOR)
-						Logger.minor(RealNodeTest.class, "Connection count for "+nodes[i]+" : "+countConnected+" partial "+countAlmostConnected);
+						Logger.minor(RealNodeTest.class, "Connection count for "+nodes[i]+" : "+countConnected+" partial N/A");
 				}
 				if(countBackedOff > 0) {
 					if(logMINOR)
@@ -172,8 +257,8 @@ public class RealNodeTest {
 				return;
 			} else {
 				long tDelta = (System.currentTimeMillis() - tStart)/1000;
-				System.err.println("Waiting for nodes to be fully connected: "+countFullyConnected+" / "+nodes.length+" ("+totalConnections+" / "+totalPeers+" connections total partial "+totalPartialConnections+" compatible "+totalCompatibleConnections+") - backed off "+totalBackedOff+" ping min/avg/max "+(int)minPingTime+"/"+(int)avgPingTime+"/"+(int)maxPingTime+" at "+tDelta+'s');
-				Logger.normal(RealNodeTest.class, "Waiting for nodes to be fully connected: "+countFullyConnected+" / "+nodes.length+" ("+totalConnections+" / "+totalPeers+" connections total partial "+totalPartialConnections+" compatible "+totalCompatibleConnections+") - backed off "+totalBackedOff+" ping min/avg/max "+(int)minPingTime+"/"+(int)avgPingTime+"/"+(int)maxPingTime+" at "+tDelta+'s');
+				System.err.println("Waiting for nodes to be fully connected: "+countFullyConnected+" / "+nodes.length+" ("+totalConnections+" / "+totalPeers+" connections total partial N/A compatible N/A) - backed off "+totalBackedOff+" ping min/avg/max "+(int)minPingTime+"/"+(int)avgPingTime+"/"+(int)maxPingTime+" at "+tDelta+'s');
+				Logger.normal(RealNodeTest.class, "Waiting for nodes to be fully connected: "+countFullyConnected+" / "+nodes.length+" ("+totalConnections+" / "+totalPeers+" connections total partial N/A compatible N/A) - backed off "+totalBackedOff+" ping min/avg/max "+(int)minPingTime+"/"+(int)avgPingTime+"/"+(int)maxPingTime+" at "+tDelta+'s');
 				Thread.sleep(1000);
 			}
 		}

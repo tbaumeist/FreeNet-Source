@@ -1140,14 +1140,14 @@ public class PeerManager {
 	/* custom
 	 * write formatted to file, return as string as well
 	 */
-	public String writeTMCIPeerList(boolean allPeers) {
+	public String writeTMCIPeerList(boolean allPeers, boolean simulation) {
 		StringBuilder sb = new StringBuilder();
 		OpennetPeerNode[] peers = getOpennetPeers();
 		String[] peerList = new String[peers.length];
 		for(int i = 0; i < peers.length; i++) {
 			PeerNode pn = peers[i];
 			if (allPeers || pn.getPeerNodeStatusString().equals("CONNECTED"))
-				peerList[i] = pn.getFileTMCIPeerInfo();
+				peerList[i] = pn.getFileTMCIPeerInfo(simulation);
 			else
 				peerList[i] = "";
 		}
