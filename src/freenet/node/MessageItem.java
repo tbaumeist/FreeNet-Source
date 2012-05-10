@@ -8,6 +8,7 @@ import freenet.io.comm.ByteCounter;
 import freenet.io.comm.DMT;
 import freenet.io.comm.Message;
 import freenet.support.Logger;
+import freenet.testbed.Simulator;
 
 /** A queued byte[], maybe including a Message, and a callback, which may be null.
  * Note that we always create the byte[] on construction, as almost everywhere
@@ -35,6 +36,21 @@ public class MessageItem {
 		this.submitted = System.currentTimeMillis();
 		priority = msg2.getSpec().getPriority();
 		buf = msg.encodeToPacket(pn, n.getLocation(), pn.getLocation());
+		
+		if(msg.getSpec() == DMT.FNPVoid)
+			return;
+		
+		StringBuilder b = new StringBuilder();
+		b.append(pn.getPeer().getPort());
+		b.append(",");
+		if(msg.isSet(DMT.UID))
+			b.append(msg.getLong(DMT.UID));
+		else
+			b.append("NO_UID");
+		b.append(",");
+		b.append(msg.getSpec().getName());
+		
+		Simulator.writeProtocolTrace(n.getOpennetFNPPort(), b.toString());
 	}
 
 	public MessageItem(byte[] data, AsyncMessageCallback[] cb2, boolean formatted, ByteCounter ctr, short priority) {

@@ -1,9 +1,11 @@
 package freenet.testbed.commandControl;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
+import java.lang.management.ManagementFactory;
+import java.net.*;
 
 import freenet.testbed.ISimulator;
 
@@ -42,8 +44,14 @@ public class CommandInterpreter extends Thread {
 						"[node count] [peer count] [max HTL] Start the simulation environment.") {
 					public boolean action() throws Exception {
 						writeOutput("Starting ...");
-						return simulator.startSimulator(getParameterInt(0),
+						long startTime = System.currentTimeMillis();
+
+						Boolean stat = simulator.startSimulator(getParameterInt(0),
 								getParameterInt(1), (short) getParameterInt(2));
+						
+						long totalTime = System.currentTimeMillis() - startTime;
+						writeOutput("Start up time seconds:"+ (totalTime/1000));
+						return stat;
 					}
 				},
 				new Command("networkstate", 0,
@@ -65,9 +73,16 @@ public class CommandInterpreter extends Thread {
 					}
 				},
 				new Command("listnodes", 0,
-						"List all of the node ids.(Opennet Port:TMCI Port).") {
+						"List all of the node ids.(Opennet Port:TMCI Port:Darknet Port:).") {
 					public boolean action() throws Exception {
 						writeOutput(simulator.getNodeIDs());
+						return true;
+					}
+				},
+				new Command("liststoreddata", 0,
+						"List all of the data stored in the nodes.") {
+					public boolean action() throws Exception {
+						writeOutput(simulator.getStoredDataInfo());
 						return true;
 					}
 				},
@@ -78,10 +93,20 @@ public class CommandInterpreter extends Thread {
 						return true;
 					}
 				},
+				new Command("quit", 0,
+						"Close the connection to the simulation environment.") {
+					public boolean action() throws Exception {
+						closeConnection = true;
+						return true;
+					}
+				},
 				new Command("shutdown", 0,
 						"Shutdown the simulation environment.") {
 					public boolean action() throws Exception {
 						exitProgram = true;
+						String pName = ManagementFactory.getRuntimeMXBean()
+								.getName().split("@")[0];
+						writeOutput("PID:" + pName);
 						return true;
 					}
 				} };
@@ -111,8 +136,8 @@ public class CommandInterpreter extends Thread {
 				this.output.flush();
 			}
 			this.socket.close();
-			
-			if(this.exitProgram)
+
+			if (this.exitProgram)
 				this.simulator.exit();
 		} catch (Exception ex) {
 			System.out.println("Error communicating on command interface "
@@ -128,7 +153,8 @@ public class CommandInterpreter extends Thread {
 						this.writeCommand(STATUS_SUCCESS);
 					else
 						this.writeCommand(STATUS_FAILED);
-					System.out.println("Processed command: "+ c.getCommandName());
+					System.out.println("Processed command: "
+							+ c.getCommandName());
 					return;
 				}
 			}

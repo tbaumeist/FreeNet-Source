@@ -670,10 +670,11 @@ public class OpennetManager {
 				if(logMINOR) Logger.minor(this, "Opennet peer "+pn+" promoted to top of LRU because of successful request");
 				
 				// debug successCount values
-				System.out.println("Opennet peer "+pn+" promoted to top of LRU because of successful request");
+				System.out.println("Opennet peer "+pn.getPeer().getPort()+" promoted to top of LRU because of successful request");
 				System.out.print("\tSuccess Count:");
 				for(ConnectionType type : ConnectionType.values())
 					System.out.print(type.toString()+"="+successCount.get(type)+" ");
+				System.out.println();
 				
 				return;
 			} else {

@@ -6,5 +6,6 @@ public interface ISimulator {
 	public boolean restoreSimulator(int nodeCount, int peerCount, short maxHTL, int networkState) throws Exception;
 	public String getTopology();
 	public String getNodeIDs();
+	public String getStoredDataInfo();
 	public void exit();
 }

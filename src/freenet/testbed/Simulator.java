@@ -1,6 +1,7 @@
 package freenet.testbed;
 
 import java.io.File;
+import java.io.PrintWriter;
 
 import freenet.testbed.commandControl.CommandServer;
 import freenet.testbed.simulation.OpennetSimulator;
@@ -10,6 +11,7 @@ public class Simulator implements ISimulator {
 	private int basePort;
 	private File storageDirectory;
 	private OpennetSimulator openSim = null;
+	private static PrintWriter protocolWriter = null;
 
 	private final int NEW_TOPOLOGY = -1;
 
@@ -25,17 +27,22 @@ public class Simulator implements ISimulator {
 			File storageDir = new File("simulation_data");
 			if (args.length > 1)
 				storageDir = new File(args[1]);
+			
+			File protocolTrace = new File("protocol.trace");
+			if (args.length > 2)
+				protocolTrace = new File(args[2]);
 
-			new Simulator(port, storageDir);
+			new Simulator(port, storageDir, protocolTrace);
 		} catch (Exception ex) {
 			System.out.println("Error: " + ex.getMessage());
 			System.exit(1);
 		}
 	}
 
-	private Simulator(int port, File storageDir) throws Exception {
+	private Simulator(int port, File storageDir, File protocolTrace) throws Exception {
 		this.basePort = port;
 		this.storageDirectory = storageDir;
+		Simulator.protocolWriter = new PrintWriter(protocolTrace);
 
 		System.out.println("Starting simulator...");
 
@@ -47,6 +54,14 @@ public class Simulator implements ISimulator {
 		command.start();
 
 		System.out.println("Closing simulator");
+	}
+	
+	public static synchronized void writeProtocolTrace(int current, String message){
+		if(Simulator.protocolWriter != null){
+			Simulator.protocolWriter.println(current + " : " + message);
+			Simulator.protocolWriter.flush();
+		}
+		System.out.println(current + "," + message);
 	}
 
 	public boolean startSimulator(int nodeCount, int peerCount, short maxHTL)
@@ -82,8 +97,12 @@ public class Simulator implements ISimulator {
 	}
 
 	public void exit() {
-		System.out.println("Exiting simulator!!");
+		writeProtocolTrace(0, "Exiting simulator!!");
 		System.exit(0);
+	}
+
+	public String getStoredDataInfo() {
+		return this.openSim.getStoredDataInfo();
 	}
 
 }

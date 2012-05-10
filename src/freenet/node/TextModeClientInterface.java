@@ -57,6 +57,7 @@ import freenet.support.io.ArrayBucket;
 import freenet.support.io.BucketTools;
 import freenet.support.io.Closer;
 import freenet.support.io.FileBucket;
+import freenet.testbed.Simulator;
 import freenet.tools.TracebackAttacklet;
 import freenet.keys.ClientCHK;
 
@@ -299,6 +300,10 @@ public class TextModeClientInterface implements Runnable {
 			// Should have a key next
 			String key = line.substring("GET:".length()).trim();
 			Logger.normal(this, "Key: " + key);
+			
+			System.out.println("Request at " + this.n.getOpennetFNPPort());
+			Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "GET " + key);
+			
 			FreenetURI uri;
 			try {
 				uri = new FreenetURI(key);
@@ -358,6 +363,7 @@ public class TextModeClientInterface implements Runnable {
 					outsb.append("Permanent redirect: ").append(e.newURI)
 							.append("\r\n");
 			}
+			Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "END_GET");
 		} else if (uline.startsWith("DUMP:")) {
 			// Should have a key next
 			String key = line.substring("DUMP:".length()).trim();
@@ -647,8 +653,13 @@ public class TextModeClientInterface implements Runnable {
 			InsertBlock block = new InsertBlock(new ArrayBucket(data), null,
 					FreenetURI.EMPTY_CHK_URI);
 
+			if(!getCHKOnly){
+				System.out.println("Insert at "+ this.n.getOpennetFNPPort());
+				Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "PUT " + content);
+			}
+			
 			FreenetURI uri;
-			try {
+			try {			
 				uri = client.insert(block, getCHKOnly, null);
 			} catch (InsertException e) {
 				outsb.append("Error: ").append(e.getMessage());
@@ -671,6 +682,10 @@ public class TextModeClientInterface implements Runnable {
 			ClientCHK chk = new ClientCHK(uri);
 			double targetLoc = chk.getNodeCHK().toNormalizedDouble();
 			outsb.append("\r\nDouble: ").append(targetLoc).append("\r\n");
+			
+			if(!getCHKOnly){
+				Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "END_PUT");
+			}
 			// //////////////////////////////////////////////////////////////////////////////
 		} else if (uline.startsWith("PUTHTL:")) {
 
@@ -690,6 +705,10 @@ public class TextModeClientInterface implements Runnable {
 				// Multiple line insert
 				content = readLines(reader, false);
 			}
+			
+			System.out.println("Insert at " + this.n.getOpennetFNPPort());
+			Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "PUT " + content);
+			
 			// Insert
 			byte[] data = content.getBytes();
 			boolean b = this.n.disableProbabilisticHTLs;
@@ -723,6 +742,8 @@ public class TextModeClientInterface implements Runnable {
 			ClientCHK chk = new ClientCHK(uri);
 			double targetLoc = chk.getNodeCHK().toNormalizedDouble();
 			outsb.append("\r\nDouble: ").append(targetLoc).append("\r\n");
+			Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "END_PUT");
+			
 			// //////////////////////////////////////////////////////////////////////////////
 		} else if (uline.startsWith("PUTDIR:")
 				|| (uline.startsWith("PUTSSKDIR"))

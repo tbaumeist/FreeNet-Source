@@ -1,6 +1,9 @@
 package freenet.testbed.simulation;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,11 @@ public class OpennetSimulator extends RealNodeTest {
 	private Node[] nodes;
 	private int networkState;
 	private File storageDirectory;
+	
+	private int[] portsFreenet;
+	private int[] portsOpennet;
+	private int[] portsTMCI;
+	private int portOffset = 0;
 
 	private final boolean START_WITH_IDEAL_LOCATIONS = true;
 	private final boolean FORCE_NEIGHBOUR_CONNECTIONS = true;
@@ -39,6 +47,9 @@ public class OpennetSimulator extends RealNodeTest {
 		this.basePort = startPort;
 		this.nodes = new Node[this.nodeCount];
 		this.storageDirectory = storageDir;
+		this.portsFreenet = new int[this.nodeCount];
+		this.portsOpennet = new int[this.nodeCount];
+		this.portsTMCI = new int[this.nodeCount];
 	}
 
 	public int getNetworkState() {
@@ -71,7 +82,7 @@ public class OpennetSimulator extends RealNodeTest {
 			this.nodes[i] = NodeStarter.createTestNode(getPort(i),
 					getOpennetPort(i), dir, true, this.maxHTL, this.peerCount,
 					0 /* no dropped packets */, random, executor,
-					500 * this.nodeCount, 65536, true, ENABLE_SWAPPING, false,
+					500 * this.nodeCount, 65536 * 100, true, ENABLE_SWAPPING, false,
 					false, false, ENABLE_SWAP_QUEUEING, true, 0, ENABLE_FOAF,
 					ENABLE_ANNOUNCEMENT, true, false, null, getTMCIPort(i));
 		}
@@ -119,21 +130,45 @@ public class OpennetSimulator extends RealNodeTest {
 			b.append(this.getOpennetPort(i));
 			b.append(":");
 			b.append(this.getTMCIPort(i));
+			b.append(":");
+			b.append(this.getPort(i));
+			b.append(":\n");
+		}
+		if(b.length() > 0)
+			b.deleteCharAt(b.length()-1);
+		return b.toString();
+	}
+	
+	public String getStoredDataInfo() {
+		StringBuilder b = new StringBuilder();
+		for(Node n : this.nodes){
+			b.append(n.getOpennetFNPPort());
+			b.append(" ");
+			b.append(n.writeChkDatastoreFileA());
 			b.append("\n");
 		}
+		
+		if(b.length() > 0)
+			b.deleteCharAt(b.length()-1);
 		return b.toString();
 	}
 
 	private int getPort(int i) {
-		return this.basePort + (i * 3);
+		if(this.portsFreenet[i] == 0)
+			this.portsFreenet[i] = getNextOpenPort();
+		return this.portsFreenet[i];
 	}
 
 	private int getOpennetPort(int i) {
-		return this.basePort + (i * 3) + 1;
+		if(this.portsOpennet[i] == 0)
+			this.portsOpennet[i] = getNextOpenPort();
+		return this.portsOpennet[i];
 	}
 
 	private int getTMCIPort(int i) {
-		return this.basePort + (i * 3) + 2;
+		if(this.portsTMCI[i] == 0)
+			this.portsTMCI[i] = getNextOpenPort();
+		return this.portsTMCI[i];
 	}
 
 	private void forceReconnect(Node[] nodes) {
@@ -179,4 +214,41 @@ public class OpennetSimulator extends RealNodeTest {
 				openStill.add(peer);
 		}
 	}
+	
+	private int getNextOpenPort(){
+		int current = this.basePort + this.portOffset;
+		while( ! isPortOpen(current)){
+			current++;
+		}
+		this.portOffset = (current - this.basePort) + 1;
+		return current;
+	}
+	
+	private boolean isPortOpen(int port) {
+		ServerSocket ss = null;
+		DatagramSocket ds = null;
+		try {
+			ss = new ServerSocket(port);
+			ss.setReuseAddress(true);
+			ds = new DatagramSocket(port);
+			ds.setReuseAddress(true);
+			return true;
+		} catch (IOException e) {
+		} finally {
+			if (ds != null) {
+				ds.close();
+			}
+
+			if (ss != null) {
+				try {
+					ss.close();
+				} catch (IOException e) {
+					/* should not be thrown */
+				}
+			}
+		}
+
+		return false;
+	}
+
 }

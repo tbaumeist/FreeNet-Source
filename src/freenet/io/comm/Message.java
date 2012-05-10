@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.db4o.marshall.Context;
+
 import DebugMessenger.DebugMessage;
 import DebugMessenger.DebugMessengerClientSender;
 
@@ -40,6 +42,7 @@ import freenet.support.Logger;
 import freenet.support.Serializer;
 import freenet.support.ShortBuffer;
 import freenet.support.Logger.LogLevel;
+import freenet.testbed.Simulator;
 import freenet.tools.DebugTool;
 
 /**

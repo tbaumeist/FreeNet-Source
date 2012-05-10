@@ -4260,6 +4260,7 @@ public class Node implements TimeSkewDetectorCallback {
 	public CHKBlock fetch(NodeCHK key, boolean dontPromote, boolean canReadClientCache, boolean canWriteClientCache, boolean canWriteDatastore, boolean forULPR, BlockMetadata meta) {
 		double loc=key.toNormalizedDouble();
 		double dist=Location.distance(lm.getLocation(), loc);
+		//System.out.println("Fetch key at "+ this.getOpennetFNPPort());
 		if(canReadClientCache) {
 			try {
 				CHKBlock block = chkClientcache.fetch(key, dontPromote || !canWriteClientCache, false, meta);
@@ -4417,6 +4418,7 @@ public class Node implements TimeSkewDetectorCallback {
 					chkDatastore.put(block, !canWriteDatastore);
 					nodeStats.avgStoreCHKLocation.report(loc);
 					
+					System.out.println("Storing at "+this.getOpennetFNPPort());
 					// Add block to chkDatastoreContents for network storage topology
 					if(!chkDatastoreContents.contains(block.toString()))
 						chkDatastoreContents.add(block.toString());
@@ -4896,22 +4898,23 @@ public class Node implements TimeSkewDetectorCallback {
 	 */
 	public String writeChkDatastoreFileA() {
 		StringBuilder sb = new StringBuilder();
-		try {
-			FileWriter fstream = new FileWriter("datastorea.txt");
-			BufferedWriter out = new BufferedWriter(fstream);
+		//try {
+			//FileWriter fstream = new FileWriter("datastorea.txt");
+			//BufferedWriter out = new BufferedWriter(fstream);
 			sb.append(getLocation());
 
 			if (chkDatastoreContents.size() == 0) {
-				sb.append("CHK Datastore appears to be empty.\n");
+				sb.append("\n\tCHK Datastore appears to be empty.");
 			} else {	
 				for (int i = 0; i < chkDatastoreContents.size(); i++) {
-					sb.append("\n" + chkDatastoreContents.get(i));
+					sb.append("\n\t");
+					sb.append(chkDatastoreContents.get(i));
 				}
 			}
-			out.write(sb.toString());
-			out.close();
-		} catch (IOException e) {
-		}
+			//out.write(sb.toString());
+			//out.close();
+		//} catch (IOException e) {
+		//}
 		return sb.toString();
 	}
 	

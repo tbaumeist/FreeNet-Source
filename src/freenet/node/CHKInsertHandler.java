@@ -81,6 +81,8 @@ public class CHKInsertHandler implements PrioRunnable, ByteCounter {
         this.preferInsert = preferInsert;
         this.ignoreLowBackoff = ignoreLowBackoff;
         this.realTimeFlag = realTimeFlag;
+        
+        System.out.println("Insert at "+ this.node.getOpennetFNPPort());
     }
     
     @Override

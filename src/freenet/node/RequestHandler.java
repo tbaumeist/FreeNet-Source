@@ -100,6 +100,8 @@ public class RequestHandler implements PrioRunnable, ByteCounter, RequestSender.
 		if(key instanceof NodeSSK)
 			needsPubKey = m.getBoolean(DMT.NEED_PUB_KEY);
 		receivedBytes(m.receivedByteCount());
+		
+		System.out.println("Request at "+ this.node.getOpennetFNPPort());
 	}
 
 	public void run() {
