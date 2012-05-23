@@ -3979,8 +3979,10 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 		}
 		long loopTime1 = System.currentTimeMillis();
 		Vector<Peer> validIPs = new Vector<Peer>();
+		Peer lastSeenPeer = null;
 		for(int i=0;i<localHandshakeIPs.length;i++){
 			Peer peer = localHandshakeIPs[i];
+			lastSeenPeer = peer;
 			FreenetInetAddress addr = peer.getFreenetAddress();
 			if(!outgoingMangler.allowConnection(this, addr)) {
 				if(logMINOR)
@@ -3998,7 +4000,15 @@ public abstract class PeerNode implements PeerContext, USKRetrieverCallback {
 		}
 		Peer ret;
 		if(validIPs.isEmpty()) {
-			ret = null;
+			// Hack for when machine doesn't have an ip, when running simulation
+			try {
+				ret = null;
+				if(lastSeenPeer != null)
+					ret = new Peer("127.0.0.1:"+lastSeenPeer.getPort(), false);
+			} catch (Exception e) {
+				ret = null;
+			}
+			//ret = null;
 		} else if(validIPs.size() == 1) {
 			ret = validIPs.get(0);
 		} else {
