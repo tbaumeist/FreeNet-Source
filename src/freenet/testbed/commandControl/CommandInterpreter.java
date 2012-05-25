@@ -86,6 +86,14 @@ public class CommandInterpreter extends Thread {
 						return true;
 					}
 				},
+				new Command("topologyonly", 3,
+						"[node count] [peer count] [max HTL] Generate topology only.") {
+					public boolean action() throws Exception {
+						simulator.genTopologyOnly(getParameterInt(0),
+								getParameterInt(1), (short) getParameterInt(2));
+						return true;
+					}
+				},
 				new Command("close", 0,
 						"Close the connection to the simulation environment.") {
 					public boolean action() throws Exception {

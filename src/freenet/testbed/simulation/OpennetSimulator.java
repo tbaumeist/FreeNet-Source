@@ -27,6 +27,8 @@ public class OpennetSimulator extends RealNodeTest {
 	private int networkState;
 	private File storageDirectory;
 	
+	private boolean needRestart = false;
+	
 	private int[] portsFreenet;
 	private int[] portsOpennet;
 	private int[] portsTMCI;
@@ -57,6 +59,25 @@ public class OpennetSimulator extends RealNodeTest {
 	}
 
 	public void startNetwork(int networkState) throws Exception {
+		this.genTopology(networkState);
+
+		for (int i = 0; i < this.nodeCount; i++) {
+			System.out.println("Starting node " + i);
+			this.nodes[i].start(false);
+		}
+
+		while (!waitForAllConnectedOpen(this.nodes)) {
+			// failed to get all nodes to connect
+			// reset trouble makers
+			System.out.println("Forcing reconnects...");
+			forceReconnect(this.nodes);
+		}
+	}
+	
+	public void genTopology(int networkState) throws Exception {
+		if( this.needRestart )
+			throw new Exception("Must restart program before running a new topology.");
+		this.needRestart = true;
 		String dir = this.storageDirectory.getAbsolutePath();
 		File wd = this.storageDirectory;
 		if (!FileUtil.removeAll(wd)) {
@@ -92,18 +113,6 @@ public class OpennetSimulator extends RealNodeTest {
 				this.peerCount, FORCE_NEIGHBOUR_CONNECTIONS, random);
 
 		finishFillingNetwork(this.nodes, this.peerCount, random);
-
-		for (int i = 0; i < this.nodeCount; i++) {
-			System.out.println("Starting node " + i);
-			this.nodes[i].start(false);
-		}
-
-		while (!waitForAllConnectedOpen(this.nodes)) {
-			// failed to get all nodes to connect
-			// reset trouble makers
-			System.out.println("Forcing reconnects...");
-			forceReconnect(this.nodes);
-		}
 	}
 
 	public String getTopology() {

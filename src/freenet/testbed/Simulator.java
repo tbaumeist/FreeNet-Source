@@ -27,7 +27,7 @@ public class Simulator implements ISimulator {
 			File storageDir = new File("simulation_data");
 			if (args.length > 1)
 				storageDir = new File(args[1]);
-			
+
 			File protocolTrace = new File("protocol.trace");
 			if (args.length > 2)
 				protocolTrace = new File(args[2]);
@@ -39,7 +39,8 @@ public class Simulator implements ISimulator {
 		}
 	}
 
-	private Simulator(int port, File storageDir, File protocolTrace) throws Exception {
+	private Simulator(int port, File storageDir, File protocolTrace)
+			throws Exception {
 		this.basePort = port;
 		this.storageDirectory = storageDir;
 		Simulator.protocolWriter = new PrintWriter(protocolTrace);
@@ -49,15 +50,17 @@ public class Simulator implements ISimulator {
 		CommandServer command = new CommandServer(port, this);
 
 		System.out.println("Listening on port " + port);
-		System.out.println("Storing runtime data in " + storageDir.getAbsolutePath());
+		System.out.println("Storing runtime data in "
+				+ storageDir.getAbsolutePath());
 
 		command.start();
 
 		System.out.println("Closing simulator");
 	}
-	
-	public static synchronized void writeProtocolTrace(int current, String message){
-		if(Simulator.protocolWriter != null){
+
+	public static synchronized void writeProtocolTrace(int current,
+			String message) {
+		if (Simulator.protocolWriter != null) {
 			Simulator.protocolWriter.println(current + " : " + message);
 			Simulator.protocolWriter.flush();
 		}
@@ -71,6 +74,16 @@ public class Simulator implements ISimulator {
 		this.openSim = new OpennetSimulator(nodeCount, peerCount, maxHTL,
 				this.basePort + 1, this.storageDirectory);
 		this.openSim.startNetwork(NEW_TOPOLOGY);
+		return true;
+	}
+
+	public boolean genTopologyOnly(int nodeCount, int peerCount, short maxHTL)
+			throws Exception {
+		if (this.openSim != null)
+			return false;
+		this.openSim = new OpennetSimulator(nodeCount, peerCount, maxHTL,
+				this.basePort + 1, this.storageDirectory);
+		this.openSim.genTopology(NEW_TOPOLOGY);
 		return true;
 	}
 
