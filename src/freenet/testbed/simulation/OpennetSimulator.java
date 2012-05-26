@@ -28,6 +28,7 @@ public class OpennetSimulator extends RealNodeTest {
 	private File storageDirectory;
 	
 	private boolean needRestart = false;
+	private boolean nodesStarted = false;
 	
 	private int[] portsFreenet;
 	private int[] portsOpennet;
@@ -60,6 +61,8 @@ public class OpennetSimulator extends RealNodeTest {
 
 	public void startNetwork(int networkState) throws Exception {
 		this.genTopology(networkState);
+		
+		this.nodesStarted = true;
 
 		for (int i = 0; i < this.nodeCount; i++) {
 			System.out.println("Starting node " + i);
@@ -116,7 +119,9 @@ public class OpennetSimulator extends RealNodeTest {
 	}
 
 	public String getTopology() {
-		StringBuilder b = new StringBuilder();
+		if(!this.nodesStarted)
+			return getTopologyOffline();
+		StringBuilder b = new StringBuilder(); 
 		for (Node n : this.nodes) {
 			b.append(n.writeTMCIPeerFile(false, true));
 		}
@@ -159,6 +164,29 @@ public class OpennetSimulator extends RealNodeTest {
 		
 		if(b.length() > 0)
 			b.deleteCharAt(b.length()-1);
+		return b.toString();
+	}
+	
+	private String getTopologyOffline() {
+		StringBuilder b = new StringBuilder(); 
+		for (Node n : this.nodes) {
+			for(PeerNode p : n.peers.getOpennetPeers()){
+				Node n2 = this.getNodeByPort(p.getPeer().getPort());
+				if(n2 == null)
+					continue;
+				b.append("\"");
+				b.append(n.getLocation());
+				b.append("\t");
+				b.append(n.getOpennetFNPPort());
+				b.append("\"\t->\t\"");
+				b.append(n2.getLocation());
+				b.append("\t");
+				b.append(n2.getOpennetFNPPort());
+				b.append("\"\n");
+			}
+		}
+		if(b.length() > 0)
+			b.deleteCharAt(b.length() - 1);
 		return b.toString();
 	}
 
