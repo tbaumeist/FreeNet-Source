@@ -37,7 +37,7 @@ public class MessageItem {
 		priority = msg2.getSpec().getPriority();
 		buf = msg.encodeToPacket(pn, n.getLocation(), pn.getLocation());
 		
-		if(msg.getSpec() == DMT.FNPVoid)
+		if(msg.getSpec() == DMT.FNPVoid || msg.getSpec() == DMT.packetTransmit)
 			return;
 		
 		StringBuilder b = new StringBuilder();

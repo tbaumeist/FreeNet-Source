@@ -376,7 +376,8 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 	private boolean handleDataRequest(Message m, PeerNode source, boolean isSSK) {
 		long id = m.getLong(DMT.UID);
 		ByteCounter ctr = isSSK ? node.nodeStats.sskRequestCtr : node.nodeStats.chkRequestCtr;
-		if(node.recentlyCompleted(id)) {
+		boolean debugging = false;
+		if(debugging || node.recentlyCompleted(id)) {
 			Message rejected = DMT.createFNPRejectedLoop(id);
 			try {
 				source.sendAsync(rejected, null, ctr);
@@ -447,7 +448,8 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 	private boolean handleInsertRequest(Message m, PeerNode source, boolean isSSK) {
 		ByteCounter ctr = isSSK ? node.nodeStats.sskInsertCtr : node.nodeStats.chkInsertCtr;
 		long id = m.getLong(DMT.UID);
-		if(node.recentlyCompleted(id)) {
+		boolean debugging = false;
+		if(debugging || node.recentlyCompleted(id)) {
 			Message rejected = DMT.createFNPRejectedLoop(id);
 			try {
 				source.sendAsync(rejected, null, ctr);
