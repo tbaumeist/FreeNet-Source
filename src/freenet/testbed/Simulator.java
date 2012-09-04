@@ -83,7 +83,7 @@ public class Simulator implements ISimulator {
 			return false;
 		this.openSim = new OpennetSimulator(nodeCount, peerCount, maxHTL,
 				this.basePort + 1, this.storageDirectory);
-		this.openSim.genTopology(NEW_TOPOLOGY);
+		this.openSim.genTopology(NEW_TOPOLOGY, true);
 		return true;
 	}
 
@@ -116,6 +116,13 @@ public class Simulator implements ISimulator {
 
 	public String getStoredDataInfo() {
 		return this.openSim.getStoredDataInfo();
+	}
+
+	public String experimentRoutePrecition(int nodeCount, int peerCount,
+			short maxHTL) throws Exception {
+		
+		
+		return null;
 	}
 
 }

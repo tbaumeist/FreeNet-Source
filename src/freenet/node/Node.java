@@ -175,13 +175,15 @@ import freenet.support.io.Closer;
 import freenet.support.io.FileUtil;
 import freenet.support.io.NativeThread;
 import freenet.support.transport.ip.HostnameSyntaxException;
+import freenet.testbed.INode;
+import freenet.testbed.IOpennetPeerNode;
 import freenet.tools.TracebackMonitor;
 
 import java.io.Writer
 ;/**
  * @author amphibian
  */
-public class Node implements TimeSkewDetectorCallback {
+public class Node implements TimeSkewDetectorCallback, INode{
 
 	public class MigrateOldStoreData implements Runnable {
 
@@ -6362,5 +6364,25 @@ public class Node implements TimeSkewDetectorCallback {
 		sb.append("Hits: " + chkDatastore.misses() + "\n");
 		sb.append("Hits: " + chkDatastore.writes() + "\n");
 		return sb.toString();
+	}
+
+	public int countConnectedOpennetPeers() {
+		return this.peers.countConnectedOpennetPeers();
+	}
+
+	public int countValidPeers() {
+		return this.peers.countValidPeers();
+	}
+
+	public IOpennetPeerNode[] getOpennetPeers() {
+		return this.peers.getOpennetPeers();
+	}
+
+	public int countBackedOffPeers() {
+		return this.peers.countBackedOffPeers();
+	}
+
+	public double getNodeAveragePingTime() {
+		return this.nodeStats.getNodeAveragePingTime();
 	}
 }

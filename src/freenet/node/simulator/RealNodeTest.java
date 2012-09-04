@@ -21,6 +21,7 @@ import freenet.node.PeerNode;
 import freenet.support.LogThresholdCallback;
 import freenet.support.Logger;
 import freenet.support.Logger.LogLevel;
+import freenet.testbed.INode;
 
 /**
  * Optional base class for RealNode*Test.
@@ -58,7 +59,7 @@ public class RealNodeTest {
 	        [0..n], some nodes tend to have *much* higher connections than the degree (the first few),
 	        starving the latter ones.
 	 */
-	protected static void makeKleinbergNetwork (Node[] nodes, boolean idealLocations, int degree, boolean forceNeighbourConnections, RandomSource random)
+	protected static void makeKleinbergNetwork (INode[] nodes, boolean idealLocations, int degree, boolean forceNeighbourConnections, RandomSource random)
 	{
 		if(idealLocations) {
 			// First set the locations up so we don't spend a long time swapping just to stabilise each network.
@@ -78,24 +79,24 @@ public class RealNodeTest {
 			}
 		}
 		for (int i=0; i<nodes.length; i++) {
-			Node a = nodes[i];
+			INode a = nodes[i];
 			
 			// Normalise the probabilities
 			double norm = 0.0;
 			for (int j=0; j<nodes.length; j++) {
-				Node b = nodes[j];
+				INode b = nodes[j];
 				if (a.getLocation() == b.getLocation()) continue;
 				norm += 1.0 / distance (a, b);
 			}
 			// Create degree/2 outgoing connections
 			for (int k=0; k<nodes.length; k++) {
-				Node b = nodes[k];
+				INode b = nodes[k];
 				if (a.getLocation() == b.getLocation()) continue;
 				double p = 1.0 / distance (a, b) / norm;
 				for (int n = 0; n < degree / 2; n++) {
 					if (random.nextFloat() < p && 
-							a.peers.countValidPeers() < degree &&
-							b.peers.countValidPeers() < degree){
+							a.countValidPeers() < degree &&
+							b.countValidPeers() < degree){
 						connectOpen(a, b);
 						break;
 					}
@@ -104,7 +105,7 @@ public class RealNodeTest {
 		}
 	}
 	
-	protected static void connectOpen(Node a, Node b) {
+	protected static void connectOpen(INode a, INode b) {
 		try {
 			a.addNewOpennetNode(b.exportOpennetPublicFieldSet(), ConnectionType.ANNOUNCE);
 			b.addNewOpennetNode(a.exportOpennetPublicFieldSet(), ConnectionType.ANNOUNCE);
@@ -130,7 +131,7 @@ public class RealNodeTest {
 		}
 	}
 	
-	static double distance(Node a, Node b) {
+	static double distance(INode a, INode b) {
 		double aL=a.getLocation();
 		double bL=b.getLocation();
 		return Location.distance(aL, bL);
@@ -148,7 +149,7 @@ public class RealNodeTest {
 		return Integer.toString(n.getDarknetPortNumber());
 	}
 	
-	protected static boolean waitForAllConnectedOpen(Node[] nodes) throws InterruptedException, NodeInitException {
+	protected static boolean waitForAllConnectedOpen(INode[] nodes) throws InterruptedException, NodeInitException {
 		long tStart = System.currentTimeMillis();
 		
 		int disconnectTime = 1 * nodes.length;
@@ -164,13 +165,13 @@ public class RealNodeTest {
 			double minPingTime = Double.MAX_VALUE;
 			
 			for(int i=0;i<nodes.length;i++) {
-				int countConnected = nodes[i].peers.countConnectedOpennetPeers();
-				int countTotal = nodes[i].peers.countValidPeers();
-				int countBackedOff = nodes[i].peers.countBackedOffPeers();
+				int countConnected = nodes[i].countConnectedOpennetPeers();
+				int countTotal = nodes[i].countValidPeers();
+				int countBackedOff = nodes[i].countBackedOffPeers();
 				totalPeers += countTotal;
 				totalConnections += countConnected;
 				totalBackedOff += countBackedOff;
-				double pingTime = nodes[i].nodeStats.getNodeAveragePingTime();
+				double pingTime = nodes[i].getNodeAveragePingTime();
 				totalPingTime += pingTime;
 				if(pingTime > maxPingTime) maxPingTime = pingTime;
 				if(pingTime < minPingTime) minPingTime = pingTime;

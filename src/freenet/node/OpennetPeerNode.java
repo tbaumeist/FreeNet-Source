@@ -4,8 +4,9 @@ import freenet.io.comm.PeerParseException;
 import freenet.io.comm.ReferenceSignatureVerificationException;
 import freenet.node.OpennetManager.ConnectionType;
 import freenet.support.SimpleFieldSet;
+import freenet.testbed.IOpennetPeerNode;
 
-public class OpennetPeerNode extends PeerNode {
+public class OpennetPeerNode extends PeerNode implements IOpennetPeerNode {
 
 	final OpennetManager opennet;
 	private long timeLastSuccess;
@@ -218,5 +219,9 @@ public class OpennetPeerNode extends PeerNode {
 	@Override
 	protected void maybeClearPeerAddedTimeOnRestart(long now) {
 		// Do nothing.
+	}
+
+	public int getPort() {
+		return this.getPeer().getPort();
 	}
 }

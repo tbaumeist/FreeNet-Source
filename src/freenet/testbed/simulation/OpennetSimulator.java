@@ -9,21 +9,22 @@ import java.util.List;
 
 import freenet.crypt.DummyRandomSource;
 import freenet.crypt.RandomSource;
-import freenet.node.Node;
 import freenet.node.NodeStarter;
+import freenet.node.OpennetPeerNode;
 import freenet.node.PeerNode;
-import freenet.node.simulator.RealNodeRoutingTest;
 import freenet.node.simulator.RealNodeTest;
 import freenet.support.Executor;
-import freenet.support.Logger;
 import freenet.support.PooledExecutor;
 import freenet.support.Logger.LogLevel;
 import freenet.support.io.FileUtil;
+import freenet.testbed.DummyNode;
+import freenet.testbed.INode;
+import freenet.testbed.IOpennetPeerNode;
 
 public class OpennetSimulator extends RealNodeTest {
 	private int nodeCount, peerCount, basePort;
 	private short maxHTL;
-	private Node[] nodes;
+	private INode[] nodes;
 	private int networkState;
 	private File storageDirectory;
 	
@@ -48,7 +49,7 @@ public class OpennetSimulator extends RealNodeTest {
 		this.peerCount = peerCount;
 		this.maxHTL = maxHTL;
 		this.basePort = startPort;
-		this.nodes = new Node[this.nodeCount];
+		this.nodes = new INode[this.nodeCount];
 		this.storageDirectory = storageDir;
 		this.portsFreenet = new int[this.nodeCount];
 		this.portsOpennet = new int[this.nodeCount];
@@ -60,7 +61,7 @@ public class OpennetSimulator extends RealNodeTest {
 	}
 
 	public void startNetwork(int networkState) throws Exception {
-		this.genTopology(networkState);
+		this.genTopology(networkState, false);
 		
 		this.nodesStarted = true;
 
@@ -77,7 +78,7 @@ public class OpennetSimulator extends RealNodeTest {
 		}
 	}
 	
-	public void genTopology(int networkState) throws Exception {
+	public void genTopology(int networkState, boolean topologyOnly) throws Exception {
 		if( this.needRestart )
 			throw new Exception("Must restart program before running a new topology.");
 		this.needRestart = true;
@@ -103,12 +104,16 @@ public class OpennetSimulator extends RealNodeTest {
 		Executor executor = new PooledExecutor();
 		for (int i = 0; i < this.nodeCount; i++) {
 			System.out.println("Creating node " + i);
-			this.nodes[i] = NodeStarter.createTestNode(getPort(i),
-					getOpennetPort(i), dir, true, this.maxHTL, this.peerCount,
-					0 /* no dropped packets */, random, executor,
-					500 * this.nodeCount, 65536 * 100, true, ENABLE_SWAPPING, false,
-					false, false, ENABLE_SWAP_QUEUEING, true, 0, ENABLE_FOAF,
-					ENABLE_ANNOUNCEMENT, true, false, null, getTMCIPort(i));
+			if(topologyOnly){
+				this.nodes[i] = new DummyNode(getPort(i));
+			}else{
+				this.nodes[i] = NodeStarter.createTestNode(getPort(i),
+						getOpennetPort(i), dir, true, this.maxHTL, this.peerCount,
+						0 /* no dropped packets */, random, executor,
+						500 * this.nodeCount, 65536 * 100, true, ENABLE_SWAPPING, false,
+						false, false, ENABLE_SWAP_QUEUEING, true, 0, ENABLE_FOAF,
+						ENABLE_ANNOUNCEMENT, true, false, null, getTMCIPort(i));
+			}
 		}
 
 		// Now link them up
@@ -122,7 +127,7 @@ public class OpennetSimulator extends RealNodeTest {
 		if(!this.nodesStarted)
 			return getTopologyOffline();
 		StringBuilder b = new StringBuilder(); 
-		for (Node n : this.nodes) {
+		for (INode n : this.nodes) {
 			b.append(n.writeTMCIPeerFile(false, true));
 		}
 		if(b.length() > 0)
@@ -130,8 +135,8 @@ public class OpennetSimulator extends RealNodeTest {
 		return b.toString();
 	}
 
-	public Node getNodeByPort(int port) {
-		for (Node n : this.nodes) {
+	public INode getNodeByPort(int port) {
+		for (INode n : this.nodes) {
 			if (n.getOpennetFNPPort() == port)
 				return n;
 		}
@@ -155,7 +160,7 @@ public class OpennetSimulator extends RealNodeTest {
 	
 	public String getStoredDataInfo() {
 		StringBuilder b = new StringBuilder();
-		for(Node n : this.nodes){
+		for(INode n : this.nodes){
 			b.append(n.getOpennetFNPPort());
 			b.append(" ");
 			b.append(n.writeChkDatastoreFileA());
@@ -169,9 +174,9 @@ public class OpennetSimulator extends RealNodeTest {
 	
 	private String getTopologyOffline() {
 		StringBuilder b = new StringBuilder(); 
-		for (Node n : this.nodes) {
-			for(PeerNode p : n.peers.getOpennetPeers()){
-				Node n2 = this.getNodeByPort(p.getPeer().getPort());
+		for (INode n : this.nodes) {
+			for(IOpennetPeerNode p : n.getOpennetPeers()){
+				INode n2 = this.getNodeByPort(p.getPort());
 				if(n2 == null)
 					continue;
 				b.append("\"");
@@ -208,46 +213,45 @@ public class OpennetSimulator extends RealNodeTest {
 		return this.portsTMCI[i];
 	}
 
-	private void forceReconnect(Node[] nodes) {
+	private void forceReconnect(INode[] nodes) {
 
 		// just force all peers to reconnect
 		// hack to get around a bug in Freenet
 		// all nodes get connected, but not put in connect node array
-		for (Node n : nodes) {
-			if (n.peers.countValidPeers() > n.peers
-					.countConnectedOpennetPeers()) {
-				for (PeerNode p : n.peers.getOpennetPeers()) {
+		for (INode n : nodes) {
+			if (n.countValidPeers() > n.countConnectedOpennetPeers()) {
+				for (IOpennetPeerNode p : n.getOpennetPeers()) {
 					p.forceDisconnect(true);
 				}
 			}
 		}
 	}
 
-	private void finishFillingNetwork(Node[] nodes, int degree,
+	private void finishFillingNetwork(INode[] nodes, int degree,
 			RandomSource random) {
 		// assuming the network is already seeded, now fill the holes with
 		// random peers
 
-		List<Node> openStill = new ArrayList<Node>();
-		for (Node n : nodes) {
-			if (n.peers.countValidPeers() < degree)
+		List<INode> openStill = new ArrayList<INode>();
+		for (INode n : nodes) {
+			if (n.countValidPeers() < degree)
 				openStill.add(n);
 		}
 
 		int maxIterations = openStill.size() * 3;
 		while (openStill.size() > 1 && maxIterations-- >= 0) {
-			Node fill = openStill.get(0);
+			INode fill = openStill.get(0);
 			openStill.remove(0);
 
 			int peerIndex = random.nextInt(openStill.size());
-			Node peer = openStill.get(peerIndex);
+			INode peer = openStill.get(peerIndex);
 			openStill.remove(peerIndex);
 
 			connectOpen(fill, peer);
 
-			if (fill.peers.countValidPeers() < degree)
+			if (fill.countValidPeers() < degree)
 				openStill.add(fill);
-			if (peer.peers.countValidPeers() < degree)
+			if (peer.countValidPeers() < degree)
 				openStill.add(peer);
 		}
 	}
