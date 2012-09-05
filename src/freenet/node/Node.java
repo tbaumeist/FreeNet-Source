@@ -177,6 +177,7 @@ import freenet.support.io.NativeThread;
 import freenet.support.transport.ip.HostnameSyntaxException;
 import freenet.testbed.INode;
 import freenet.testbed.IOpennetPeerNode;
+import freenet.testbed.simulation.ExperimentRoutePredictionStats;
 import freenet.tools.TracebackMonitor;
 
 import java.io.Writer
@@ -4421,6 +4422,8 @@ public class Node implements TimeSkewDetectorCallback, INode{
 					nodeStats.avgStoreCHKLocation.report(loc);
 					
 					System.out.println("Storing at "+this.getOpennetFNPPort());
+					if(ExperimentRoutePredictionStats.getInstance() != null)
+						ExperimentRoutePredictionStats.getInstance().storedInsert(this.getOpennetFNPPort()+"");
 					// Add block to chkDatastoreContents for network storage topology
 					if(!chkDatastoreContents.contains(block.toString()))
 						chkDatastoreContents.add(block.toString());

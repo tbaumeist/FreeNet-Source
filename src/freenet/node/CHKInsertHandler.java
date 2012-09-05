@@ -25,6 +25,7 @@ import freenet.support.OOMHandler;
 import freenet.support.ShortBuffer;
 import freenet.support.Logger.LogLevel;
 import freenet.support.io.NativeThread;
+import freenet.testbed.simulation.ExperimentRoutePredictionStats;
 
 /**
  * @author amphibian
@@ -83,6 +84,8 @@ public class CHKInsertHandler implements PrioRunnable, ByteCounter {
         this.realTimeFlag = realTimeFlag;
         
         System.out.println("Insert at "+ this.node.getOpennetFNPPort());
+        if(ExperimentRoutePredictionStats.getInstance() != null)
+        	ExperimentRoutePredictionStats.getInstance().routedInsert(this.node.getOpennetFNPPort()+"");
     }
     
     @Override

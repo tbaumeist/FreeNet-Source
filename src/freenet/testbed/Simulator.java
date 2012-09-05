@@ -118,11 +118,11 @@ public class Simulator implements ISimulator {
 		return this.openSim.getStoredDataInfo();
 	}
 
-	public String experimentRoutePrecition(int nodeCount, int peerCount,
-			short maxHTL) throws Exception {
-		
-		
-		return null;
+	public String experimentRoutePrecition(int insertCount)
+			throws Exception {
+		if (this.openSim == null)
+			return "START or RESTORE an network before running experiment.";
+		return this.openSim.experimentRoutePrecition(insertCount);
 	}
 
 }

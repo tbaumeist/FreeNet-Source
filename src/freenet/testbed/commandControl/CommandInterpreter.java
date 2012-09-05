@@ -1,7 +1,6 @@
 package freenet.testbed.commandControl;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
@@ -46,11 +45,13 @@ public class CommandInterpreter extends Thread {
 						writeOutput("Starting ...");
 						long startTime = System.currentTimeMillis();
 
-						Boolean stat = simulator.startSimulator(getParameterInt(0),
-								getParameterInt(1), (short) getParameterInt(2));
-						
+						Boolean stat = simulator.startSimulator(
+								getParameterInt(0), getParameterInt(1),
+								(short) getParameterInt(2));
+
 						long totalTime = System.currentTimeMillis() - startTime;
-						writeOutput("Start up time seconds:"+ (totalTime/1000));
+						writeOutput("Start up time seconds:"
+								+ (totalTime / 1000));
 						return stat;
 					}
 				},
@@ -94,6 +95,16 @@ public class CommandInterpreter extends Thread {
 						return true;
 					}
 				},
+				new Command(
+						"experiment:routeprediction",
+						1,
+						"[insert count @ each node] Run the route prediction experiment.") {
+					public boolean action() throws Exception {
+						writeOutput(simulator.experimentRoutePrecition(
+								getParameterInt(0)));
+						return true;
+					}
+				},
 				new Command("close", 0,
 						"Close the connection to the simulation environment.") {
 					public boolean action() throws Exception {
@@ -134,13 +145,13 @@ public class CommandInterpreter extends Thread {
 					this.socket.getInputStream()));
 
 			printCommands();
-			writeCommand("SIM>");
+			writeCommandInline("SIM>");
 
 			String command;
 			while (!this.exitProgram && !this.closeConnection
 					&& (command = input.readLine()) != null) {
 				processCommand(command);
-				writeCommand("SIM>");
+				writeCommandInline("SIM>");
 				this.output.flush();
 			}
 			this.socket.close();
@@ -182,6 +193,11 @@ public class CommandInterpreter extends Thread {
 
 	private void writeCommand(String s) {
 		this.output.println(s);
+	}
+	
+	private void writeCommandInline(String s){
+		this.output.print(s);
+		this.output.flush();
 	}
 
 }

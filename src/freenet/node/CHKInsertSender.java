@@ -28,6 +28,7 @@ import freenet.support.Logger;
 import freenet.support.OOMHandler;
 import freenet.support.Logger.LogLevel;
 import freenet.support.io.NativeThread;
+import freenet.testbed.simulation.ExperimentRoutePredictionStats;
 import freenet.tools.DebugTool;
 
 public final class CHKInsertSender implements PrioRunnable, AnyInsertSender, ByteCounter {
@@ -324,6 +325,11 @@ public final class CHKInsertSender implements PrioRunnable, AnyInsertSender, Byt
         while(true) {
             if(receiveFailed) {
             	return; // don't need to set status as killed by CHKInsertHandler
+            }
+            
+            if(source == null && node.maxHTL() == htl){
+				if(ExperimentRoutePredictionStats.getInstance() != null)
+					ExperimentRoutePredictionStats.getInstance().newPath();
             }
             
             /*

@@ -1,14 +1,19 @@
 package freenet.testbed.simulation;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
 import freenet.crypt.DummyRandomSource;
 import freenet.crypt.RandomSource;
+import freenet.keys.ClientCHK;
 import freenet.node.NodeStarter;
 import freenet.node.OpennetPeerNode;
 import freenet.node.PeerNode;
@@ -27,10 +32,10 @@ public class OpennetSimulator extends RealNodeTest {
 	private INode[] nodes;
 	private int networkState;
 	private File storageDirectory;
-	
+
 	private boolean needRestart = false;
 	private boolean nodesStarted = false;
-	
+
 	private int[] portsFreenet;
 	private int[] portsOpennet;
 	private int[] portsTMCI;
@@ -62,7 +67,7 @@ public class OpennetSimulator extends RealNodeTest {
 
 	public void startNetwork(int networkState) throws Exception {
 		this.genTopology(networkState, false);
-		
+
 		this.nodesStarted = true;
 
 		for (int i = 0; i < this.nodeCount; i++) {
@@ -77,10 +82,12 @@ public class OpennetSimulator extends RealNodeTest {
 			forceReconnect(this.nodes);
 		}
 	}
-	
-	public void genTopology(int networkState, boolean topologyOnly) throws Exception {
-		if( this.needRestart )
-			throw new Exception("Must restart program before running a new topology.");
+
+	public void genTopology(int networkState, boolean topologyOnly)
+			throws Exception {
+		if (this.needRestart)
+			throw new Exception(
+					"Must restart program before running a new topology.");
 		this.needRestart = true;
 		String dir = this.storageDirectory.getAbsolutePath();
 		File wd = this.storageDirectory;
@@ -89,9 +96,8 @@ public class OpennetSimulator extends RealNodeTest {
 		}
 		wd.mkdir();
 		// NOTE: globalTestInit returns in ignored random source
-		RandomSource r = NodeStarter.globalTestInit(
-				dir, false, LogLevel.ERROR, "",
-				true);
+		RandomSource r = NodeStarter.globalTestInit(dir, false, LogLevel.ERROR,
+				"", true);
 
 		// Make the network reproducible so we can easily compare different
 		// routing options by specifying a seed.
@@ -104,14 +110,15 @@ public class OpennetSimulator extends RealNodeTest {
 		Executor executor = new PooledExecutor();
 		for (int i = 0; i < this.nodeCount; i++) {
 			System.out.println("Creating node " + i);
-			if(topologyOnly){
+			if (topologyOnly) {
 				this.nodes[i] = new DummyNode(getPort(i));
-			}else{
+			} else {
 				this.nodes[i] = NodeStarter.createTestNode(getPort(i),
-						getOpennetPort(i), dir, true, this.maxHTL, this.peerCount,
-						0 /* no dropped packets */, random, executor,
-						500 * this.nodeCount, 65536 * 100, true, ENABLE_SWAPPING, false,
-						false, false, ENABLE_SWAP_QUEUEING, true, 0, ENABLE_FOAF,
+						getOpennetPort(i), dir, true, this.maxHTL,
+						this.peerCount, 0 /* no dropped packets */, random,
+						executor, 500 * this.nodeCount, 65536 * 100, true,
+						ENABLE_SWAPPING, false, false, false,
+						ENABLE_SWAP_QUEUEING, true, 0, ENABLE_FOAF,
 						ENABLE_ANNOUNCEMENT, true, false, null, getTMCIPort(i));
 			}
 		}
@@ -124,13 +131,13 @@ public class OpennetSimulator extends RealNodeTest {
 	}
 
 	public String getTopology() {
-		if(!this.nodesStarted)
+		if (!this.nodesStarted)
 			return getTopologyOffline();
-		StringBuilder b = new StringBuilder(); 
+		StringBuilder b = new StringBuilder();
 		for (INode n : this.nodes) {
 			b.append(n.writeTMCIPeerFile(false, true));
 		}
-		if(b.length() > 0)
+		if (b.length() > 0)
 			b.deleteCharAt(b.length() - 1);
 		return b.toString();
 	}
@@ -153,31 +160,31 @@ public class OpennetSimulator extends RealNodeTest {
 			b.append(this.getPort(i));
 			b.append(":\n");
 		}
-		if(b.length() > 0)
-			b.deleteCharAt(b.length()-1);
+		if (b.length() > 0)
+			b.deleteCharAt(b.length() - 1);
 		return b.toString();
 	}
-	
+
 	public String getStoredDataInfo() {
 		StringBuilder b = new StringBuilder();
-		for(INode n : this.nodes){
+		for (INode n : this.nodes) {
 			b.append(n.getOpennetFNPPort());
 			b.append(" ");
 			b.append(n.writeChkDatastoreFileA());
 			b.append("\n");
 		}
-		
-		if(b.length() > 0)
-			b.deleteCharAt(b.length()-1);
+
+		if (b.length() > 0)
+			b.deleteCharAt(b.length() - 1);
 		return b.toString();
 	}
-	
+
 	private String getTopologyOffline() {
-		StringBuilder b = new StringBuilder(); 
+		StringBuilder b = new StringBuilder();
 		for (INode n : this.nodes) {
-			for(IOpennetPeerNode p : n.getOpennetPeers()){
+			for (IOpennetPeerNode p : n.getOpennetPeers()) {
 				INode n2 = this.getNodeByPort(p.getPort());
-				if(n2 == null)
+				if (n2 == null)
 					continue;
 				b.append("\"");
 				b.append(n.getLocation());
@@ -190,25 +197,25 @@ public class OpennetSimulator extends RealNodeTest {
 				b.append("\"\n");
 			}
 		}
-		if(b.length() > 0)
+		if (b.length() > 0)
 			b.deleteCharAt(b.length() - 1);
 		return b.toString();
 	}
 
 	private int getPort(int i) {
-		if(this.portsFreenet[i] == 0)
+		if (this.portsFreenet[i] == 0)
 			this.portsFreenet[i] = getNextOpenPort();
 		return this.portsFreenet[i];
 	}
 
 	private int getOpennetPort(int i) {
-		if(this.portsOpennet[i] == 0)
+		if (this.portsOpennet[i] == 0)
 			this.portsOpennet[i] = getNextOpenPort();
 		return this.portsOpennet[i];
 	}
 
 	private int getTMCIPort(int i) {
-		if(this.portsTMCI[i] == 0)
+		if (this.portsTMCI[i] == 0)
 			this.portsTMCI[i] = getNextOpenPort();
 		return this.portsTMCI[i];
 	}
@@ -255,16 +262,16 @@ public class OpennetSimulator extends RealNodeTest {
 				openStill.add(peer);
 		}
 	}
-	
-	private int getNextOpenPort(){
+
+	private int getNextOpenPort() {
 		int current = this.basePort + this.portOffset;
-		while( ! isPortOpen(current)){
+		while (!isPortOpen(current)) {
 			current++;
 		}
 		this.portOffset = (current - this.basePort) + 1;
 		return current;
 	}
-	
+
 	private boolean isPortOpen(int port) {
 		ServerSocket ss = null;
 		DatagramSocket ds = null;
@@ -292,4 +299,76 @@ public class OpennetSimulator extends RealNodeTest {
 		return false;
 	}
 
+	public String experimentRoutePrecition(int insertCount) throws Exception {
+		/*
+		 * Steps for each node in the topology for 1 to insertCount check if
+		 * topology has changed (stop) Insert a unique word Save the
+		 * origin node Save the unique word Save word's key Save nodes with word
+		 * stored Save insert path
+		 */
+		StringBuilder b = new StringBuilder();
+		b.append(ExperimentRoutePredictionStats.toStringCSVHeader());
+		b.append("\n");
+		
+		String originalTop = this.getTopology();
+
+		int index = 0;
+		String baseWord = "jabberwocky";
+		for (int n = 0; n < this.nodeCount; n++) {
+			for (int i = 0; i < insertCount; i++) {
+				
+				// check if topology has held (shouldn't change)
+				if(!this.getTopology().equals(originalTop))
+					return "Topology changed at experiment "+index;
+				
+				String word = baseWord + index;
+
+				ExperimentRoutePredictionStats.reset();
+				ExperimentRoutePredictionStats.getInstance().startInsert(
+						index + "", this.nodeCount + "", this.peerCount + "",
+						this.maxHTL + "", this.getOpennetPort(n) + "", word);
+
+				// use the telnet interface to insert the word
+				String result = this.sendSingleCommand(this.getTMCIPort(n),
+						"PUT:" + word);
+				if (result == null)
+					continue;
+
+				if (result == null)
+					continue;
+
+				if (index > 0)
+					b.append("\n");
+				b.append(ExperimentRoutePredictionStats.getInstance()
+						.toString());
+
+				index++;
+			}
+		}
+
+		return b.toString();
+	}
+
+	private String sendSingleCommand(int port, String command) {
+		String result = null;
+		try {
+			Socket socket = new Socket("localhost", port);
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					socket.getInputStream()));
+			out.println(command);
+			out.println("QUIT");
+			String line = null;
+			while ((line = reader.readLine()) != null)
+				result += line + "\n";
+			// result = "sucess";
+			out.close();
+			reader.close();
+			socket.close();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+		return result;
+	}
 }

@@ -58,6 +58,7 @@ import freenet.support.io.BucketTools;
 import freenet.support.io.Closer;
 import freenet.support.io.FileBucket;
 import freenet.testbed.Simulator;
+import freenet.testbed.simulation.ExperimentRoutePredictionStats;
 import freenet.tools.TracebackAttacklet;
 import freenet.keys.ClientCHK;
 
@@ -655,6 +656,7 @@ public class TextModeClientInterface implements Runnable {
 
 			if(!getCHKOnly){
 				System.out.println("Insert at "+ this.n.getOpennetFNPPort());
+				//ExperimentRoutePredictionStats.getInstance().routedInsert(this.n.getOpennetFNPPort()+"");
 				Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "PUT " + content);
 			}
 			
@@ -707,6 +709,7 @@ public class TextModeClientInterface implements Runnable {
 			}
 			
 			System.out.println("Insert at " + this.n.getOpennetFNPPort());
+			//ExperimentRoutePredictionStats.getInstance().routedInsert(this.n.getOpennetFNPPort()+"");
 			Simulator.writeProtocolTrace(n.getOpennetFNPPort(), "PUT " + content);
 			
 			// Insert
