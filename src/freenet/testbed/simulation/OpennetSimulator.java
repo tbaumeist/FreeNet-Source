@@ -10,6 +10,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import freenet.crypt.DummyRandomSource;
 import freenet.crypt.RandomSource;
@@ -336,6 +338,14 @@ public class OpennetSimulator extends RealNodeTest {
 
 				if (result == null)
 					continue;
+				
+				// get word location
+				Pattern pattern = java.util.regex.Pattern
+				.compile("Double: [-+]?[0-9]*\\.[0-9]+([eE][-+]?[0-9]+)?");
+
+				Matcher matcher = pattern.matcher(result);
+				matcher.find();
+				ExperimentRoutePredictionStats.getInstance().setWordLocation(matcher.group().split(" ")[1]);
 
 				if (index > 0)
 					b.append("\n");
@@ -361,7 +371,7 @@ public class OpennetSimulator extends RealNodeTest {
 			String line = null;
 			while ((line = reader.readLine()) != null)
 				result += line + "\n";
-			// result = "sucess";
+
 			out.close();
 			reader.close();
 			socket.close();

@@ -12,6 +12,7 @@ public class ExperimentRoutePredictionStats {
 	private String expIndex = "";
 	private String originNode = "";
 	private String insertWord = "";
+	private String wordLocation = "";
 	private List<List<String>> nodesStoringWord = new ArrayList<List<String>>();
 	private List<List<String>> insertPath = new ArrayList<List<String>>();
 
@@ -40,6 +41,10 @@ public class ExperimentRoutePredictionStats {
 		this.originNode = node;
 		this.insertWord = word;
 	}
+	
+	public void setWordLocation(String location){
+		this.wordLocation = location;
+	}
 
 	public void routedInsert(String node) {
 		this.insertPath.get(this.insertPath.size() - 1).add(node);
@@ -63,6 +68,8 @@ public class ExperimentRoutePredictionStats {
 			b.append(this.originNode);
 			b.append(",");
 			b.append(this.insertWord);
+			b.append(",");
+			b.append(this.wordLocation);
 			b.append(",");
 			
 			for (String s : this.nodesStoringWord.get(i))
@@ -88,6 +95,7 @@ public class ExperimentRoutePredictionStats {
 		b.append("HTL,");
 		b.append("Origin Node,");
 		b.append("Word,");
+		b.append("Word Location,");
 		b.append("Nodes Storing,");
 		b.append("Insert Path");
 		return b.toString();
