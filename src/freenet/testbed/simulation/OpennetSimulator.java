@@ -43,6 +43,8 @@ public class OpennetSimulator extends RealNodeTest {
 	private int[] portsTMCI;
 	private int portOffset = 0;
 
+	private Thread routePredictionThread = null;
+
 	private final boolean START_WITH_IDEAL_LOCATIONS = true;
 	private final boolean FORCE_NEIGHBOUR_CONNECTIONS = true;
 	private final boolean ENABLE_SWAPPING = false;
@@ -61,6 +63,18 @@ public class OpennetSimulator extends RealNodeTest {
 		this.portsFreenet = new int[this.nodeCount];
 		this.portsOpennet = new int[this.nodeCount];
 		this.portsTMCI = new int[this.nodeCount];
+	}
+	
+	public int getNodeCount(){
+		return this.nodeCount;
+	}
+	
+	public int getPeerCount(){
+		return this.peerCount;
+	}
+	
+	public int getMaxHTL(){
+		return this.maxHTL;
 	}
 
 	public int getNetworkState() {
@@ -210,13 +224,13 @@ public class OpennetSimulator extends RealNodeTest {
 		return this.portsFreenet[i];
 	}
 
-	private int getOpennetPort(int i) {
+	public int getOpennetPort(int i) {
 		if (this.portsOpennet[i] == 0)
 			this.portsOpennet[i] = getNextOpenPort();
 		return this.portsOpennet[i];
 	}
 
-	private int getTMCIPort(int i) {
+	public int getTMCIPort(int i) {
 		if (this.portsTMCI[i] == 0)
 			this.portsTMCI[i] = getNextOpenPort();
 		return this.portsTMCI[i];
@@ -301,84 +315,16 @@ public class OpennetSimulator extends RealNodeTest {
 		return false;
 	}
 
-	public String experimentRoutePrecition(int insertCount) throws Exception {
-		/*
-		 * Steps for each node in the topology for 1 to insertCount check if
-		 * topology has changed (stop) Insert a unique word Save the
-		 * origin node Save the unique word Save word's key Save nodes with word
-		 * stored Save insert path
-		 */
-		StringBuilder b = new StringBuilder();
-		b.append(ExperimentRoutePredictionStats.toStringCSVHeader());
-		b.append("\n");
-		
-		String originalTop = this.getTopology();
-
-		int index = 0;
-		String baseWord = "jabberwocky";
-		for (int n = 0; n < this.nodeCount; n++) {
-			for (int i = 0; i < insertCount; i++) {
-				
-				// check if topology has held (shouldn't change)
-				if(!this.getTopology().equals(originalTop))
-					return "Topology changed at experiment "+index;
-				
-				String word = baseWord + index;
-
-				ExperimentRoutePredictionStats.reset();
-				ExperimentRoutePredictionStats.getInstance().startInsert(
-						index + "", this.nodeCount + "", this.peerCount + "",
-						this.maxHTL + "", this.getOpennetPort(n) + "", word);
-
-				// use the telnet interface to insert the word
-				String result = this.sendSingleCommand(this.getTMCIPort(n),
-						"PUT:" + word);
-				if (result == null)
-					continue;
-
-				if (result == null)
-					continue;
-				
-				// get word location
-				Pattern pattern = java.util.regex.Pattern
-				.compile("Double: [-+]?[0-9]*\\.[0-9]+([eE][-+]?[0-9]+)?");
-
-				Matcher matcher = pattern.matcher(result);
-				matcher.find();
-				ExperimentRoutePredictionStats.getInstance().setWordLocation(matcher.group().split(" ")[1]);
-
-				if (index > 0)
-					b.append("\n");
-				b.append(ExperimentRoutePredictionStats.getInstance()
-						.toString());
-
-				index++;
-			}
-		}
-
-		return b.toString();
+	public boolean experimentRoutePrecition(int insertCount, String outFileName)
+			throws Exception {
+		this.routePredictionThread = new RoutePredictionThread(this, insertCount, outFileName);
+		this.routePredictionThread.start();
+		return true;
 	}
 
-	private String sendSingleCommand(int port, String command) {
-		String result = null;
-		try {
-			Socket socket = new Socket("localhost", port);
-			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					socket.getInputStream()));
-			out.println(command);
-			out.println("QUIT");
-			String line = null;
-			while ((line = reader.readLine()) != null)
-				result += line + "\n";
-
-			out.close();
-			reader.close();
-			socket.close();
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-			return null;
-		}
-		return result;
+	public boolean experimentRoutePrecitionDone() {
+		if (this.routePredictionThread == null)
+			return true;
+		return !this.routePredictionThread.isAlive();
 	}
 }

@@ -6,7 +6,9 @@ public interface ISimulator {
 
 	public boolean genTopologyOnly(int nodeCount, int peerCount, short maxHTL) throws Exception;
 
-	public String experimentRoutePrecition(int insertCount) throws Exception;
+	public boolean experimentRoutePrecition(int insertCount, String outFileName) throws Exception;
+	
+	public boolean experimentRoutePrecitionDone() throws Exception ;
 
 	public int getNetworkState();
 

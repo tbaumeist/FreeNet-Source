@@ -118,11 +118,17 @@ public class Simulator implements ISimulator {
 		return this.openSim.getStoredDataInfo();
 	}
 
-	public String experimentRoutePrecition(int insertCount)
+	public boolean experimentRoutePrecition(int insertCount, String outFileName)
 			throws Exception {
 		if (this.openSim == null)
-			return "START or RESTORE an network before running experiment.";
-		return this.openSim.experimentRoutePrecition(insertCount);
+			throw new Exception( "START or RESTORE an network before running experiment.");
+		return this.openSim.experimentRoutePrecition(insertCount, outFileName);
+	}
+
+	public boolean experimentRoutePrecitionDone() throws Exception  {
+		if (this.openSim == null)
+			throw new Exception( "START or RESTORE an network before running experiment.");
+		return this.openSim.experimentRoutePrecitionDone();
 	}
 
 }

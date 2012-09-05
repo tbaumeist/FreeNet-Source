@@ -96,13 +96,20 @@ public class CommandInterpreter extends Thread {
 					}
 				},
 				new Command(
-						"experiment:routeprediction",
-						1,
-						"[insert count @ each node] Run the route prediction experiment.") {
+						"experiment:routepredstart",
+						2,
+						"[insert count @ each node] [output file name] Run the route prediction experiment.") {
 					public boolean action() throws Exception {
-						writeOutput(simulator.experimentRoutePrecition(
-								getParameterInt(0)));
-						return true;
+						return simulator.experimentRoutePrecition(
+								getParameterInt(0), getParameter(1));
+					}
+				},
+				new Command(
+						"experiment:routepreddone",
+						0,
+						"Is the route prediction experiment is done?.") {
+					public boolean action() throws Exception {
+						return simulator.experimentRoutePrecitionDone();
 					}
 				},
 				new Command("close", 0,
@@ -189,15 +196,18 @@ public class CommandInterpreter extends Thread {
 
 	private void writeOutput(String s) {
 		this.output.println("\t" + s.replace("\n", "\n\t"));
+		//System.out.println("\t" + s.replace("\n", "\n\t"));
 	}
 
 	private void writeCommand(String s) {
 		this.output.println(s);
+		//System.out.println(s);
 	}
 	
 	private void writeCommandInline(String s){
 		this.output.print(s);
 		this.output.flush();
+		//System.out.print(s);
 	}
 
 }
