@@ -109,7 +109,8 @@ public class CommandInterpreter extends Thread {
 						0,
 						"Is the route prediction experiment is done?.") {
 					public boolean action() throws Exception {
-						return simulator.experimentRoutePrecitionDone();
+						writeOutput("ROUTEEXP:" + simulator.experimentRoutePrecitionDone());
+						return true;
 					}
 				},
 				new Command("close", 0,

@@ -125,9 +125,9 @@ public class Simulator implements ISimulator {
 		return this.openSim.experimentRoutePrecition(insertCount, outFileName);
 	}
 
-	public boolean experimentRoutePrecitionDone() throws Exception  {
+	public String experimentRoutePrecitionDone() throws Exception  {
 		if (this.openSim == null)
-			throw new Exception( "START or RESTORE an network before running experiment.");
+			return "START or RESTORE an network before running experiment.";
 		return this.openSim.experimentRoutePrecitionDone();
 	}
 

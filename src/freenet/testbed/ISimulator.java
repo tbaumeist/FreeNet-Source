@@ -8,7 +8,7 @@ public interface ISimulator {
 
 	public boolean experimentRoutePrecition(int insertCount, String outFileName) throws Exception;
 	
-	public boolean experimentRoutePrecitionDone() throws Exception ;
+	public String experimentRoutePrecitionDone() throws Exception ;
 
 	public int getNetworkState();
 

@@ -13,12 +13,25 @@ public class RoutePredictionThread extends Thread {
 	private int insertCount;
 	private String outFileName;
 	private OpennetSimulator openSim;
+	private int index = 0;
+	private int totalIndex = 0;
+	
+	private final int STABLE_INTERVAL = 5;
 
 	public RoutePredictionThread(OpennetSimulator sim, int insertCount,
 			String outFileName) {
 		this.openSim = sim;
 		this.insertCount = insertCount;
 		this.outFileName = outFileName;
+		this.totalIndex = this.openSim.getNodeCount() * this.insertCount;
+	}
+	
+	public synchronized int getProgress(){
+		return (int)(((double)this.index) / ((double)this.totalIndex) * 100.0);
+	}
+	
+	private synchronized void incrementIndex(){
+		this.index++;
 	}
 
 	@Override
@@ -37,7 +50,7 @@ public class RoutePredictionThread extends Thread {
 
 			String originalTop = this.openSim.getTopology();
 
-			int index = 0;
+			this.index = 0;
 			int randomStart = (int)(Math.random() * 20000);
 			String baseWord = "jabberwocky";
 			for (int n = 0; n < this.openSim.getNodeCount(); n++) {
@@ -46,13 +59,17 @@ public class RoutePredictionThread extends Thread {
 					// check if topology has held (shouldn't change)
 					if (!this.openSim.getTopology().equals(originalTop))
 						throw new Exception(
-								"Topology changed at experiment " + index);
+								"Topology changed at experiment " + this.index);
+					
+					// Check the stability of the topology
+					if(this.index % STABLE_INTERVAL == 0)
+						this.openSim.stablize();
 
-					String word = baseWord + randomStart + index;
+					String word = baseWord + randomStart + this.index;
 
 					ExperimentRoutePredictionStats.reset();
 					ExperimentRoutePredictionStats.getInstance()
-							.startInsert(index + "",
+							.startInsert(this.index + "",
 									this.openSim.getNodeCount() + "",
 									this.openSim.getPeerCount() + "",
 									this.openSim.getMaxHTL() + "",
@@ -77,13 +94,13 @@ public class RoutePredictionThread extends Thread {
 					ExperimentRoutePredictionStats.getInstance()
 							.setWordLocation(matcher.group().split(" ")[1]);
 
-					if (index > 0)
+					if (this.index > 0)
 						b.append("\n");
 					b.append(ExperimentRoutePredictionStats.getInstance()
 							.toString());
 					b.flush();
 
-					index++;
+					this.incrementIndex();
 				}
 			}
 			b.close();

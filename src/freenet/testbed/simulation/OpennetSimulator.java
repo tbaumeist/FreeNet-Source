@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import freenet.crypt.DummyRandomSource;
 import freenet.crypt.RandomSource;
 import freenet.keys.ClientCHK;
+import freenet.node.NodeInitException;
 import freenet.node.NodeStarter;
 import freenet.node.OpennetPeerNode;
 import freenet.node.PeerNode;
@@ -43,7 +44,8 @@ public class OpennetSimulator extends RealNodeTest {
 	private int[] portsTMCI;
 	private int portOffset = 0;
 
-	private Thread routePredictionThread = null;
+	private RoutePredictionThread routePredictionThread = null;
+	private String statusText = "";
 
 	private final boolean START_WITH_IDEAL_LOCATIONS = true;
 	private final boolean FORCE_NEIGHBOUR_CONNECTIONS = true;
@@ -64,16 +66,16 @@ public class OpennetSimulator extends RealNodeTest {
 		this.portsOpennet = new int[this.nodeCount];
 		this.portsTMCI = new int[this.nodeCount];
 	}
-	
-	public int getNodeCount(){
+
+	public int getNodeCount() {
 		return this.nodeCount;
 	}
-	
-	public int getPeerCount(){
+
+	public int getPeerCount() {
 		return this.peerCount;
 	}
-	
-	public int getMaxHTL(){
+
+	public int getMaxHTL() {
 		return this.maxHTL;
 	}
 
@@ -91,11 +93,25 @@ public class OpennetSimulator extends RealNodeTest {
 			this.nodes[i].start(false);
 		}
 
-		while (!waitForAllConnectedOpen(this.nodes)) {
-			// failed to get all nodes to connect
-			// reset trouble makers
-			System.out.println("Forcing reconnects...");
-			forceReconnect(this.nodes);
+		this.stablize();
+	}
+
+	public void stablize() throws Exception {
+		this.statusText = "stabilizing network";
+		try {
+			System.out.println("*************");
+			System.out.println(" Stabilizing Network");
+			System.out.println("*************");
+			while (!waitForAllConnectedOpen(this.nodes)) {
+				// failed to get all nodes to connect
+				// reset trouble makers
+				System.out.println("Forcing reconnects...");
+				forceReconnect(this.nodes);
+			}
+		} catch (Exception ex) {
+			throw ex;
+		} finally {
+			this.statusText = "";
 		}
 	}
 
@@ -317,14 +333,16 @@ public class OpennetSimulator extends RealNodeTest {
 
 	public boolean experimentRoutePrecition(int insertCount, String outFileName)
 			throws Exception {
-		this.routePredictionThread = new RoutePredictionThread(this, insertCount, outFileName);
+		this.routePredictionThread = new RoutePredictionThread(this,
+				insertCount, outFileName);
 		this.routePredictionThread.start();
 		return true;
 	}
 
-	public boolean experimentRoutePrecitionDone() {
-		if (this.routePredictionThread == null)
-			return true;
-		return !this.routePredictionThread.isAlive();
+	public String experimentRoutePrecitionDone() {
+		if (this.routePredictionThread == null
+				|| !this.routePredictionThread.isAlive())
+			return "SUCCESS";
+		return this.routePredictionThread.getProgress()+"% " + this.statusText;
 	}
 }
