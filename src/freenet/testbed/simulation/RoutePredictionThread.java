@@ -38,6 +38,7 @@ public class RoutePredictionThread extends Thread {
 			String originalTop = this.openSim.getTopology();
 
 			int index = 0;
+			int randomStart = (int)(Math.random() * 20000);
 			String baseWord = "jabberwocky";
 			for (int n = 0; n < this.openSim.getNodeCount(); n++) {
 				for (int i = 0; i < insertCount; i++) {
@@ -47,7 +48,7 @@ public class RoutePredictionThread extends Thread {
 						throw new Exception(
 								"Topology changed at experiment " + index);
 
-					String word = baseWord + index;
+					String word = baseWord + randomStart + index;
 
 					ExperimentRoutePredictionStats.reset();
 					ExperimentRoutePredictionStats.getInstance()
