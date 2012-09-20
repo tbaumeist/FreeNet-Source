@@ -5,8 +5,6 @@ package freenet.node;
 
 import java.util.HashSet;
 
-import DebugMessenger.DebugMessage;
-
 import freenet.io.comm.ByteCounter;
 import freenet.io.comm.DMT;
 import freenet.io.comm.DisconnectedException;
@@ -22,7 +20,6 @@ import freenet.support.Logger;
 import freenet.support.SimpleFieldSet;
 import freenet.support.Logger.LogLevel;
 import freenet.support.io.NativeThread;
-import freenet.tools.DebugTool;
 
 public class AnnounceSender implements PrioRunnable, ByteCounter {
 	private static volatile boolean logMINOR;
@@ -413,16 +410,7 @@ public class AnnounceSender implements PrioRunnable, ByteCounter {
 	private long sendTo(PeerNode next) {
 		try {
 			System.out.println("!! Sending announcement to next node " + next.userToString());
-			
-			
-			// log every announcement sent, and to whom
-			DebugMessage mess = new DebugMessage();
-			mess.setCustomProperty("MESSAGE_HTL", htl+"");
-			mess.setMessageType("MESSAGE_ANNOUNCE");
-			mess.setMessage("Sending announcement loc:"+target+" to next node " + next.userToString());
-			DebugTool.getInstance().sendMessage(mess);
-			
-			
+						
 			return om.startSendAnnouncementRequest(uid, next, noderefBuf, this, target, htl);
 		} catch (NotConnectedException e) {
 			if(logMINOR) Logger.minor(this, "Disconnected");

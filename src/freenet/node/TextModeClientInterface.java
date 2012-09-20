@@ -59,7 +59,6 @@ import freenet.support.io.Closer;
 import freenet.support.io.FileBucket;
 import freenet.testbed.Simulator;
 import freenet.testbed.simulation.ExperimentRoutePredictionStats;
-import freenet.tools.TracebackAttacklet;
 import freenet.keys.ClientCHK;
 
 /**
@@ -1187,31 +1186,8 @@ public class TextModeClientInterface implements Runnable {
 			// iterating over db
 			// with cursor
 			outsb.append("\r\nSTOREFILEB done.\r\n");
-		} else if (uline.startsWith("TRACEBACKATTACK:")) {
-			String messUID = (uline.substring("TRACEBACKATTACK:".length()))
-					.trim();
-			TracebackAttacklet attacklet = new TracebackAttacklet(n);
-			attacklet.attack(Long.parseLong(messUID), outsb);
 		} else if (uline.startsWith("PRINTMESSAGEUIDS")) {
 			outsb.append(n.recentlyCompletedUIDsToString());
-		} else if (uline.startsWith("ATTACKAGENT:")) {
-			String attackCloadIp = (uline.substring("ATTACKAGENT:".length()))
-					.trim();
-			n.getAttackAgent().setAttackCloadIP(attackCloadIp.split(","));
-		} else if (uline.startsWith("ATTACKAGENTINSERTFILTER:")) {
-			String type = (uline.substring("ATTACKAGENTINSERTFILTER:".length()))
-					.trim();
-			if (type.equals("FORCE"))
-				n.getAttackAgent().attackInsert(11133324, 4);
-			else
-				n.getAttackAgent().setInsertFilter(type.equals("TRUE"));
-		} else if (uline.startsWith("ATTACKAGENTREQUESTFILTER:")) {
-			String type = (uline
-					.substring("ATTACKAGENTREQUESTFILTER:".length())).trim();
-			if (type.equals("FORCE"))
-				n.getAttackAgent().attackRequest(11133324, 4);
-			else
-				n.getAttackAgent().setRequestFilter(type.equals("TRUE"));
 		} else if (uline.startsWith("PROBE:")) {
 			String s = uline.substring("PROBE:".length()).trim();
 			double d = Double.parseDouble(s);

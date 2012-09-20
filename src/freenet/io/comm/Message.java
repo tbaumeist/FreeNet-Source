@@ -31,9 +31,6 @@ import java.util.List;
 
 import com.db4o.marshall.Context;
 
-import DebugMessenger.DebugMessage;
-import DebugMessenger.DebugMessengerClientSender;
-
 import freenet.keys.Key;
 import freenet.support.ByteBufferInputStream;
 import freenet.support.Fields;
@@ -43,7 +40,6 @@ import freenet.support.Serializer;
 import freenet.support.ShortBuffer;
 import freenet.support.Logger.LogLevel;
 import freenet.testbed.Simulator;
-import freenet.tools.DebugTool;
 
 /**
  * A Message which can be read from and written to a DatagramPacket
@@ -147,50 +143,7 @@ public class Message {
 		{
 			Logger.generalLogMessage(Message.class, m.toXML(false) + "<From>" + srcloc + "</From><To>" + destloc + "</To>");
 		}
-		if(m.shouldRemoteDebug(mspec))
-		{
-			
-			if(m._payload.containsKey(DMT.UID))
-			{
-				DebugMessage mess = new DebugMessage();
-				long id = m.getLong(DMT.UID);
-				mess.setCustomProperty("MESSAGE_UID", id+"");
-				
-				if(m._payload.containsKey(DMT.FREENET_ROUTING_KEY))
-				{
-					Key key = (Key) m.getObject(DMT.FREENET_ROUTING_KEY);
-					mess.setCustomProperty("MESSAGE_CHK", key.toString());
-				}
-				
-
-				if(m._payload.containsKey(DMT.HTL))
-				{
-					short htl = m.getShort(DMT.HTL);
-					mess.setCustomProperty("MESSAGE_HTL", htl+"");
-				}
-			
-				mess.setMessageType("MESSAGE_TRACE");
-				mess.setMessage("Recieved " + mspec.getName() + " from "+peer.getPeer().toString());
-				DebugTool.getInstance().sendMessage(mess);
-			}
-		}
 		return m;
-	}
-	
-	private boolean shouldRemoteDebug(MessageType type)
-	{
-		return type == DMT.FNPAccepted ||
-				type == DMT.FNPInsertRequest ||
-				type == DMT.FNPRejectedLoop ||
-				type == DMT.FNPInsertReply ||
-				type == DMT.FNPDataInsert ||
-				type == DMT.FNPInsertTransfersCompleted ||
-				type == DMT.FNPRejectedOverload ||
-				type == DMT.FNPRouteNotFound ||
-				type == DMT.FNPRejectedTimeout ||
-				type == DMT.FNPCHKDataRequest ||
-				type == DMT.FNPCHKDataFound;
-		//return type != DMT.FNPVoid;
 	}
 
 	public Message(MessageType spec) {
@@ -320,31 +273,6 @@ public class Message {
 		if (!shouldFilter())
 		{
 			Logger.generalLogMessage(Message.class, toXML(true) + "<From>" + srcloc + "</From><To>" + destloc + "</To>");
-		}
-		if(shouldRemoteDebug(_spec))
-		{
-			if(_payload.containsKey(DMT.UID))
-			{
-				DebugMessage mess = new DebugMessage();
-				long id = getLong(DMT.UID);
-				mess.setCustomProperty("MESSAGE_UID", id+"");
-				
-				if(_payload.containsKey(DMT.FREENET_ROUTING_KEY))
-				{
-					Key key = (Key) getObject(DMT.FREENET_ROUTING_KEY);
-					mess.setCustomProperty("MESSAGE_CHK", key.toString());
-				}
-				
-				if(_payload.containsKey(DMT.HTL))
-				{
-					short htl = getShort(DMT.HTL);
-					mess.setCustomProperty("MESSAGE_HTL", htl+"");
-				}
-				
-				mess.setMessageType("MESSAGE_TRACE");
-				mess.setMessage("Sent " + _spec.getName() + " to "+destination.getPeer().toString());
-				DebugTool.getInstance().sendMessage(mess);
-			}
 		}
 		return buf;
 	}

@@ -6,8 +6,6 @@ package freenet.node;
 import java.util.HashSet;
 import java.util.Vector;
 
-import DebugMessenger.DebugMessage;
-
 import freenet.io.comm.AsyncMessageFilterCallback;
 import freenet.io.comm.ByteCounter;
 import freenet.io.comm.DMT;
@@ -29,7 +27,6 @@ import freenet.support.OOMHandler;
 import freenet.support.Logger.LogLevel;
 import freenet.support.io.NativeThread;
 import freenet.testbed.simulation.ExperimentRoutePredictionStats;
-import freenet.tools.DebugTool;
 
 public final class CHKInsertSender implements PrioRunnable, AnyInsertSender, ByteCounter {
 	

@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import DebugMessenger.DebugMessage;
-
 import freenet.crypt.HMAC;
 import freenet.io.comm.ByteCounter;
 import freenet.io.comm.DMT;
@@ -405,11 +403,6 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 		}
 		
 		
-		// trace back attack code
-		if(node.getAttackAgent().shouldAttackRequest())
-			node.getAttackAgent().attackRequest(id, m.getShort(DMT.HTL));
-		
-		
 		// There are at least 2 threads that call this function.
 		// DO NOT reuse the meta object, unless on a per-thread basis.
 		// Object allocation is pretty cheap in modern Java anyway...
@@ -470,11 +463,6 @@ public class NodeDispatcher implements Dispatcher, Runnable {
 			}
 			return true;
 		}
-		
-		
-		// trace back attack code
-		if(node.getAttackAgent().shouldAttackInsert())
-			node.getAttackAgent().attackInsert(id, m.getShort(DMT.HTL));
 		
 		
 		boolean preferInsert = Node.PREFER_INSERT_DEFAULT;

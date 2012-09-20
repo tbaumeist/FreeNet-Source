@@ -18,8 +18,6 @@ import java.util.EnumMap;
 import java.util.Enumeration;
 import java.util.Map;
 
-import DebugMessenger.DebugMessage;
-
 import freenet.io.comm.ByteCounter;
 import freenet.io.comm.DMT;
 import freenet.io.comm.DisconnectedException;
@@ -49,7 +47,6 @@ import freenet.support.io.Closer;
 import freenet.support.io.FileUtil;
 import freenet.support.io.NativeThread;
 import freenet.support.transport.ip.HostnameSyntaxException;
-import freenet.tools.DebugTool;
 
 /**
  * Central location for all things opennet.
@@ -684,12 +681,6 @@ public class OpennetManager {
 		}
 		if(!wantPeer(pn, false, false, false, ConnectionType.RECONNECT)) // Start at top as it just succeeded
 		{
-			// log every announcement sent, and to whom
-			DebugMessage mess = new DebugMessage();
-			mess.setMessageType("RTI_DROP_PEER");
-			mess.setMessage("Dropping peer " + pn.userToString());
-			DebugTool.getInstance().sendMessage(mess);
-
 			System.out.println("Dropping peer " + pn.userToString());
 			node.peers.disconnect(pn, true, false, true);
 		}

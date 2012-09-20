@@ -28,7 +28,6 @@ import freenet.support.Logger.LogLevel;
 import freenet.support.LoggerHook.InvalidThresholdException;
 import freenet.support.api.StringCallback;
 import freenet.support.io.NativeThread;
-import freenet.tools.DebugTool;
 
 /**
  *  @author nextgens
@@ -180,21 +179,6 @@ public class NodeStarter implements WrapperListener {
 			e.printStackTrace();
 			System.exit(e.exitCode);
 		}
-		
-		// Debug Tool setup
-		DebugTool.getInstance().setNode(node);
-		File configDebugFilename = new File("debug.conf");
-		if(configDebugFilename.isFile()) //custom debug init code
-		{
-			try {
-				FreenetFilePersistentConfig debugCfg = FreenetFilePersistentConfig.constructFreenetFilePersistentConfig(configDebugFilename);
-				SimpleFieldSet s = debugCfg.getSimpleFieldSet();
-
-				DebugTool.getInstance().setServerInformation(s.getString("debug.IP"), s.getInt("debug.port"));
-			} catch (Exception p) {
-			}
-		}
-		// End: Debug Tool setup
 
 		return null;
 	}

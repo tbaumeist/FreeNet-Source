@@ -178,7 +178,6 @@ import freenet.support.transport.ip.HostnameSyntaxException;
 import freenet.testbed.INode;
 import freenet.testbed.IOpennetPeerNode;
 import freenet.testbed.simulation.ExperimentRoutePredictionStats;
-import freenet.tools.TracebackMonitor;
 
 import java.io.Writer
 ;/**
@@ -258,10 +257,6 @@ public class Node implements TimeSkewDetectorCallback, INode{
 	volatile CHKStore oldCHKClientCache;
 	volatile PubkeyStore oldPKClientCache;
 	volatile SSKStore oldSSKClientCache;
-	
-	private TracebackMonitor _attackAgent = new TracebackMonitor();
-	
-	public TracebackMonitor getAttackAgent(){ return _attackAgent;}
 
 	private <T extends StorableBlock> void migrateOldStore(StoreCallback<T> old, StoreCallback<T> newStore, boolean canReadClientCache) {
 		FreenetStore<T> store = old.getStore();
