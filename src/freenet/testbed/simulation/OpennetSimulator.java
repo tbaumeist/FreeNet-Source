@@ -220,11 +220,11 @@ public class OpennetSimulator extends RealNodeTest {
 					continue;
 				b.append("\"");
 				b.append(n.getLocation());
-				b.append("\t");
+				b.append(" ");
 				b.append(n.getOpennetFNPPort());
-				b.append("\"\t->\t\"");
+				b.append("\" -> \"");
 				b.append(n2.getLocation());
-				b.append("\t");
+				b.append(" ");
 				b.append(n2.getOpennetFNPPort());
 				b.append("\"\n");
 			}
