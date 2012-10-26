@@ -7,5 +7,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="lib/freenet-ext.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/todd/FreeNet-Analysis/eclipse_workspace/FreeNet-Source/dist/freenet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
