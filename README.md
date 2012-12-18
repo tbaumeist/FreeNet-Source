@@ -1,7 +1,7 @@
 FreeNet-Source
 =================
 
-Our person modified version of teh FreeNet source code.
+Our person modified version of the FreeNet source code.
 
 ** Open project in Eclipse **
 
