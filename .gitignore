@@ -1,0 +1,14 @@
+/*~
+/.*
+/bin
+/build
+/dist
+/javadoc
+/generator/js/lib
+/generator/js/tests/lib
+/generator/js/tests/bin
+
+/*.swp
+/*.iml
+/*.ipr
+/*.iws
