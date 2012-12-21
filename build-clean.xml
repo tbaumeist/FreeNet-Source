@@ -17,13 +17,13 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	<!-- =================================================================== -->
 
 	<macrodef name="proppath" description="set a property to a path if it exists">
-		<attribute name="name"/>
-		<attribute name="path"/>
-		<attribute name="else" default="."/>
-		<attribute name="type" default="dir"/>
+		<attribute name="name" />
+		<attribute name="path" />
+		<attribute name="else" default="." />
+		<attribute name="type" default="dir" />
 		<sequential>
 			<condition property="@{name}" value="@{path}" else="@{else}">
-				<available file="@{path}" type="@{type}"/>
+				<available file="@{path}" type="@{type}" />
 			</condition>
 		</sequential>
 	</macrodef>
@@ -33,58 +33,61 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	<!-- =================================================================== -->
 
 	<!-- user overrides (properties are immutable, so set overrides first) -->
-	<property file="override.properties"/>
-	<property file="build.properties"/>
-	<proppath name="java.class.dirs" path="${java.class.dirs.user}" else="${java.home}/lib"/>
+	<property file="override.properties" />
+	<property file="build.properties" />
+	<proppath name="java.class.dirs" path="${java.class.dirs.user}" else="${java.home}/lib" />
 
-	<property name="main.src" value="src"/>
-	<property name="main.make" value="build/main"/>
-	<property name="main.dst" value="dist"/>
+	<property name="main.src" value="src" />
+	<property name="main.make" value="build/main" />
+	<property name="main.dst" value="dist" />
+	<property name="main.global" value="../../bin" />
 
-	<property name="test.src" value="test"/>
-	<property name="test.make" value="build/test"/>
-	<property name="test.dst" value="run"/>
+	<property name="test.src" value="test" />
+	<property name="test.make" value="build/test" />
+	<property name="test.dst" value="run" />
 
-	<property name="doc.dst" value="javadoc"/><!-- UNUSED -->
-	<property name="doc.api" value="javadoc"/>
+	<property name="doc.dst" value="javadoc" />
+	<!-- UNUSED -->
+	<property name="doc.api" value="javadoc" />
 
 	<property name="version.src" value="freenet/node/Version.java" />
 	<property name="version.make" value="freenet/node/Version.class" />
 
-	<property name="lib" value="lib"/>
-	<proppath name="lib.contrib.dir" path="${contrib.dir}" else="${lib}"/>
+	<property name="lib" value="lib" />
+	<proppath name="lib.contrib.dir" path="${contrib.dir}" else="${lib}" />
 	<path id="lib.path">
-		<fileset dir="${lib.contrib.dir}" includes="**/*.jar"/>
-		<fileset dir="${lib}" includes="**/*.jar"/>
+		<fileset dir="${lib.contrib.dir}" includes="**/*.jar" />
+		<fileset dir="${lib}" includes="**/*.jar" />
 		<fileset dir="${java.class.dirs}">
-			<include name="junit.jar"/>
+			<include name="junit.jar" />
 		</fileset>
 	</path>
 
-	<property name="contrib.version.min" value="-1"/>
-	<property name="contrib.version.rec" value="-1"/>
+	<property name="contrib.version.min" value="-1" />
+	<property name="contrib.version.rec" value="-1" />
 
-	<property name="gjs.dst" value="${main.src}/freenet/clients/http/staticfiles/freenetjs"/>
-	<property name="gjs.dir" value="generator/js"/>
+	<property name="gjs.dst" value="${main.src}/freenet/clients/http/staticfiles/freenetjs" />
+	<property name="gjs.dir" value="generator/js" />
 	<path id="gjs.lib.path">
-		<fileset dir="${gjs.dir}" includes="lib/*.jar"/>
-		<pathelement location="${gjs.dir}/war/WEB-INF/classes"/>
+		<fileset dir="${gjs.dir}" includes="lib/*.jar" />
+		<pathelement location="${gjs.dir}/war/WEB-INF/classes" />
 		<fileset dir="${java.class.dirs}">
-			<include name="gwt-dev-linux.jar"/>
-			<include name="gwt-dev-windows.jar"/>
-			<include name="gwt-dev.jar"/>
-			<include name="gwt-user.jar"/>
-			<include name="commons-collections3.jar"/>
-			<include name="ant.jar"/>
-			<include name="eclipse-ecj.jar"/>
+			<include name="gwt-dev-linux.jar" />
+			<include name="gwt-dev-windows.jar" />
+			<include name="gwt-dev.jar" />
+			<include name="gwt-user.jar" />
+			<include name="commons-collections3.jar" />
+			<include name="ant.jar" />
+			<include name="eclipse-ecj.jar" />
 		</fileset>
 	</path>
 
-	<assertions><enable/></assertions>
+	<assertions>
+		<enable />
+	</assertions>
 
 	<!-- set version string based on git-describe -->
-	<exec executable="git" failifexecutionfails="false"
-		errorProperty="git.errror" outputproperty="git.describe" resultproperty="git.result">
+	<exec executable="git" failifexecutionfails="false" errorProperty="git.errror" outputproperty="git.describe" resultproperty="git.result">
 		<arg value="describe" />
 		<arg value="--always" />
 		<arg value="--abbrev=4" />
@@ -100,32 +103,32 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	<!-- Miscellaneous                                                       -->
 	<!-- =================================================================== -->
 
-	<target name="dist" depends="clean-all, all" description="clean-build everything"/>
+	<target name="dist" depends="clean-all, all" description="clean-build everything" />
 
-	<target name="all" depends="package" description="build everything, incl. docs, GWT js"/>
+	<target name="all" depends="package, global-jars" description="build everything, incl. docs, GWT js" />
 
-	<target name="clean-all" depends="clean, clean-doc, clean-gjs" description="clean all build products, incl. docs, GWT js"/>
+	<target name="clean-all" depends="clean, clean-doc, clean-gjs" description="clean all build products, incl. docs, GWT js" />
 
 	<target name="help" description="display help on parameters">
-		<echo message="For main build targets, see `ant -p`"/>
-		<echo message=""/>
-		<echo message="Test parameters (-Dtest.PARAM=true)"/>
-		<echo message="  skip        Skip all tests"/>
-		<echo message="  verbose     Report additional information"/>
-		<echo message="  benchmark   Run benchmark tests"/>
-		<echo message="  extensive   Run extensive tests"/>
-		<echo message=""/>
-		<echo message="Rebuild parameters (-Dsuppress.PARAM=false)"/>
-		<echo message="  ext         Rebuild ext if possible, otherwise download"/>
-		<echo message="  gjs         Rebuild gjs if possible, otherwise checkout"/>
-		<echo message=""/>
-		<echo message="Misc parameters (-DPARAM=VALUE)"/>
-		<echo message="  javac.args  Command line arguments to pass to javac"/>
-		<echo message=""/>
+		<echo message="For main build targets, see `ant -p`" />
+		<echo message="" />
+		<echo message="Test parameters (-Dtest.PARAM=true)" />
+		<echo message="  skip        Skip all tests" />
+		<echo message="  verbose     Report additional information" />
+		<echo message="  benchmark   Run benchmark tests" />
+		<echo message="  extensive   Run extensive tests" />
+		<echo message="" />
+		<echo message="Rebuild parameters (-Dsuppress.PARAM=false)" />
+		<echo message="  ext         Rebuild ext if possible, otherwise download" />
+		<echo message="  gjs         Rebuild gjs if possible, otherwise checkout" />
+		<echo message="" />
+		<echo message="Misc parameters (-DPARAM=VALUE)" />
+		<echo message="  javac.args  Command line arguments to pass to javac" />
+		<echo message="" />
 	</target>
 
 	<target name="debug">
-		<echoproperties/>
+		<echoproperties />
 	</target>
 
 	<!-- =================================================================== -->
@@ -140,26 +143,26 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	-->
 
 	<target name="env">
-		<available property="lib.contrib.present" classname="freenet.node.ExtVersion" classpathref="lib.path"/>
-		<available property="lib.junit.present" classname="junit.framework.Test" classpathref="lib.path"/>
-		<available property="gjs.lib.gwt-user.present" classname="com.google.gwt.user.client.Window" classpathref="gjs.lib.path"/>
-		<available property="gjs.lib.gwt-dev.present" classname="com.google.gwt.dev.About" classpathref="gjs.lib.path"/>
+		<available property="lib.contrib.present" classname="freenet.node.ExtVersion" classpathref="lib.path" />
+		<available property="lib.junit.present" classname="junit.framework.Test" classpathref="lib.path" />
+		<available property="gjs.lib.gwt-user.present" classname="com.google.gwt.user.client.Window" classpathref="gjs.lib.path" />
+		<available property="gjs.lib.gwt-dev.present" classname="com.google.gwt.dev.About" classpathref="gjs.lib.path" />
 	</target>
 
 	<target name="libdep-ext" depends="env" unless="${lib.contrib.present}">
-		<fail message="freenet-ext not available"/>
+		<fail message="freenet-ext not available" />
 	</target>
 
 	<target name="libdep-junit" depends="env" unless="${lib.junit.present}">
-		<fail message="JUnit not available"/>
+		<fail message="JUnit not available" />
 	</target>
 
 	<target name="libdep-gwt-user" depends="env" unless="${gjs.lib.gwt-user.present}">
-		<fail message="GWT-user not present"/>
+		<fail message="GWT-user not present" />
 	</target>
 
 	<target name="libdep-gwt-dev" depends="env" unless="${gjs.lib.gwt-dev.present}">
-		<fail message="GWT-dev not present"/>
+		<fail message="GWT-dev not present" />
 	</target>
 
 	<!-- =================================================================== -->
@@ -167,105 +170,119 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	<!-- =================================================================== -->
 
 	<target name="init">
-		<mkdir dir="${main.make}"/>
-		<mkdir dir="${main.dst}"/>
-		<mkdir dir="${test.make}"/>
-		<mkdir dir="${test.dst}"/>
+		<mkdir dir="${main.make}" />
+		<mkdir dir="${main.dst}" />
+		<mkdir dir="${test.make}" />
+		<mkdir dir="${test.dst}" />
 	</target>
 
-	<target name="dep" depends="dep-ext, dep-gjs"/>
+	<target name="dep" depends="dep-ext, dep-gjs" />
 
 	<target name="build" depends="init, dep">
 		<!-- Create the time stamp -->
-		<tstamp/>
+		<tstamp />
 
 		<!-- Create the Version file with patched revision number in ${main.make} -->
 		<copy file="${main.src}/${version.src}" tofile="${main.make}/${version.src}" overwrite="true" />
 		<delete file="${main.make}/${version.make}" quiet="true" />
 		<replace file="${main.make}/${version.src}">
-			<replacefilter token="@custom@" value="${git.revision}"/>
+			<replacefilter token="@custom@" value="${git.revision}" />
 		</replace>
-		<echo message="Updated build version to ${git.revision} in ${main.make}/${version.src}"/>
+		<echo message="Updated build version to ${git.revision} in ${main.make}/${version.src}" />
 
 		<!-- Create the build directory structure used by compile -->
 		<javac srcdir="${main.src}" destdir="${main.make}" debug="on" optimize="on" source="1.5" target="1.5">
-			<compilerarg line="${javac.args}"/>
-			<classpath refid="lib.path"/>
+			<compilerarg line="${javac.args}" />
+			<classpath refid="lib.path" />
 			<!-- tell javac to find Version.java in ${main.make}, not ${main.src} -->
-			<sourcepath><pathelement path="${main.make}"/></sourcepath>
+			<sourcepath>
+				<pathelement path="${main.make}" />
+			</sourcepath>
 			<!-- following a very temporary list of files to be build -->
-			<include name="freenet/**/*.java"/>
-			<include name="net/i2p/util/*.java"/>
-			<include name="org/**/*.java"/>
-			<exclude name="**/package-info.java"/>
-			<exclude name="${version.src}"/>
+			<include name="freenet/**/*.java" />
+			<include name="net/i2p/util/*.java" />
+			<include name="org/**/*.java" />
+			<exclude name="**/package-info.java" />
+			<exclude name="${version.src}" />
 		</javac>
 
 		<!-- Force compile of Version.java in case compile of ${main.src} didn't trigger it -->
 		<javac srcdir="${main.make}" destdir="${main.make}" debug="on" optimize="on" source="1.5" target="1.5">
-			<compilerarg line="${javac.args}"/>
-			<classpath refid="lib.path"/>
-			<include name="${version.src}"/>
+			<compilerarg line="${javac.args}" />
+			<classpath refid="lib.path" />
+			<include name="${version.src}" />
 		</javac>
 
 		<!-- Copy web interface static files to the build dir -->
 		<copy todir="${main.make}/freenet/clients/http/staticfiles">
-			<fileset dir="${main.src}/freenet/clients/http/staticfiles"/>
+			<fileset dir="${main.src}/freenet/clients/http/staticfiles" />
 		</copy>
 		<!-- Copy translation files to the build dir -->
 		<copy todir="${main.make}/freenet/l10n">
 			<fileset dir="${main.src}/freenet/l10n">
-				<include name="freenet.l10n.*.properties"/>
-				<include name="freenet.l10n.*.tab"/>
+				<include name="freenet.l10n.*.properties" />
+				<include name="freenet.l10n.*.tab" />
 			</fileset>
 		</copy>
 	</target>
 
-	<target name="package" depends="build, unit" description="build standard binary packages (Freenet daemon)" >
-		<jar jarfile="${main.dst}/freenet.jar" basedir="${main.make}">
+	<target name="package" depends="build" description="build standard binary packages (Freenet daemon)">
+		<jar jarfile="${main.make}/freenet.jar" basedir="${main.make}">
 			<manifest>
-				<attribute name="Main-Class" value="freenet/node/Node"/>
-				<attribute name="Built-By" value="${user.name}"/>
-				<attribute name="Required-Ext-Version" value="${contrib.version.min}"/>
-				<attribute name="Recommended-Ext-Version" value="${contrib.version.rec}"/>
+				<attribute name="Main-Class" value="freenet/node/Node" />
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Required-Ext-Version" value="${contrib.version.min}" />
+				<attribute name="Recommended-Ext-Version" value="${contrib.version.rec}" />
 				<attribute name="Class-Path" value="freenet-ext.jar" />
 				<section name="common">
-					<attribute name="Specification-Title" value="Freenet"/>
-					<attribute name="Specification-Version" value="0.7.5"/>
-					<attribute name="Specification-Vendor" value="freenetproject.org"/>
-					<attribute name="Implementation-Title" value="Freenet"/>
-					<attribute name="Implementation-Version" value="0.7.5 ${TODAY} ${git.revision}"/>
-					<attribute name="Implementation-Vendor" value="Freenetproject.org"/>
+					<attribute name="Specification-Title" value="Freenet" />
+					<attribute name="Specification-Version" value="0.7.5" />
+					<attribute name="Specification-Vendor" value="freenetproject.org" />
+					<attribute name="Implementation-Title" value="Freenet" />
+					<attribute name="Implementation-Version" value="0.7.5 ${TODAY} ${git.revision}" />
+					<attribute name="Implementation-Vendor" value="Freenetproject.org" />
 				</section>
 			</manifest>
-			<exclude name="${version.src}"/>
+			<exclude name="${version.src}" />
 		</jar>
-		<copy tofile="${main.dst}/../../../Simulation/bin/simulation.jar" file="${main.dst}/freenet.jar">
-		</copy>
-		<copy todir="${main.dst}/../../../../Freenet" file="${main.dst}/freenet.jar">
+		<zip destfile="${main.dst}/freenet.jar">
+			<zipgroupfileset dir="lib" includes="**/*.jar" excludes="junit.jar" />
+			<zipgroupfileset dir="${main.make}" includes="**/*.jar" />
+		</zip>
+	</target>
+
+	<!-- Check if this project is used as a sub project -->
+	<!-- If so copy jar to main project -->
+	<target name="-check-global-avail" unless="file.exists">
+		<available property="file.exists" file="${main.global}" />
+	</target>
+
+	<target name="global-jars" depends="-check-global-avail" if="${file.exists}">
+		<copy todir="${main.global}">
+			<fileset dir="${main.dst}" includes="**/*.jar" />
 		</copy>
 	</target>
 
 	<target name="unit-build" depends="build, libdep-junit" unless="${test.skip}">
 		<javac srcdir="${test.src}" destdir="${test.make}" debug="on" optimize="on" source="1.5" target="1.5">
-			<compilerarg line="${javac.args}"/>
+			<compilerarg line="${javac.args}" />
 			<classpath>
-				<path refid="lib.path"/>
-				<pathelement path="${main.make}"/>
+				<path refid="lib.path" />
+				<pathelement path="${main.make}" />
 			</classpath>
-			<include name="**/*.java"/>
-			<exclude name="*.java"/>
+			<include name="**/*.java" />
+			<exclude name="*.java" />
 		</javac>
 		<copy todir="${test.make}/freenet/client/filter/png">
-			<fileset dir="${test.src}/freenet/client/filter/png"/>
+			<fileset dir="${test.src}/freenet/client/filter/png" />
 		</copy>
 		<copy todir="${test.make}/freenet/client/filter/bmp">
-			<fileset dir="${test.src}/freenet/client/filter/bmp"/>
+			<fileset dir="${test.src}/freenet/client/filter/bmp" />
 		</copy>
 	</target>
 
 	<target name="unit" depends="unit-build" unless="${test.skip}">
-		<!-- <junit printsummary="yes" fork="yes" haltonfailure="yes" dir="${test.dst}">
+		<junit printsummary="yes" fork="yes" haltonfailure="yes" dir="${test.dst}">
 			<classpath>
 				<path refid="lib.path"/>
 				<pathelement path="${main.make}"/>
@@ -284,14 +301,14 @@ build-dependency on ant-optional, libbsf-java and rhino.
 			<sysproperty key="test.extensive" value="${test.extensive}"/>
 			
 			<assertions><enable/></assertions>
-		</junit> -->
+		</junit>
 	</target>
 
 	<target name="clean" description="clean standard build products">
-		<delete dir="${main.make}"/>
-		<delete dir="${main.dst}"/>
-		<delete dir="${test.make}"/>
-		<delete dir="${test.dst}"/>
+		<delete dir="${main.make}" />
+		<delete dir="${main.dst}" />
+		<delete dir="${test.make}" />
+		<delete dir="${test.dst}" />
 	</target>
 
 	<!-- =================================================================== -->
@@ -305,21 +322,21 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	<!-- =================================================================== -->
 
 	<target name="env-gjs">
-		<available property="gjs.present" file="${gjs.dst}" type="dir"/>
+		<available property="gjs.present" file="${gjs.dst}" type="dir" />
 	</target>
 
 	<target name="dep-gjs" depends="env-gjs" unless="${gjs.present}">
-		<antcall target="build-gjs"/>
+		<antcall target="build-gjs" />
 	</target>
 
 	<target name="build-gjs" depends="suppress-gjs, libdep-gwt-user, libdep-gwt-dev" unless="${suppress.gjs}">
 		<ant antfile="build.xml" dir="${gjs.dir}">
-			<reference refid="gjs.lib.path" torefid="project.class.path"/>
+			<reference refid="gjs.lib.path" torefid="project.class.path" />
 		</ant>
 	</target>
 
 	<target name="clean-gjs" depends="suppress-gjs" unless="${suppress.gjs}">
-		<ant antfile="build.xml" dir="${gjs.dir}" target="deleteGenerated"/>
+		<ant antfile="build.xml" dir="${gjs.dir}" target="deleteGenerated" />
 	</target>
 
 	<target name="suppress-gjs" if="${suppress.gjs}">
@@ -330,7 +347,7 @@ build-dependency on ant-optional, libbsf-java and rhino.
 	<!-- Documentation                                                       -->
 	<!-- =================================================================== -->
 
-	<!-- <target name="init-doc" unless="${doc.skip}">
+	<target name="init-doc" unless="${doc.skip}">
 		<mkdir dir="${doc.api}"/>
 	</target>
 
@@ -341,13 +358,13 @@ build-dependency on ant-optional, libbsf-java and rhino.
 			<link href="http://java.sun.com/j2se/1.5.0/docs/api"/>
 		</javadoc>
 	</target>
--->
-	<!-- <target name="doc" depends="javadoc" description="build documentation"> -->
-		<!-- currently freenet has no other documentation apart from javadocs -->
+	
+	<target name="doc" depends="javadoc" description="build documentation" />
+	<!-- currently freenet has no other documentation apart from javadocs -->
 	<!-- rget> -->
 
 	<target name="clean-doc" unless="${doc.skip}">
-		<delete dir="${doc.api}"/>
+		<delete dir="${doc.api}" />
 	</target>
 
 </project>
