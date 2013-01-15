@@ -1479,6 +1479,8 @@ loadWaiterLoop:
         	
         	if(noderef == null) return;
         	
+        	System.out.println("****" + this.node.getOpennetFNPPort() + " received path fold request from " + next.getPeer().getPort());
+        	
         	SimpleFieldSet ref = om.validateNoderef(noderef, 0, noderef.length, next, false);
         	
         	if(ref == null) return;
