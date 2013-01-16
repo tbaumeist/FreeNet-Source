@@ -159,7 +159,7 @@ public class OpennetSimulator extends RealNodeTest {
 		makeKleinbergNetwork(this.nodes, START_WITH_IDEAL_LOCATIONS,
 				this.peerCount, FORCE_NEIGHBOUR_CONNECTIONS, random);
 
-		finishFillingNetwork(this.nodes, this.peerCount, random);
+		//finishFillingNetwork(this.nodes, this.peerCount, random);
 	}
 
 	public String getTopology() {

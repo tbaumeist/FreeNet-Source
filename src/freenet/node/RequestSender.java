@@ -1480,6 +1480,15 @@ loadWaiterLoop:
         	if(noderef == null) return;
         	
         	System.out.println("****" + this.node.getOpennetFNPPort() + " received path fold request from " + next.getPeer().getPort());
+        	StringBuilder b = new StringBuilder("This nodes peers:");
+        	for(PeerNode node :	this.node.getConnectedPeers())
+        		b.append(" ").append(node.getPeer().getPort());
+        	System.out.println("****" + b.toString());
+        	b = new StringBuilder("Their nodes peers (location):");
+        	for(Double node : next.getPeersLocation())
+        		b.append(" ").append(node);
+        	System.out.println("****" + b.toString());
+        	
         	
         	SimpleFieldSet ref = om.validateNoderef(noderef, 0, noderef.length, next, false);
         	
