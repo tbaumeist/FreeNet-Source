@@ -41,6 +41,8 @@ public class MessageItem {
 			return;
 		
 		StringBuilder b = new StringBuilder();
+		b.append(n.getConnectedPeers().length);
+		b.append(" peers ,");
 		b.append(pn.getPeer().getPort());
 		b.append(",");
 		if(msg.isSet(DMT.UID))
