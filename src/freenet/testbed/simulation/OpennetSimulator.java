@@ -128,7 +128,7 @@ public class OpennetSimulator extends RealNodeTest {
 		}
 		wd.mkdir();
 		// NOTE: globalTestInit returns in ignored random source
-		RandomSource r = NodeStarter.globalTestInit(dir, false, LogLevel.ERROR,
+		RandomSource r = NodeStarter.globalTestInit(dir, false, LogLevel.MINOR,
 				"", true);
 
 		// Make the network reproducible so we can easily compare different
