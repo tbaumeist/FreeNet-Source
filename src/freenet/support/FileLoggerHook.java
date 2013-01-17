@@ -934,7 +934,7 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 					break;
 			}
 		}
-		//sb.append('\n');
+		sb.append('\n');
 
 //		// Write stacktrace if available
 //		sb.append("<TraceStack>");
