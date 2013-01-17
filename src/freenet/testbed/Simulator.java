@@ -61,7 +61,7 @@ public class Simulator implements ISimulator {
 	public static synchronized void writeProtocolTrace(int current,
 			String message) {
 		if (Simulator.protocolWriter != null) {
-			Simulator.protocolWriter.println(current + " : " + message);
+			Simulator.protocolWriter.println("-*" + current + " : " + message);
 			Simulator.protocolWriter.flush();
 		}
 		System.out.println(current + "," + message);
