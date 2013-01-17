@@ -896,7 +896,7 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 			return;
 		
 		StringBuilder sb = new StringBuilder( e == null ? 512 : 1024 );
-		sb.append("<LogMessage>");
+		//sb.append("<LogMessage>");
 		int sctr = 0;
 
 		for (int i = 0; i < fmt.length; ++i) {
@@ -908,60 +908,60 @@ public class FileLoggerHook extends LoggerHook implements Closeable {
 					long now = System.currentTimeMillis();
 					synchronized (this) {
 						myDate.setTime(now);
-						sb.append("<Date>").append(df.format(myDate)).append("</Date>");
+						sb.append(" ").append(df.format(myDate));
 					}
 					break;
 				case CLASS :
-					sb.append("<Class>").append(c == null ? "<none>" : c.getName()).append("</Class>");
+					sb.append(" ").append(c == null ? "<none>" : c.getName());
 					break;
 				case HASHCODE :
-					sb.append("<Hash>").append(
+					sb.append(" ").append(
 						o == null
 							? "<none>"
-							: Integer.toHexString(o.hashCode())).append("</Hash>");
+							: Integer.toHexString(o.hashCode()));
 					break;
 				case THREAD :
-					sb.append("<Thread>").append(Thread.currentThread().getName()).append("</Thread>");
+					sb.append(" ").append(Thread.currentThread().getName());
 					break;
 				case PRIORITY :
-					sb.append("<Priority>").append(priority.name()).append("</Priority>");
+					sb.append(" ").append(priority.name());
 					break;
 				case MESSAGE :
-					sb.append("<MessageItem>").append(msg).append("</MessageItem>");
+					sb.append(" ").append(msg);
 					break;
 				case UNAME :
-					sb.append("<Uname>").append(uname).append("</Uname>");
+					sb.append(" ").append(uname);
 					break;
 			}
 		}
 		//sb.append('\n');
 
-		// Write stacktrace if available
-		sb.append("<TraceStack>");
-		for(int j=0;j<20 && e != null;j++) {
-			sb.append(e.toString());
-			
-			StackTraceElement[] trace = e.getStackTrace();
-			
-			if(trace == null)
-				sb.append("(null)\n");
-			else if(trace.length == 0)
-				sb.append("(no stack trace)\n");
-			else {
-				sb.append('\n');
-				for(int i=0;i<trace.length;i++) {
-					sb.append("\tat ");
-					sb.append(trace[i].toString());
-					sb.append('\n');
-				}
-			}
-			
-			Throwable cause = e.getCause();
-			if(cause != e) e = cause;
-			else break;
-		}
-		sb.append("</TraceStack>");
-		sb.append("</LogMessage>\n");
+//		// Write stacktrace if available
+//		sb.append("<TraceStack>");
+//		for(int j=0;j<20 && e != null;j++) {
+//			sb.append(e.toString());
+//			
+//			StackTraceElement[] trace = e.getStackTrace();
+//			
+//			if(trace == null)
+//				sb.append("(null)\n");
+//			else if(trace.length == 0)
+//				sb.append("(no stack trace)\n");
+//			else {
+//				sb.append('\n');
+//				for(int i=0;i<trace.length;i++) {
+//					sb.append("\tat ");
+//					sb.append(trace[i].toString());
+//					sb.append('\n');
+//				}
+//			}
+//			
+//			Throwable cause = e.getCause();
+//			if(cause != e) e = cause;
+//			else break;
+//		}
+//		sb.append("</TraceStack>");
+//		sb.append("</LogMessage>\n");
 
 		logString(sb.toString().getBytes());
 	}
