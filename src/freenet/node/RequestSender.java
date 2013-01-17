@@ -1477,7 +1477,9 @@ loadWaiterLoop:
     		
         	byte[] noderef = om.waitForOpennetNoderef(false, next, uid, this);
         	
-        	if(noderef == null) return;
+        	if(noderef == null) return;        	
+        	
+        	SimpleFieldSet ref = om.validateNoderef(noderef, 0, noderef.length, next, false);
         	
         	System.out.println("****" + this.node.getOpennetFNPPort() + " received path fold request from " + next.getPeer().getPort());
         	StringBuilder b = new StringBuilder("This nodes peers:");
@@ -1489,13 +1491,13 @@ loadWaiterLoop:
         		b.append(" ").append(node);
         	System.out.println("****" + b.toString());
         	
-        	
-        	SimpleFieldSet ref = om.validateNoderef(noderef, 0, noderef.length, next, false);
-        	
         	if(ref == null) return;
+        	
+        	System.out.println("**** REF: " + ref.toString());
         	
 			if(node.addNewOpennetNode(ref, ConnectionType.PATH_FOLDING) == null) {
 				// If we don't want it let somebody else have it
+				System.out.println("**** DON't WANT IT");
 				synchronized(this) {
 					opennetNoderef = noderef;
 					// RequestHandler will send a noderef back up, eventually
